@@ -9,7 +9,7 @@
             padding: 0;
             font-family: 'Times New Roman', Times, serif;
             background-color: #fcf8f6; /* Rosa pastel/crema muy suave */
-            background-image: url('D:/Documents/miBoda/img/fondFlower.png');
+            background-image: url('../img/fondFlower.png');
             /* 3. Configura cómo se comportará la imagen */
             background-repeat: no-repeat;  /* Cambia a 'repeat' si es un patrón que se repite */
             background-position: center;   /* Centra la imagen */
