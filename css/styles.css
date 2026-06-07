@@ -5,15 +5,18 @@
         }
         
         body {
-            margin: 400px;
-            padding: 0;
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding-top: 0;
             font-family: 'Times New Roman', Times, serif;
             background-color: #fcf8f6; /* Rosa pastel/crema muy suave */
-            background-image: url('D:/Documents/miBoda/img/fondFlower.png');
+            background-image: url('../img/img3.png');
             /* 3. Configura cómo se comportará la imagen */
             background-repeat: no-repeat;  /* Cambia a 'repeat' si es un patrón que se repite */
-            background-position: center;   /* Centra la imagen */
-            background-size: cover;        /* Hace que cubra toda la pantalla (o 'contain' según prefieras) */
+            background-position: top;   /* Centra la imagen */
+            background-size: 100% 115%;        /* Hace que cubra toda la pantalla (o 'contain' según prefieras) */
+            background-attachment: local;
               /* Hace que el fondo se quede fijo al hacer scroll */
             color: #5c4d4d; /* Marrón topo suave para texto */
             text-align: center;
@@ -21,24 +24,15 @@
 
         /* Contenedor Principal */
         .wrapper {
+            padding-top: 500px;
+            width: 100%;
             max-width: 800px;
             margin: 0 auto;
-            padding: 20px;
+            padding-left: 10%;
+            padding-right: 80px;
+            padding-bottom: 20px;
             position: relative;
         }
-
-        /* --- DECORACIONES FLORALES (SVG integrado para evitar enlaces rotos) --- */
-        .flower-corner {
-            position: fixed;
-            width: 150px;
-            height: 150px;
-            z-index: -1;
-            opacity: 0.8;
-        }
-        .top-left { top: 0; left: 0; }
-        .top-right { top: 0; right: 0; transform: scaleX(-1); }
-        .bottom-left { bottom: 0; left: 0; transform: scaleY(-1); }
-        .bottom-right { bottom: 0; right: 0; transform: scale(-1); }
 
         /* --- ENCABEZADO / HERO --- */
         header {
@@ -67,6 +61,7 @@
 
         /* --- SECCIÓN DE DETALLES --- */
         .details-section {
+            width: 100%;
             margin: 40px auto;
             padding: 30px;
             background-color: #ffffff;
