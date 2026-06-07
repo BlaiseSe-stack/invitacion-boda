@@ -1,0 +1,211 @@
+
+        /* --- ESTILOS GENERALES Y PALETA DE COLORES PASTEL --- */
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
+        
+        body {
+            margin: 400px;
+            padding: 0;
+            font-family: 'Times New Roman', Times, serif;
+            background-color: #fcf8f6; /* Rosa pastel/crema muy suave */
+            background-image: url('D:/Documents/miBoda/img/fondFlower.png');
+            /* 3. Configura cómo se comportará la imagen */
+            background-repeat: no-repeat;  /* Cambia a 'repeat' si es un patrón que se repite */
+            background-position: center;   /* Centra la imagen */
+            background-size: cover;        /* Hace que cubra toda la pantalla (o 'contain' según prefieras) */
+              /* Hace que el fondo se quede fijo al hacer scroll */
+            color: #5c4d4d; /* Marrón topo suave para texto */
+            text-align: center;
+        }
+
+        /* Contenedor Principal */
+        .wrapper {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+        }
+
+        /* --- DECORACIONES FLORALES (SVG integrado para evitar enlaces rotos) --- */
+        .flower-corner {
+            position: fixed;
+            width: 150px;
+            height: 150px;
+            z-index: -1;
+            opacity: 0.8;
+        }
+        .top-left { top: 0; left: 0; }
+        .top-right { top: 0; right: 0; transform: scaleX(-1); }
+        .bottom-left { bottom: 0; left: 0; transform: scaleY(-1); }
+        .bottom-right { bottom: 0; right: 0; transform: scale(-1); }
+
+        /* --- ENCABEZADO / HERO --- */
+        header {
+            margin-top: 50px;
+            padding: 40px 20px;
+            background-color: rgba(255, 255, 255, 0.6);
+            border-radius: 20px;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(243, 219, 213, 0.5);
+        }
+
+        h1 {
+            font-family: 'Georgia', serif;
+            font-size: 3rem;
+            color: #b58d88; /* Rosa viejo pastel */
+            margin-bottom: 10px;
+            font-weight: 300;
+        }
+
+        .subtitle {
+            font-style: italic;
+            font-size: 1.2rem;
+            color: #8c7671;
+            letter-spacing: 2px;
+        }
+
+        /* --- SECCIÓN DE DETALLES --- */
+        .details-section {
+            margin: 40px auto;
+            padding: 30px;
+            background-color: #ffffff;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(181, 141, 136, 0.15);
+            border: 1px solid #f3dbd5;
+        }
+
+        .date {
+            font-size: 1.5rem;
+            color: #b58d88;
+            font-weight: bold;
+            margin-bottom: 20px;
+            letter-spacing: 1px;
+        }
+
+        .info-block {
+            margin: 20px 0;
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        /* Divider floral sutil */
+        .divider {
+            margin: 30px auto;
+            width: 60%;
+            height: 1px;
+            background: linear-gradient(to right, transparent, #b58d88, transparent);
+        }
+
+        /* --- FORMULARIO DE CONFIRMACIÓN (RSVP) --- */
+        .rsvp-container {
+            margin: 40px auto;
+            padding: 40px 30px;
+            background-color: #f7eded; /* Tono lila/rosa pastel muy tenue */
+            border-radius: 15px;
+            border: 1px solid #e1ceca;
+            box-shadow: 0 4px 15px rgba(181, 141, 136, 0.1);
+        }
+
+        h2 {
+            font-family: 'Georgia', serif;
+            color: #9c746f;
+            font-size: 2rem;
+            margin-bottom: 10px;
+            font-weight: 400;
+        }
+
+        .rsvp-p {
+            font-size: 1rem;
+            margin-bottom: 30px;
+            color: #7a6662;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+            max-width: 450px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 0.95rem;
+            color: #6e5854;
+            font-weight: bold;
+            letter-spacing: 0.5px;
+        }
+
+        input[type="text"],
+        select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #dcd0cd;
+            border-radius: 8px;
+            font-size: 1rem;
+            background-color: #ffffff;
+            color: #5c4d4d;
+            outline: none;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        input[type="text"]:focus,
+        select:focus {
+            border-color: #b58d88;
+            box-shadow: 0 0 5px rgba(181, 141, 136, 0.5);
+        }
+
+        .btn-submit {
+            background-color: #b58d88;
+            color: white;
+            border: none;
+            padding: 14px 40px;
+            font-size: 1.1rem;
+            font-family: 'Georgia', serif;
+            border-radius: 25px;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(181, 141, 136, 0.3);
+            transition: background-color 0.3s, transform 0.2s;
+            margin-top: 15px;
+            width: 100%;
+            max-width: 450px;
+        }
+
+        .btn-submit:hover {
+            background-color: #a37a75;
+            transform: translateY(-1px);
+        }
+
+        .btn-submit:active {
+            transform: translateY(1px);
+        }
+
+        /* Mensaje de éxito animado */
+        #success-message {
+            display: none;
+            margin-top: 25px;
+            padding: 15px;
+            background-color: #e3ebd5; /* Verde pastel de éxito */
+            color: #4e613c;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            border: 1px solid #cbd9b8;
+        }
+
+        footer {
+            margin: 60px 0 30px 0;
+            font-size: 0.9rem;
+            color: #a89692;
+            letter-spacing: 1px;
+        }
+
+        /* --- RESPONSIVIDAD (Media Queries) --- */
+        @media (max-width: 768px) {
+            h1 { font-size: 2.3rem; }
+            h2 { font-size: 1.7rem; }
+            .flower-corner { width: 90px; height: 90px; }
+            .details-section, .rsvp-container { padding: 25px 15px; }
+            body { padding: 10px; }
+        }
