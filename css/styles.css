@@ -43,6 +43,10 @@
                 background-size: cover; /* Cambia a '100% 100%' si es un marco que debe forzar su tamaño */
                 background-position: center center;
             }
+            .parents-grid {
+            grid-template-columns: 1fr !important; /* Convierte las 2 columnas en 1 sola fila en celular */
+            gap: 25px !important;
+        }
         }
 
         /* --- ENCABEZADO / HERO --- */
