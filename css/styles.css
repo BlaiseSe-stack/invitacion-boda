@@ -46,7 +46,18 @@
             .parents-grid {
             grid-template-columns: 1fr !important; /* Convierte las 2 columnas en 1 sola fila en celular */
             gap: 25px !important;
-        }
+            }
+            .parents-grid {
+            grid-template-columns: 1fr 1fr !important; /* Garantiza las dos columnas en celular */
+            gap: 10px !important; /* Reduce el espacio del centro para ganar terreno */
+            }
+            .family-title {
+                font-size: 1.05rem !important; /* Letra un poco más pequeña en celular */
+            }
+            .family-names {
+                font-size: 0.85rem !important; /* Ajuste clave para que entren los nombres largos en una línea */
+                line-height: 1.3 !important;
+            }
         }
 
         /* --- ENCABEZADO / HERO --- */

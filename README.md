@@ -3,7 +3,7 @@ En este repositorio estará alojada la invitación a mi boda con la capacidad de
 
 # Task for update
 
-Nombre de padrinos de velación (en apartado de misa), padres. 
+Nombre de padrinos de velación (en apartado de misa), padres. [LISTO]
 
 Tipo de vestimenta Etiqueta obligatoria
 
