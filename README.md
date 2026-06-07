@@ -3,20 +3,22 @@ En este repositorio estará alojada la invitación a mi boda con la capacidad de
 
 # Task for update
 
-Nombre de padrinos de velación (en apartado de misa), padres. [LISTO]
+- Nombre de padrinos de velación (en apartado de misa), padres. [OK]
 
-Tipo de vestimenta Etiqueta obligatoria
+- Tipo de vestimenta Etiqueta obligatoria [OK]
 
-Ubicacion de misa y salón de fiestas mediante url a maps
+- Ubicacion de misa y salón de fiestas mediante url a maps [OK]
 
 
 Parafrasear con IA::
 
-Frase para indicar que tendremos area de niños 
-y en caso de no estar en dicha área que los padres nos apoyen 100% con cuidar a sus engendros
+- Frase para indicar que tendremos area de niños 
+y en caso de no estar en dicha área que los padres nos apoyen 100% con cuidar a sus engendros [inProgress]
 
-"Lista de regalos preferentes pero no obligatorios"
+- "Lista de regalos preferentes pero no obligatorios"
 
 ::Parafrasear con IA
 
-Agregar enlace a albúm compartido para fotos
+- Agregar enlace a albúm compartido para fotos
+
+-
