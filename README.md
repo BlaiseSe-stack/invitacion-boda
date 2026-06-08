@@ -15,15 +15,14 @@ Parafrasear con IA::
 - Frase para indicar que tendremos area de niños 
 y en caso de no estar en dicha área que los padres nos apoyen 100% con cuidar a sus pequeños [OK]
 
-- "Lista de regalos preferentes pero no obligatorios"
+- "Lista de regalos preferentes pero no obligatorios" [ToDo]
 
 ::Parafrasear con IA
 
-- Agregar enlace a albúm compartido para fotos
+- Generar código QR de confirmación con lista de invidatos [OK]
 
-- Generar código QR de confirmación con lista de invidatos[OK]
-
-- Generar código para validar mediante el QR la lista de invitados confirmados[ToDo]
+- Generar código para validar mediante el QR la lista de invitados confirmados [OK]
 
 - Crear pagina principal, donde sea un sobre y al dar click abra toda la información actual [ToDo Prioritario]
 
+- Agregar enlace a albúm compartido para fotos [ToDo]
