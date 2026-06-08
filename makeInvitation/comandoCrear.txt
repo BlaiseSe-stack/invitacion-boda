@@ -1,1 +1,3 @@
 python creador_pases.py
+
+python creador_pases_qr.py

@@ -128,9 +128,9 @@
     let familiaUrlDecodificada = "";
 
     // 1. LEER EL APELLIDO DESDE LA URL AL ABRIR LA PÁGINA
+    // 1. LEER EL APELLIDO DESDE LA URL AL ABRIR LA PÁGINA (OPTIMIZADO)
     window.onload = function() {
         const parametros = new URLSearchParams(window.location.search);
-        // El QR debe apuntar a: acceso.html?familia=sanchez-espinoza
         const familiaUrl = parametros.get('familia'); 
 
         if (!familiaUrl) {
@@ -138,20 +138,20 @@
             return;
         }
 
-        // Convertimos "sanchez-espinoza" de vuelta a "sanchez espinoza" para buscar en la base de datos
+        # Convertimos "espinosa-rodriguez" de vuelta a "espinosa rodriguez" quitando todos los guiones
         familiaUrlDecodificada = familiaUrl.replace(/-/g, " ").toLowerCase().trim();
 
-        // Buscamos si existe en tu archivo invitados.js para validar que sea un invitado real
+        # Buscamos si existe en tu archivo invitados.js
         if (!baseInvitadosEstricta[familiaUrlDecodificada]) {
-            mostrarEstado("error", `❌ Familia No Encontrada<br><span style='font-size:0.9rem; font-weight:normal;'>"${familiaUrl}" no está en la lista de invitados.</span>`);
+            mostrarEstado("error", `❌ Familia No Encontrada<br><span style='font-size:0.9rem; font-weight:normal;'>"${familiaUrlDecodificada.toUpperCase()}" no está en la lista de invitados locales.</span>`);
             return;
         }
 
-        // Mostramos el nombre estético en el panel
+        # Mostramos el nombre estético en el panel
         document.getElementById("info-familia").innerText = nombresVisualesFamilias[familiaUrlDecodificada];
         document.getElementById("info-panel").style.display = "block";
 
-        // Consultamos en Google Sheets si ya ingresó
+        # Consultamos en Google Sheets si ya ingresó
         verificarEstatusEnGoogle();
     };
 
