@@ -1,5 +1,5 @@
 
-            const URL_WEBHOOK_GOOGLE = "https://script.google.com/macros/s/AKfycbx5omz7JRadxR6Z9Gywpujx7cxNggYoC060-jg3cx2Nd2_wVKo82hIOc0JIxuvMqciz6Q/exec";
+            const URL_WEBHOOK_GOOGLE = "https://script.google.com/macros/s/AKfycbyRyiVIpiRbGrR5zsnspXKwjk5ua56KJB8UC9ojl0jaqdhGK-vpCrYWYAKcOu86cPb2FQ/exec";
             let idFamiliaSeleccionada = "";
 
             function normalizarApellidos(texto) {
@@ -121,7 +121,7 @@
             });
 
             // =========================================================================
-            // BOTÓN DE CONFIRMACIÓN (ENVÍA EL TEXTO EN BRUTO QUE ENTIENDE TU DO-POST)
+            // BOTÓN DE CONFIRMACIÓN EN APP.JS (CORREGIDO CON LA VARIABLE TIPO)
             // =========================================================================
             document.getElementById("btn-submit-rsvp").addEventListener("click", function() {
                 const checkboxes = document.querySelectorAll(".individual-check");
@@ -138,27 +138,30 @@
                     return;
                 }
 
-                // Estructura idéntica a tu lógica original del objeto
-                const datosEnviar = {
-                    familia: nombresVisualesFamilias[idFamiliaSeleccionada],
-                    asistieron: seleccionados.join(", ")
-                };
+                const nombreFamiliaVisual = nombresVisualesFamilias[idFamiliaSeleccionada];
+                const listaAsistentes = seleccionados.join(", ");
 
                 const btn = document.getElementById("btn-submit-rsvp");
                 btn.innerText = "ENVIANDO...";
                 btn.disabled = true;
 
-                // Fetch optimizado compatible con el doPost modificado
+                // Convertimos los datos al formato nativo URL-encoded
+                const datosFormulario = new URLSearchParams();
+                datosFormulario.append("familia", nombreFamiliaVisual);
+                datosFormulario.append("asistieron", listaAsistentes);
+                // ⚠️ ESTA ES LA LÍNEA CRUCIAL QUE FALTABA:
+                datosFormulario.append("tipo", "rsvp"); 
+
+                // FETCH HACIA GOOGLE SHEETS
                 fetch(URL_WEBHOOK_GOOGLE, {
                     method: "POST",
-                    mode: "no-cors", // Evita bloqueos de origen local/GitHub
+                    mode: "no-cors", 
                     headers: { 
-                        "Content-Type": "text/plain" // Permite el paso directo del JSON en crudo hacia Google
+                        "Content-Type": "application/x-www-form-urlencoded" 
                     },
-                    body: JSON.stringify(datosEnviar)
+                    body: datosFormulario.toString()
                 })
                 .then(() => {
-                    // En modo no-cors, el éxito se asume al procesar el envío
                     document.getElementById("wedding-rsvp-form").style.display = "none";
                     document.getElementById("rsvp-success-msg").style.display = "block";
                 })
