@@ -165,7 +165,7 @@
         verificarEstatusEnGoogle();
     };
 
-    // 2. CONSULTAR A GOOGLE SHEETS VIA JSONP (Inmune a CORS)
+    // 2. CONSULTAR A GOOGLE SHEETS (VERSIÓN ULTRA-SEGURA: ESPERA EL TIEMPO QUE SEA NECESARIO)
     function verificarEstatusEnGoogle() {
         const apellidoVisual = nombresVisualesFamilias[familiaUrlDecodificada];
         const src = `${URL_WEBHOOK_GOOGLE}?familia=${encodeURIComponent(apellidoVisual)}&callback=procesarEstatusAcceso`;
@@ -174,10 +174,21 @@
         script.id = "jsonp-check-script";
         script.src = src;
         
+        // Aumentamos el tiempo de espera a 25 segundos por si las antenas del salón están saturadas
+        temporizadorRespuesta = setTimeout(function() {
+            console.log("Tiempo de espera agotado.");
+            // NOTA: Ya NO activamos el botón verde de forma automática. 
+            // Mostramos un botón para reintentar la conexión de forma manual.
+            mostrarEstado("duplicate", "⚠️ Conexión Lenta<br><span style='font-size:0.9rem; font-weight:normal;'>Google Sheets está tardando en responder debido al internet del salón.</span><br><br><button onclick='location.reload()' style='padding:8px; font-weight:bold; cursor:pointer;'>🔄 REINTENTAR ESCANEO</button>");
+            
+            const s = document.getElementById("jsonp-check-script");
+            if (s) s.remove();
+        }, 25000); // 25 segundos de tolerancia extrema
+
         script.onerror = function() {
-            // Plan de contingencia si no hay internet en el salón
-            mostrarEstado("duplicate", "⚠️ Modo Offline Activo<br><span style='font-size:0.9rem; font-weight:normal;'>No se pudo conectar a Google Sheets, pero la familia sí pertenece al evento. Puedes darles el paso.</span>");
-            document.getElementById("btn-checkin").style.display = "block";
+            clearTimeout(temporizadorRespuesta);
+            // Si la red se cae por completo, le avisa al staff y bloquea el paso hasta recuperar señal
+            mostrarEstado("error", "❌ Sin Conexión a Internet<br><span style='font-size:0.9rem; font-weight:normal;'>El teléfono no tiene datos o señal celular. No se puede validar ni registrar la entrada en el Excel.</span><br><br><button onclick='location.reload()' style='padding:8px; font-weight:bold; cursor:pointer;'>🔄 REINTENTAR CONEXIÓN</button>");
             script.remove();
         };
 
@@ -186,25 +197,31 @@
 
     // 3. RECIBIR EL VEREDICTO DESDE GOOGLE SHEETS
     window.procesarEstatusAcceso = function(data) {
-        // Eliminar el script temporal creado
+        clearTimeout(temporizadorRespuesta); // Detenemos el reloj de error porque Google respondió
+
         const scriptAntiguo = document.getElementById("jsonp-check-script");
         if (scriptAntiguo) scriptAntiguo.remove();
 
-        // Caso A: No han confirmado asistencia en la web RSVP
+        if (data.acceso === "ERROR") {
+            mostrarEstado("error", `❌ Error Interno en Sheets<br><span style='font-size:0.9rem; font-weight:normal;'>Detalle: ${data.msg}</span>`);
+            return;
+        }
+
         if (data.confirmado === false) {
-            mostrarEstado("error", "❌ Alerta: No Confirmados<br><span style='font-size:0.9rem; font-weight:normal;'>Esta familia no registró su asistencia en la página web.</span>");
-            document.getElementById("btn-checkin").style.display = "block"; // Permitimos registrar de todos modos si el novio autoriza
+            mostrarEstado("error", "❌ Alerta: No Confirmados<br><span style='font-size:0.9rem; font-weight:normal;'>Esta familia no se encuentra registrada en la pestaña de confirmaciones del Excel.</span>");
+            // Aquí puedes decidir si dejas pasar a alguien no confirmado:
+            // Si NO quieres que pasen si no confirmaron previamente en la web, dejas la siguiente línea comentada:
+            // document.getElementById("btn-checkin").style.display = "block"; 
             return;
         }
 
-        // Caso B: Fraude / Invitación ya usada
         if (data.acceso && data.acceso.includes("ENTRÓ")) {
-            mostrarEstado("error", `❌ ¡ACCESO DENEGADO!<br><span style='font-size:1rem; font-weight:normal;'>Esta invitación ya fue escaneada previamente.<br><strong>Estatus: ${data.acceso}</strong></span>`);
+            mostrarEstado("error", `❌ ¡ACCESO DENEGADO!<br><span style='font-size:1rem; font-weight:normal;'>Esta invitación ya fue escaneada previamente.<br><strong>Estatus actual: ${data.acceso}</strong></span>`);
             return;
         }
 
-        // Caso C: Todo en orden, listos para ingresar
-        mostrarEstado("success", "✅ ¡INVITACIÓN VÁLIDA!<br><span style='font-size:1rem; font-weight:normal;'>Pases confirmados listos. Dale clic abajo para registrar su entrada.</span>");
+        // ÉXITO REAL: Solo en este punto se revela el botón para dar el acceso
+        mostrarEstado("success", "✅ ¡INVITACIÓN VÁLIDA!<br><span style='font-size:1rem; font-weight:normal;'>Pases confirmados listos en orden. Presiona abajo para registrar la entrada.</span>");
         document.getElementById("btn-checkin").style.display = "block";
     };
 
