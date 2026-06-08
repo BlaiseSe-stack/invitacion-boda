@@ -1,134 +1,10 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Control de Acceso - Validación de QR</title>
-    <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f4f4f9;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            color: #333;
-        }
-        .container {
-            width: 100%;
-            max-width: 450px;
-            background: #ffffff;
-            border-radius: 15px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-            padding: 30px;
-            text-align: center;
-            box-sizing: border-box;
-            margin: 15px;
-        }
-        h1 {
-            font-size: 1.6rem;
-            margin-bottom: 20px;
-            color: #4a4a4a;
-        }
-        /* ESTADOS VISUALES */
-        .status-box {
-            padding: 25px;
-            border-radius: 12px;
-            font-size: 1.2rem;
-            font-weight: bold;
-            margin-bottom: 25px;
-            display: none;
-            line-height: 1.5;
-        }
-        .loading {
-            background-color: #e2e3e5;
-            color: #383d41;
-            display: block;
-        }
-        .success {
-            background-color: #d4edda;
-            color: #155724;
-            border: 2px solid #c3e6cb;
-        }
-        .duplicate {
-            background-color: #fff3cd;
-            color: #856404;
-            border: 2px solid #ffeeba;
-        }
-        .error {
-            background-color: #f8d7da;
-            color: #721c24;
-            border: 2px solid #f5c6cb;
-        }
-        .info-panel {
-            text-align: left;
-            background: #f8f9fa;
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            border-left: 5px solid #b58d88;
-            display: none;
-        }
-        .info-panel p {
-            margin: 8px 0;
-            font-size: 1rem;
-        }
-        .info-panel strong {
-            color: #555;
-        }
-        .btn-action {
-            width: 100%;
-            padding: 15px;
-            font-size: 1.1rem;
-            font-weight: bold;
-            color: white;
-            background-color: #28a745;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            display: none;
-            box-shadow: 0 4px 6px rgba(40, 167, 69, 0.2);
-            transition: background 0.2s;
-        }
-        .btn-action:hover {
-            background-color: #218838;
-        }
-        .btn-action:disabled {
-            background-color: #6c757d;
-            cursor: not-allowed;
-        }
-    </style>
-</head>
-<body>
-
-<div class="container">
-    <h1>Control de Entrada</h1>
-    
-    <div id="status-box" class="status-box loading">
-        🔄 Conectando con la base de datos...
-    </div>
-
-    <div id="info-panel" class="info-panel">
-        <p><strong>Familia:</strong> <span id="info-familia">-</span></p>
-    </div>
-
-    <button id="btn-checkin" class="btn-action" onclick="registrarEntrada()">
-        CONFIRMAR ENTRADA
-    </button>
-</div>
-
-<script src="baseDatos/invitados.js"></script>
-
 <script>
-    // URL exacta de tu Google Apps Script (Debe ser la misma que usas en app.js)
-    const URL_WEBHOOK_GOOGLE = "https://script.google.com/macros/s/AKfycbyJLHHcp-7CQVAgV8AyC7vpv9BfBZgkNFhRja057CWqZQS0-cZuragWdcI1tjxH2_UB1A/exec";
+    // URL exacta de tu Google Apps Script
+    const URL_WEBHOOK_GOOGLE = "https://script.google.com/macros/s/AKfycbyPgEh9hPVwwKYakrZC5UVnGCsF6B7En5SKUsi1dmteCjTJB-pdh37H8ww8nr7kveJX/exec";
     
     let familiaUrlDecodificada = "";
+    let temporizadorRespuesta;
 
-    // 1. LEER EL APELLIDO DESDE LA URL AL ABRIR LA PÁGINA
-    // 1. LEER EL APELLIDO DESDE LA URL AL ABRIR LA PÁGINA (OPTIMIZADO)
     window.onload = function() {
         const parametros = new URLSearchParams(window.location.search);
         const familiaUrl = parametros.get('familia'); 
@@ -138,24 +14,21 @@
             return;
         }
 
-        # Convertimos "espinosa-rodriguez" de vuelta a "espinosa rodriguez" quitando todos los guiones
+        // Limpieza profunda de guiones
         familiaUrlDecodificada = familiaUrl.replace(/-/g, " ").toLowerCase().trim();
 
-        # Buscamos si existe en tu archivo invitados.js
         if (!baseInvitadosEstricta[familiaUrlDecodificada]) {
-            mostrarEstado("error", `❌ Familia No Encontrada<br><span style='font-size:0.9rem; font-weight:normal;'>"${familiaUrlDecodificada.toUpperCase()}" no está en la lista de invitados locales.</span>`);
+            mostrarEstado("error", `❌ Familia No Encontrada<br><span style='font-size:0.9rem; font-weight:normal;'>"${familiaUrlDecodificada.toUpperCase()}" no está en invitados.js</span>`);
             return;
         }
 
-        # Mostramos el nombre estético en el panel
         document.getElementById("info-familia").innerText = nombresVisualesFamilias[familiaUrlDecodificada];
         document.getElementById("info-panel").style.display = "block";
 
-        # Consultamos en Google Sheets si ya ingresó
+        // Lanzar consulta
         verificarEstatusEnGoogle();
     };
 
-    // 2. CONSULTAR A GOOGLE SHEETS VIA JSONP (Inmune a CORS)
     function verificarEstatusEnGoogle() {
         const apellidoVisual = nombresVisualesFamilias[familiaUrlDecodificada];
         const src = `${URL_WEBHOOK_GOOGLE}?familia=${encodeURIComponent(apellidoVisual)}&callback=procesarEstatusAcceso`;
@@ -164,9 +37,19 @@
         script.id = "jsonp-check-script";
         script.src = src;
         
+        // ⚠️ DETECTOR DE ERRORES AUTOMÁTICO (TIMEOUT)
+        // Si Google tarda más de 6 segundos, asumimos desconexión y liberamos el botón
+        temporizadorRespuesta = setTimeout(function() {
+            console.log("Tiempo de espera agotado. Activando modo de contingencia.");
+            mostrarEstado("duplicate", "⚠️ Servidor Ocupado / Offline<br><span style='font-size:0.9rem; font-weight:normal;'>Google Sheets tardó demasiado en responder. Si confirmaron en físico, puedes darles el paso.</span>");
+            document.getElementById("btn-checkin").style.display = "block";
+            const s = document.getElementById("jsonp-check-script");
+            if (s) s.remove();
+        }, 6000);
+
         script.onerror = function() {
-            // Plan de contingencia si no hay internet en el salón
-            mostrarEstado("duplicate", "⚠️ Modo Offline Activo<br><span style='font-size:0.9rem; font-weight:normal;'>No se pudo conectar a Google Sheets, pero la familia sí pertenece al evento. Puedes darles el paso.</span>");
+            clearTimeout(temporizadorRespuesta);
+            mostrarEstado("duplicate", "⚠️ Error de Red de Google<br><span style='font-size:0.9rem; font-weight:normal;'>No se pudo establecer conexión. Acceso permitido mediante validación local.</span>");
             document.getElementById("btn-checkin").style.display = "block";
             script.remove();
         };
@@ -174,31 +57,36 @@
         document.body.appendChild(script);
     }
 
-    // 3. RECIBIR EL VEREDICTO DESDE GOOGLE SHEETS
+    // RESPUESTA GLOBAL JSONP
     window.procesarEstatusAcceso = function(data) {
-        // Eliminar el script temporal creado
+        // Cancelamos el temporizador de error porque Google SÍ respondió
+        clearTimeout(temporizadorRespuesta);
+
         const scriptAntiguo = document.getElementById("jsonp-check-script");
         if (scriptAntiguo) scriptAntiguo.remove();
 
-        // Caso A: No han confirmado asistencia en la web RSVP
+        // Si el script de Google arroja un error interno nos avisará aquí
+        if (data.acceso === "ERROR") {
+            mostrarEstado("error", `❌ Error Interno en Sheets<br><span style='font-size:0.9rem; font-weight:normal;'>Detalle: ${data.msg}</span>`);
+            return;
+        }
+
         if (data.confirmado === false) {
-            mostrarEstado("error", "❌ Alerta: No Confirmados<br><span style='font-size:0.9rem; font-weight:normal;'>Esta familia no registró su asistencia en la página web.</span>");
-            document.getElementById("btn-checkin").style.display = "block"; // Permitimos registrar de todos modos si el novio autoriza
+            mostrarEstado("error", "❌ Alerta: No Confirmados<br><span style='font-size:0.9rem; font-weight:normal;'>Esta familia no se encuentra registrada en la pestaña de confirmaciones del Excel.</span>");
+            document.getElementById("btn-checkin").style.display = "block"; 
             return;
         }
 
-        // Caso B: Fraude / Invitación ya usada
         if (data.acceso && data.acceso.includes("ENTRÓ")) {
-            mostrarEstado("error", `❌ ¡ACCESO DENEGADO!<br><span style='font-size:1rem; font-weight:normal;'>Esta invitación ya fue escaneada previamente.<br><strong>Estatus: ${data.acceso}</strong></span>`);
+            mostrarEstado("error", `❌ ¡ACCESO DENEGADO!<br><span style='font-size:1rem; font-weight:normal;'>Esta invitación ya fue escaneada previamente.<br><strong>Estatus actual: ${data.acceso}</strong></span>`);
             return;
         }
 
-        // Caso C: Todo en orden, listos para ingresar
-        mostrarEstado("success", "✅ ¡INVITACIÓN VÁLIDA!<br><span style='font-size:1rem; font-weight:normal;'>Pases confirmados listos. Dale clic abajo para registrar su entrada.</span>");
+        // Éxito total
+        mostrarEstado("success", "✅ ¡INVITACIÓN VÁLIDA!<br><span style='font-size:1rem; font-weight:normal;'>Pases listos en orden. Presiona el botón de abajo para registrar la entrada al salón.</span>");
         document.getElementById("btn-checkin").style.display = "block";
     };
 
-    // 4. GUARDAR EL "CHECK-IN" EN EL EXCEL CUANDO EL STAFF DE CLIC AL BOTÓN
     function registrarEntrada() {
         const btn = document.getElementById("btn-checkin");
         btn.disabled = true;
@@ -206,10 +94,9 @@
 
         const apellidoVisual = nombresVisualesFamilias[familiaUrlDecodificada];
         
-        // Enviamos formato url-encoded idéntico a tu doPost optimizado
         const datosFormulario = new URLSearchParams();
         datosFormulario.append("familia", apellidoVisual);
-        datosFormulario.append("tipo", "checkin"); // Le avisa al doPost que ejecute la lógica de actualización de celda
+        datosFormulario.append("tipo", "checkin"); 
 
         fetch(URL_WEBHOOK_GOOGLE, {
             method: "POST",
@@ -220,4 +107,21 @@
             body: datosFormulario.toString()
         })
         .then(() => {
-            mostrarEstado("success", "🎉
+            mostrarEstado("success", "🎉 ¡BIENVENIDOS!<br><span style='font-size:1rem; font-weight:normal;'>Acceso concedido y sellado en el Excel de forma exitosa.</span>");
+            btn.style.display = "none";
+        })
+        .catch(err => {
+            console.error("Error al hacer check-in:", err);
+            alert("Error de conexión al guardar el acceso. Inténtalo de nuevo.");
+            btn.disabled = false;
+            btn.innerText = "CONFIRMAR ENTRADA";
+        });
+    }
+
+    function mostrarEstado(clase, texto) {
+        const box = document.getElementById("status-box");
+        box.className = "status-box " + clase;
+        box.innerHTML = texto;
+        box.style.display = "block";
+    }
+</script>
