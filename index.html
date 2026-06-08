@@ -252,15 +252,9 @@
                 // Consulta en tiempo real a Google Sheets
                 fetch(`${URL_WEBHOOK_GOOGLE}?familia=${encodeURIComponent(apellidoVisual)}`, {
                     method: "GET",
-                    mode: "cors",         // Indica al navegador que maneje políticas CORS
-                    redirect: "follow"    // CRUCIAL: Le dice al navegador que siga el redireccionamiento de Google
+                    redirect: "follow" // Le dice al navegador que siga la redirección interna de Google
                 })
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error("Error en la respuesta del servidor");
-                        }
-                        return response.json(); // Convierte la respuesta a JSON
-                    })
+                    .then(response => response.json())
                     .then(data => {
                         btnBuscar.disabled = false;
                         errorMsg.style.color = "#cc0000"; 
