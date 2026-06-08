@@ -116,18 +116,195 @@
         </div>
 
 
-       <div class="rsvp-container" style="padding: 10px; background-color: #f7eded; border-radius: 15px; border: 1px solid #e1ceca; max-width: 500px; margin: 40px auto;">
-    <h2 style="font-family: 'Georgia', serif; color: #9c746f; font-size: 2rem; margin-bottom: 5px; font-weight: 400;">Confirmación de asistencia</h2>
-    <p class="rsvp-p" style="font-size: 1rem; margin-bottom: 20px; color: #7a6662;">Por favor, Confirma tu asistencia antes del <br> <b style="font-size: 1.2rem; color: #b58d88; font-style: italic; margin-bottom: 5px;">05/septiembre/2026:</p>
-    
-    <div style="position: relative; overflow: hidden; width: 100%; padding-top: 140%;"> <iframe 
-            src="https://forms.gle/9Vo5hxVFCZsG88Hz7" 
-            style="position: absolute; top: 0; left: 0; bottom: 0; right: 0; width: 100%; height: 100%; border: none;" 
-            allowfullscreen>
-            Cargando formulario…
-        </iframe>
-    </div>
-</div>
+        <section id="rsvp-section" style="background-color: #fbf6f5; padding: 60px 20px; font-family: 'Times New Roman', Times, serif; color: #5c4d4d; text-align: center;">
+            <div style="max-width: 500px; margin: 0 auto; background: #ffffff; padding: 40px 30px; border-radius: 4px; border: 1px solid #e8d0cb; position: relative; box-shadow: 0 4px 15px rgba(0,0,0,0.02);">
+                
+                <div style="position: absolute; top: 10px; bottom: 10px; left: 10px; right: 10px; border: 1px solid #b58d88; pointer-events: none;"></div>
+
+                <h2 style="font-family: 'Georgia', serif; color: #b58d88; font-size: 1.8rem; margin: 0 0 5px 0; font-style: italic; letter-spacing: 1px;">Confirmar Asistencia</h2>
+                <div style="width: 80px; height: 1px; background-color: #b58d88; margin: 15px auto 25px auto;"></div>
+
+                <div id="rsvp-search-box">
+                    <p style="font-size: 1rem; margin-bottom: 20px; line-height: 1.4; padding: 0 10px;">
+                        Por favor, ingresa los <strong>dos apellidos</strong> de tu familia para buscar tus pases asignados:
+                    </p>
+                    <input type="text" id="rsvp-search-input" placeholder="Ej: Sánchez Espinoza" 
+                           style="width: 80%; max-width: 300px; padding: 10px 15px; border: 1px solid #e8d0cb; font-family: 'Times New Roman', serif; font-size: 1.1rem; color: #5c4d4d; outline: none; text-align: center; margin-bottom: 15px; border-radius: 4px;">
+                    <br>
+                    <button type="button" id="btn-search-family" 
+                            style="background-color: #b58d88; color: white; border: none; padding: 10px 25px; font-family: 'Georgia', serif; font-size: 0.95rem; cursor: pointer; letter-spacing: 1px; transition: background 0.3s; border-radius: 4px;">
+                        BUSCAR PASES
+                    </button>
+                    <div id="search-error-msg" style="color: #cc0000; font-style: italic; font-size: 0.95rem; margin-top: 15px; display: none;"></div>
+                </div>
+
+                <form id="wedding-rsvp-form" style="display: none;">
+                    <div id="rsvp-family-header"></div>
+                    
+                    <div id="super-check-container" style="background-color: #fbf6f5; padding: 12px; max-width: 320px; margin: 0 auto 20px auto; display: flex; align-items: center; border-radius: 4px; border: 1px dashed #e8d0cb;">
+                        <input type="checkbox" id="super-check" checked 
+                               style="width: 20px; height: 20px; margin-right: 12px; accent-color: #b58d88; cursor: pointer;">
+                        <label for="super-check" style="cursor: pointer; user-select: none; font-weight: bold; font-size: 1rem; color: #b58d88;">
+                            Confirmar todos los pases ✔
+                        </label>
+                    </div>
+
+                    <div id="rsvp-guests-list" style="text-align: left; max-width: 320px; margin: 0 auto 30px auto;"></div>
+                    
+                    <button type="submit" id="btn-submit-rsvp" 
+                            style="background-color: #b58d88; color: white; border: none; padding: 12px 35px; font-family: 'Georgia', serif; font-size: 1rem; cursor: pointer; letter-spacing: 1px; transition: background 0.3s; border-radius: 4px;">
+                        CONFIRMAR ASISTENCIA
+                    </button>
+                </form>
+
+                <div id="rsvp-success-msg" style="display: none; font-size: 1.25rem; color: #b58d88; font-style: italic; line-height: 1.5; padding: 20px 0;">
+                    ✨ ¡Tu asistencia ha sido confirmada con éxito! <br>Gracias por bloquear la fecha, nos vemos muy pronto.
+                </div>
+            </div>
+        </section>
+
+        <script>
+            // 1. TU BASE DE DATOS DE INVITADOS
+            // Importante: La clave debe ser la unión exacta de ambos apellidos en minúsculas y sin acentos.
+            const baseInvitadosEstricta = {
+                "sanchez espinosa": ["Donaldo", "Martha"],
+                "sanchez espinoza": ["Atzareel", "Andrew", "Panque", "Cow", "Capuchina", "Maple"],
+                "sanchez perez": ["Juan Sánchez", "María Pérez"],
+                "espinosa rodriguez": ["Ricardo Espinosa", "Sofía Rodríguez"]
+            };
+
+            // Guarda los nombres correctos con mayúsculas y acentos para mostrar en pantalla
+            const nombresVisualesFamilias = {
+                "sanchez espinosa": "Sánchez Espinosa"
+                "sanchez espinoza": "Sánchez Espinoza",
+                "sanchez perez": "Sánchez Pérez",
+                "espinosa rodriguez": "Espinosa Rodríguez"
+            };
+
+            const URL_WEBHOOK_GOOGLE = "https://script.google.com/macros/s/AKfycbwTHs2h6nW42cxWtOCNRkQguQcpyDHlQ1OqjiT0dO6flG3-ckyyWFdkEpEwBmhl1R2KuQ/exec";
+            let idFamiliaSeleccionada = "";
+
+            // Función para estandarizar el texto ingresado por el usuario
+            function normalizarApellidos(texto) {
+                return texto.toLowerCase()
+                            .normalize("NFD")
+                            .replace(/[\u0300-\u036f]/g, "") // Remueve acentos de forma inteligente
+                            .replace(/\s+/g, ' ')            // Convierte múltiples espacios en uno solo
+                            .trim();
+            }
+
+            // 2. LÓGICA DE BÚSQUEDA ESTRICTA POR AMBOS APELLIDOS
+            document.getElementById("btn-search-family").addEventListener("click", function() {
+                const inputTexto = document.getElementById("rsvp-search-input").value;
+                const busqueda = normalizarApellidos(inputTexto);
+                const errorMsg = document.getElementById("search-error-msg");
+
+                if (busqueda === "") {
+                    errorMsg.innerText = "Por favor, escribe tus dos apellidos.";
+                    errorMsg.style.display = "block";
+                    return;
+                }
+
+                // Validación directa: Debe coincidir exactamente la combinación de ambos apellidos
+                const integrantes = baseInvitadosEstricta[busqueda];
+
+                if (!integrantes) {
+                    errorMsg.innerHTML = `No encontramos pases asignados para "${inputTexto}".<br><span style="font-size:0.85rem; color:#5c4d4d;">Asegúrate de ingresar ambos apellidos (Ej: Sánchez Espinosa).</span>`;
+                    errorMsg.style.display = "block";
+                    return;
+                }
+
+                // Si coincide con éxito el ID completo de ambos apellidos
+                errorMsg.style.display = "none";
+                document.getElementById("rsvp-search-box").style.display = "none";
+                
+                idFamiliaSeleccionada = busqueda;
+                const apellidoVisual = nombresVisualesFamilias[idFamiliaSeleccionada];
+                const totalPases = integrantes.length;
+                const textoPlural = totalPases > 1 ? "pases asignados" : "pase asignado";
+
+                // Inyectar la información en el encabezado
+                document.getElementById("rsvp-family-header").innerHTML = `
+                    <div style="font-size: 1.35rem; font-weight: bold; margin-bottom: 4px;">Familia ${apellidoVisual}</div>
+                    <div style="font-size: 0.95rem; color: #b58d88; font-style: italic; margin-bottom: 20px;">(${totalPases} ${textoPlural})</div>
+                    <p style="font-size: 0.95rem; margin-bottom: 20px; line-height: 1.4; padding: 0 10px;">
+                        Selecciona únicamente a las personas que asistirán:
+                    </p>
+                `;
+
+                // Inyectar la lista de checkboxes
+                let contenedorCheckboxes = "";
+                integrantes.forEach((nombre, index) => {
+                    contenedorCheckboxes += `
+                        <div style="display: flex; align-items: center; margin-bottom: 12px; font-size: 1.1rem;">
+                            <input type="checkbox" id="invitado_${index}" name="asistentes_boda" value="${nombre}" checked 
+                                   style="width: 18px; height: 18px; margin-right: 12px; accent-color: #b58d88; cursor: pointer;" class="individual-check">
+                            <label for="invitado_${index}" style="cursor: pointer; user-select: none;">${nombre}</label>
+                        </div>`;
+                });
+                document.getElementById("rsvp-guests-list").innerHTML = contenedorCheckboxes;
+                
+                document.getElementById("wedding-rsvp-form").style.display = "block";
+                configurarSuperCheck();
+            });
+
+            // 3. LÓGICA DEL SÚPER CHECK
+            function configurarSuperCheck() {
+                const superCheck = document.getElementById("super-check");
+                superCheck.checked = true;
+                
+                superCheck.addEventListener("change", function() {
+                    const checkboxesIndividuales = document.querySelectorAll(".individual-check");
+                    checkboxesIndividuales.forEach(cb => cb.checked = superCheck.checked);
+                });
+
+                document.querySelectorAll(".individual-check").forEach(cb => {
+                    cb.addEventListener("change", function() {
+                        const todos = document.querySelectorAll(".individual-check");
+                        const marcados = document.querySelectorAll(".individual-check:checked");
+                        superCheck.checked = (todos.length === marcados.length);
+                    });
+                });
+            }
+
+            // 4. ENVÍO A GOOGLE SHEETS
+            document.getElementById("wedding-rsvp-form").addEventListener("submit", function(e) {
+                e.preventDefault();
+                
+                const seleccionados = [];
+                document.querySelectorAll('.individual-check:checked').forEach((cb) => {
+                    seleccionados.push(cb.value);
+                });
+                
+                if (seleccionados.length === 0) {
+                    alert("Si ningún integrante puede asistir, por favor avísanos de forma personal. ¡Muchas gracias!");
+                    return;
+                }
+
+                const datosEnviar = {
+                    familia: nombresVisualesFamilias[idFamiliaSeleccionada],
+                    asistieron: seleccionados.join(", ")
+                };
+
+                const btn = document.getElementById("btn-submit-rsvp");
+                btn.innerText = "ENVIANDO...";
+                btn.disabled = true;
+
+                fetch(URL_WEBHOOK_GOOGLE, {
+                    method: "POST",
+                    mode: "no-cors",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(datosEnviar)
+                }).then(() => {
+                    document.getElementById("wedding-rsvp-form").style.display = "none";
+                    document.getElementById("rsvp-success-msg").style.display = "block";
+                }).catch(err => {
+                    alert("Ocurrió un error al enviar la confirmación. Inténtalo de nuevo.");
+                    btn.innerText = "CONFIRMAR ASISTENCIA";
+                    btn.disabled = false;
+                });
+            });
+            </script>
 
         <footer>
             Hecho con amor para nuestra boda ♡ Atzareel & Andrew ♡ • 2026
