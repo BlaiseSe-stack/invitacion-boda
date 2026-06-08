@@ -105,13 +105,13 @@
                 </span>
 
                 <div style="margin: 35px auto; max-width: 450px; background-color: #fbf6f5; padding: 20px; border-radius: 10px; border: 1px dashed #e8d0cb; font-family: 'Times New Roman', Times, serif; color: #5c4d4d;">
-    <div style="font-family: 'Georgia', serif; font-style: italic; font-size: 1.2rem; color: #b58d88; margin-bottom: 8px;">
-        Pequeños Invitados
-    </div>
-    <div style="font-size: 0.95rem; line-height: 1.5; font-weight: bold; letter-spacing: 0.5px; padding: 0 10px;">
-        Queremos que todos disfruten al máximo de la celebración. Habrá un área de niños disponible; fuera de ella, la supervisión y cuidado de los pequeños es responsabilidad exclusiva de sus papás, para mantener un ambiente seguro y ordenado. ¡Gracias por su apoyo!
-    </div>
-</div>
+                    <div style="font-family: 'Georgia', serif; font-style: italic; font-size: 1.2rem; color: #b58d88; margin-bottom: 8px;">
+                        Pequeños Invitados
+                    </div>
+                    <div style="font-size: 0.95rem; line-height: 1.5; font-weight: bold; letter-spacing: 0.5px; padding: 0 10px;">
+                        Queremos que todos disfruten al máximo de la celebración. Habrá un área de niños disponible; fuera de ella, la supervisión y cuidado de los pequeños es responsabilidad exclusiva de sus papás, para mantener un ambiente seguro y ordenado. ¡Gracias por su apoyo!
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -127,6 +127,9 @@
                 <div id="rsvp-search-box">
                     <p style="font-size: 1rem; margin-bottom: 20px; line-height: 1.4; padding: 0 10px;">
                         Por favor, ingresa los <strong>dos apellidos</strong> de tu familia para buscar tus pases asignados:
+                    </p>
+                    <p style="font-size: 1rem; margin-bottom: 20px; line-height: 1.4; padding: 0 10px;">
+                        Nota:<strong> Estos apellidos de tu familia son los que tienen tus hijos</strong>
                     </p>
                     <input type="text" id="rsvp-search-input" placeholder="Ej: Sánchez Espinoza" 
                            style="width: 80%; max-width: 300px; padding: 10px 15px; border: 1px solid #e8d0cb; font-family: 'Times New Roman', serif; font-size: 1.1rem; color: #5c4d4d; outline: none; text-align: center; margin-bottom: 15px; border-radius: 4px;">
@@ -159,6 +162,17 @@
 
                 <div id="rsvp-success-msg" style="display: none; font-size: 1.25rem; color: #b58d88; font-style: italic; line-height: 1.5; padding: 20px 0;">
                     ✨ ¡Tu asistencia ha sido confirmada con éxito! <br>Gracias por bloquear la fecha, nos vemos muy pronto.
+
+                    <div style="margin: 35px auto; max-width: 450px; background-color: #fbf6f5; padding: 20px; border-radius: 10px; border: 1px dashed #e8d0cb; font-family: 'Times New Roman', Times, serif; color: #5c4d4d;">
+                        <div style="font-family: 'Georgia', serif; font-style: italic; font-size: 1.2rem; color: #b58d88; margin-bottom: 8px;">
+                            Pases virtuales 
+                        </div>
+                        <div style="font-size: 0.95rem; line-height: 1.5; font-weight: bold; letter-spacing: 0.5px; padding: 0 10px;">
+                            Después del cierre de confirmaciones te haremos llegar tus pases virtuales para el acceso al salón mediante un código QR.
+
+                            Nota: Si es necesario cancelar tu asistencia por favor comunicate exclusiva y directamente con los novios.
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
@@ -181,7 +195,7 @@
                 "espinosa rodriguez": "Espinosa Rodríguez"
             };
 
-            const URL_WEBHOOK_GOOGLE = "https://script.google.com/macros/s/AKfycbwTHs2h6nW42cxWtOCNRkQguQcpyDHlQ1OqjiT0dO6flG3-ckyyWFdkEpEwBmhl1R2KuQ/exec";
+            const URL_WEBHOOK_GOOGLE = "https://script.google.com/macros/s/AKfycbz1r5ebK8ijQFMvvard9hzQ7l6N2LQGmFt2BXutPW_aTdO_cM3hzO9YjE5FOfbT5bEpMQ/exec";
             let idFamiliaSeleccionada = "";
 
             // Función para estandarizar el texto ingresado por el usuario
