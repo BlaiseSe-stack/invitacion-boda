@@ -102,6 +102,20 @@
 </head>
 <body>
     <div id="envelope-layer" class="envelope-wrapper">
+        <div id="envelope-layer" class="envelope-wrapper">
+            <div class="envelope-container">
+                
+                <div class="countdown-envelope">
+                    <h3>Tiempo restante para confirmar asistencia:</h3>
+                    <div id="timer-rsvp" class="timer-display">00d 00h 00m 00s</div>
+                </div>
+
+                <div class="envelope" onclick="abrirSobre(this)">
+                    <div class="envelope-text">ABRIR INVITACIÓN</div>
+                </div>
+
+            </div>
+        </div>
         <div class="envelope" onclick="abrirSobre(this)">
             <div class="envelope-text">ABRIR INVITACIÓN</div>
         </div>
@@ -111,6 +125,11 @@
             <h1>¡Nos Casamos!</h1>
             
             <div class="subtitle">DESEAMOS COMPARTIR ESTE DÍA CONTIGO</div>
+            <div class="countdown-wedding">
+                <h2>FALTAN SOLO:</h2>
+                <div id="timer-wedding" class="timer-display-wedding">00d 00h 00m 00s</div>
+                <h3>Para el gran día</h3>
+            </div>
         </header>
 
 <!-- CALENDARIO INI -->        
@@ -214,6 +233,21 @@
             </div>
         </div>
 
+        <div class="gift-section">
+            <h2 class="gift-title">Detalles</h2>
+            <p class="gift-text">
+                Nuestra mayor alegría es su presencia. Dado que ya tenemos lo necesario para el hogar, 
+                si desean hacernos un obsequio opcional, su aportación económica voluntaria 
+                será un hermoso apoyo para ayudarnos a iniciar esta nueva etapa juntos.
+            </p>
+            
+            <div class="bank-details">
+                <p><strong>Banco:</strong> Nombre del Banco</p>
+                <p><strong>CLABE:</strong> 0000 0000 0000 0000 00</p>
+                <p><strong>A nombre de:</strong> Tus nombres</p>
+            </div>
+        </div>
+
 
         <section id="rsvp-section" style="background-color: #fbf6f5; padding: 60px 20px; font-family: 'Times New Roman', Times, serif; color: #5c4d4d; text-align: center;">
             <div style="max-width: 500px; margin: 0 auto; background: #ffffff; padding: 40px 30px; border-radius: 4px; border: 1px solid #e8d0cb; position: relative; box-shadow: 0 4px 15px rgba(0,0,0,0.02);">
@@ -285,17 +319,5 @@
         </footer>
     </div>
 
-    <script>
-        function abrirSobre(elementoSobre) {
-            // 1. Activa la animación CSS de la solapa levantándose
-            elementoSobre.classList.add("open");
-            
-            // 2. Espera 600 milisegundos (a que termine de levantarse la solapa) 
-            // y desvanece suavemente todo el sobre para revelar la invitación real.
-            setTimeout(function() {
-                document.getElementById("envelope-layer").classList.add("fade-out");
-            }, 800);
-        }
-    </script>
 </body>
 </html>

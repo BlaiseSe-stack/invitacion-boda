@@ -172,3 +172,74 @@
                     btn.disabled = false;
                 });
             });
+
+        function abrirSobre(elementoSobre) {
+            // 1. Forzar al navegador a ir al inicio de la página inmediatamente
+            window.scrollTo({
+                top: 0,
+                behavior: 'instant' // 'instant' asegura que suba de golpe antes de que se quite el sobre
+            });
+            
+            // También aseguramos el scroll a elementos internos si el body tuviera restricciones
+            document.documentElement.scrollTop = 0;
+            document.body.scrollTop = 0;
+
+            // 2. Activa la animación CSS de la solapa levantándose
+            elementoSobre.classList.add("open");
+            
+            // 3. Espera a que termine de levantarse la solapa y desvanece el sobre
+            setTimeout(function() {
+                document.getElementById("envelope-layer").classList.add("fade-out");
+            }, 800);
+        }
+
+        // =========================================================================
+        // CONFIGURACIÓN DE FECHAS LÍMITE (Modifica con tus fechas reales)
+        // =========================================================================
+        // Ejemplo: Cierre de listas el 5 de Septiembre a las 23:59:59
+        const FECHA_CIERRE_RSVP = new Date(2026, 8, 5, 23, 59, 59).getTime(); 
+        
+        // Ejemplo: El día de la Boda el 17 de Octubre a las 16:00:00
+        const FECHA_BODA = new Date(2026, 9, 17, 16, 0, 0).getTime();
+
+        // =========================================================================
+        // EJECUCIÓN CONTINUA DE LOS CONTADORES
+        // =========================================================================
+        const intervaloRelojes = setInterval(function() {
+            const ahora = new Date().getTime();
+
+            // 1. CÁLCULO PARA EL CIERRE DE RSVP (SOBRE)
+            const distanciaRsvp = FECHA_CIERRE_RSVP - ahora;
+            if (distanciaRsvp < 0) {
+                document.getElementById("timer-rsvp").innerText = "Lista Cerrada";
+                // Opcional: Aquí podrías ocultar el formulario de confirmación si ya expiró el tiempo
+            } else {
+                document.getElementById("timer-rsvp").innerText = formatearTiempo(distanciaRsvp);
+            }
+
+            // 2. CÁLCULO PARA EL GRAN DÍA (INVITACIÓN)
+            const distanciaBoda = FECHA_BODA - ahora;
+            if (distanciaBoda < 0) {
+                document.getElementById("timer-wedding").innerText = "¡Llegó el Gran Día!";
+                clearInterval(intervaloRelojes);
+            } else {
+                document.getElementById("timer-wedding").innerText = formatearTiempo(distanciaBoda);
+            }
+
+        }, 1000); // Se actualiza cada 1 segundo (1000 ms)
+
+        // FUNCIÓN AUXILIAR MATEMÁTICA PARA PASAR MILISEGUNDOS A TEXTO (DD HH MM SS)
+        function formatearTiempo(milisegundos) {
+            const dias = Math.floor(milisegundos / (1000 * 60 * 60 * 24));
+            const horas = Math.floor((milisegundos % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutos = Math.floor((milisegundos % (1000 * 60 * 60)) / (1000 * 60));
+            const segundos = Math.floor((milisegundos % (1000 * 60)) / 1000);
+
+            // Agregamos un cero a la izquierda si el número es menor a 10 para mantener la simetría visual
+            const dStr = dias < 10 ? "0" + dias : dias;
+            const hStr = horas < 10 ? "0" + horas : horas;
+            const mStr = minutos < 10 ? "10" && minutos < 10 ? "0" + minutos : minutos : minutos;
+            const sStr = segundos < 10 ? "0" + segundos : segundos;
+
+            return `${dStr}d ${hStr}h ${mStr}m ${sStr}s`;
+        }

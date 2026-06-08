@@ -21,6 +21,122 @@
               /* Hace que el fondo se quede fijo al hacer scroll */
             color: #5c4d4d; /* Marrón topo suave para texto */
             text-align: center;
+
+        }
+
+        /* CONTENEDOR FLEXIBLE PARA EL SOBRE Y SU RELOJ */
+        .envelope-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 25px; /* Espacio entre el contador superior y el sobre */
+        }
+
+        /* RELOJ DE CONFIRMACIONES (FUERA DEL SOBRE) */
+        .countdown-envelope {
+            text-align: center;
+            color: #5c4d4d; /* Tu color de texto principal */
+            background-color: rgba(251, 246, 245, 0.85); /* Fondo suave translúcido */
+            padding: 12px 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            max-width: 310px;
+        }
+
+        .countdown-envelope h3 {
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 1rem;
+            font-style: italic;
+            margin: 0 0 6px 0;
+        }
+
+        .timer-display {
+            font-family: 'Georgia', serif;
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: #b58d88; /* Tu color de detalles */
+            letter-spacing: 1px;
+        }
+
+        /* RELOJ PARA EL GRAN DÍA (DENTRO DE LA INVITACIÓN) */
+        .countdown-wedding {
+            text-align: center;
+            margin: 35px auto;
+            padding: 20px;
+            max-width: 500px;
+        }
+
+        .countdown-wedding h2 {
+            font-family: 'Georgia', serif;
+            font-size: 1.1rem;
+            color: #b58d88;
+            letter-spacing: 3px;
+            margin-bottom: 8px;
+        }
+
+        .timer-display-wedding {
+            font-family: 'Georgia', serif;
+            font-size: 2.2rem; /* Más grande y llamativo */
+            color: #5c4d4d;
+            font-weight: 300;
+            margin: 10px 0;
+        }
+
+        .countdown-wedding h3 {
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 1.2rem;
+            font-style: italic;
+            color: #b58d88;
+            margin-top: 5px;
+        }
+
+        /* ESTILOS PARA LA SECCIÓN DETALLES/REGALOS */
+        .gift-section {
+            max-width: 600px;
+            margin: 40px auto; /* Centrado y con espacio arriba/abajo */
+            padding: 20px;
+            text-align: center;
+            background-color: #fbf6f5; /* Tu color de fondo suave */
+            border-radius: 10px;
+        }
+
+        .gift-title {
+            font-family: 'Georgia', serif;
+            font-size: 1.8rem;
+            color: #b58d88; /* Tu color de detalles (Marrón sutil) */
+            margin-bottom: 12px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .gift-text {
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 1.05rem; /* Un poco más pequeña que el texto estándar */
+            color: #5c4d4d; /* Tu color de texto principal */
+            font-style: italic; /* Texto en cursiva */
+            line-height: 1.6;
+            margin-bottom: 25px;
+            padding: 0 15px;
+        }
+
+        /* Contenedor sutil para los datos de la cuenta */
+        .bank-details {
+            display: inline-block;
+            text-align: left;
+            background-color: #ffffff;
+            padding: 15px 25px;
+            border-radius: 8px;
+            border: 1px dashed #b58d88; /* Línea punteada muy fina */
+            font-size: 1rem;
+            color: #5c4d4d;
+        }
+
+        .bank-details p {
+            margin: 6px 0;
+        }
+        /* Cuando el sobre ya se desvaneció, permitimos el scroll normal para ver la invitación */
+        .envelope-wrapper.fade-out ~ * {
+            /* Esto le devuelve el scroll al cuerpo de la página automáticamente */
         }
 
         /* Contenedor Principal */
