@@ -124,7 +124,7 @@
 <script>
     console.log("=== PRUEBA DE DIAGNÓSTICO ===");
     if (typeof baseInvitadosEstricta !== 'undefined') {
-        console.log("¡Éxito! La base de datos cargó correctamente:");
+        console.log("¡Éxito! La base de datos cargó correctamente:", baseInvitadosEstricta);
         print(baseInvitadosEstricta); // Imprime el objeto completo
     } else {
         console.error("❌ Error: 'baseInvitadosEstricta' sigue sin existir en la memoria.");
@@ -148,20 +148,20 @@
             return;
         }
 
-        # Convertimos "espinosa-rodriguez" de vuelta a "espinosa rodriguez" quitando todos los guiones
+        // Convertimos "espinosa-rodriguez" de vuelta a "espinosa rodriguez" quitando todos los guiones
         familiaUrlDecodificada = familiaUrl.replace(/-/g, " ").toLowerCase().trim();
 
-        # Buscamos si existe en tu archivo invitados.js
+        // Buscamos si existe en tu archivo invitados.js
         if (!baseInvitadosEstricta[familiaUrlDecodificada]) {
             mostrarEstado("error", `❌ Familia No Encontrada<br><span style='font-size:0.9rem; font-weight:normal;'>"${familiaUrlDecodificada.toUpperCase()}" no está en la lista de invitados locales.</span>`);
             return;
         }
 
-        # Mostramos el nombre estético en el panel
+        // Mostramos el nombre estético en el panel
         document.getElementById("info-familia").innerText = nombresVisualesFamilias[familiaUrlDecodificada];
         document.getElementById("info-panel").style.display = "block";
 
-        # Consultamos en Google Sheets si ya ingresó
+        // Consultamos en Google Sheets si ya ingresó
         verificarEstatusEnGoogle();
     };
 
