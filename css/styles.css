@@ -21,7 +21,23 @@
               /* Hace que el fondo se quede fijo al hacer scroll */
             color: #5c4d4d; /* Marrón topo suave para texto */
             text-align: center;
+        }
 
+        /* ESTILOS GENERALES PARA LAS IMÁGENES DE LA INVITACIÓN */
+        .invitation-img {
+            width: 150px;  /* Forzado a 150px de ancho */
+            height: 150px; /* Forzado a 150px de alto */
+            object-fit: cover; /* Recorta la imagen estéticamente para que no se deforme siendo cuadrada */
+            border-radius: 16px; /* Mantiene tus bordes curvos estilizados */
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); /* Sombra sutil */
+            display: block;
+        }
+        /* CONTENEDOR PARA IMÁGENES INDIVIDUALES (Recepción y Dress code) */
+        .single-image-container {
+            max-width: 100%;
+            margin: 20px auto;
+            display: flex;
+            justify-content: center;
         }
 
         /* CONTENEDOR FLEXIBLE PARA EL SOBRE Y SU RELOJ */
