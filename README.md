@@ -27,6 +27,6 @@ y en caso de no estar en dicha área que los padres nos apoyen 100% con cuidar a
 
 - Crear pagina principal, donde sea un sobre y al dar click abra toda la información actual [OK]
 
-- Agregar enlace a albúm compartido para fotos [ToDo]
+- Agregar enlace a albúm compartido para fotos [Ok]
 
-- Terminar la BD por familias [ToDo]
+- Terminar la BD por familias [InProgres]
