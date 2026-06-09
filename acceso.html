@@ -15,17 +15,30 @@
             align-items: center;
             min-height: 100vh;
             color: #333;
+
+            /* 🖼️ IMAGEN DE FONDO PARA TODA LA PANTALLA */
+            background-image: 
+                linear-gradient(rgba(251, 246, 245, 0.4), rgba(251, 246, 245, 0.4)), 
+                url('img/img4.png');
+            background-size: cover;           /* Cubre toda la pantalla sin importar el tamaño del celular */
+            background-position: center;
         }
         .container {
-            width: 100%;
-            max-width: 450px;
-            background: #ffffff;
-            border-radius: 15px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-            padding: 30px;
+            max-width: 500px;
+            margin: 20px auto;
+            padding: 30px 20px;
+            border-radius: 16px;
             text-align: center;
-            box-sizing: border-box;
-            margin: 15px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+
+            /* 🖼️ AQUÍ SE INTEGRA LA IMAGEN DE FONDO 'img2.png' */
+            background-image: 
+                linear-gradient(rgba(251, 246, 245, 0.85), rgba(251, 246, 245, 0.85)), 
+                url('img/img2.png');
+                
+            background-size: cover;       /* Escala la imagen para que cubra todo el recuadro */
+            background-position: center;  /* Centra la imagen de fondo */
+            background-repeat: no-repeat;
         }
         h1 {
             font-size: 1.6rem;
@@ -179,7 +192,7 @@
             console.log("Tiempo de espera agotado.");
             // NOTA: Ya NO activamos el botón verde de forma automática. 
             // Mostramos un botón para reintentar la conexión de forma manual.
-            mostrarEstado("duplicate", "⚠️ Conexión Lenta<br><span style='font-size:0.9rem; font-weight:normal;'>Google Sheets está tardando en responder debido al internet del salón.</span><br><br><button onclick='location.reload()' style='padding:8px; font-weight:bold; cursor:pointer;'>🔄 REINTENTAR ESCANEO</button>");
+            mostrarEstado("duplicate", "⚠️ Conexión Lenta<br><span style='font-size:0.9rem; font-weight:normal;'>La lista está tardando en responder debido al internet de la zona.</span><br><br><button onclick='location.reload()' style='padding:8px; font-weight:bold; cursor:pointer;'>🔄 REINTENTAR ESCANEO</button>");
             
             const s = document.getElementById("jsonp-check-script");
             if (s) s.remove();
@@ -188,7 +201,7 @@
         script.onerror = function() {
             clearTimeout(temporizadorRespuesta);
             // Si la red se cae por completo, le avisa al staff y bloquea el paso hasta recuperar señal
-            mostrarEstado("error", "❌ Sin Conexión a Internet<br><span style='font-size:0.9rem; font-weight:normal;'>El teléfono no tiene datos o señal celular. No se puede validar ni registrar la entrada en el Excel.</span><br><br><button onclick='location.reload()' style='padding:8px; font-weight:bold; cursor:pointer;'>🔄 REINTENTAR CONEXIÓN</button>");
+            mostrarEstado("error", "❌ Sin Conexión a Internet<br><span style='font-size:0.9rem; font-weight:normal;'>El teléfono no tiene datos o señal celular. No se puede validar ni registrar la entrada en la lista.</span><br><br><button onclick='location.reload()' style='padding:8px; font-weight:bold; cursor:pointer;'>🔄 REINTENTAR CONEXIÓN</button>");
             script.remove();
         };
 
@@ -203,12 +216,12 @@
         if (scriptAntiguo) scriptAntiguo.remove();
 
         if (data.acceso === "ERROR") {
-            mostrarEstado("error", `❌ Error Interno en Sheets<br><span style='font-size:0.9rem; font-weight:normal;'>Detalle: ${data.msg}</span>`);
+            mostrarEstado("error", `❌ Error Interno en la lista<br><span style='font-size:0.9rem; font-weight:normal;'>Detalle: ${data.msg}</span>`);
             return;
         }
 
         if (data.confirmado === false) {
-            mostrarEstado("error", "❌ Alerta: No Confirmados<br><span style='font-size:0.9rem; font-weight:normal;'>Esta familia no se encuentra registrada en la pestaña de confirmaciones del Excel.</span>");
+            mostrarEstado("error", "❌ Alerta: No Confirmados<br><span style='font-size:0.9rem; font-weight:normal;'>Esta familia no se encuentra registrada en la lista de confirmaciones.</span>");
             // Aquí puedes decidir si dejas pasar a alguien no confirmado:
             // Si NO quieres que pasen si no confirmaron previamente en la web, dejas la siguiente línea comentada:
             // document.getElementById("btn-checkin").style.display = "block"; 
