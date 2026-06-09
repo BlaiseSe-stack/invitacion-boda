@@ -233,10 +233,9 @@
 
         const apellidoVisual = nombresVisualesFamilias[familiaUrlDecodificada];
         
-        // Enviamos formato url-encoded idéntico a tu doPost optimizado
         const datosFormulario = new URLSearchParams();
         datosFormulario.append("familia", apellidoVisual);
-        datosFormulario.append("tipo", "checkin"); // Le avisa al doPost que ejecute la lógica de actualización de celda
+        datosFormulario.append("tipo", "checkin"); 
 
         fetch(URL_WEBHOOK_GOOGLE, {
             method: "POST",
@@ -247,8 +246,33 @@
             body: datosFormulario.toString()
         })
         .then(() => {
-            mostrarEstado("success", "🎉 ¡BIENVENIDOS!<br><span style='font-size:1rem; font-weight:normal;'>Acceso concedido y registrado en el sistema de forma exitosa.</span>");
+            // 1. Ocultamos el botón de registro que ya se usó
             btn.style.display = "none";
+
+            // 2. Modificamos el cuadro de estado a Éxito Total
+            mostrarEstado("success", "🎉 ¡BIENVENIDOS!<br><span style='font-size:1rem; font-weight:normal;'>Acceso concedido y registrado con éxito.</span>");
+            
+            // 3. INYECCIÓN VISUAL: Creamos el bloque del álbum interactivo debajo de todo
+            const contenedorAlbum = document.createElement("div");
+            contenedorAlbum.style.marginTop = "30px";
+            contenedorAlbum.style.padding = "20px";
+            contenedorAlbum.style.borderRadius = "12px";
+            contenedorAlbum.style.border = "2px dashed #b58d88"; // Tu color café sutil
+            contenedorAlbum.style.backgroundColor = "#fbf6f5";   // Fondo claro elegante
+            
+            contenedorAlbum.innerHTML = `
+                <p style="margin: 0 0 10px 0; font-size: 1.2rem; font-weight: bold; color: #b58d88;">📸 ¡Ayúdanos a recordar!</p>
+                <p style="margin: 0 0 20px 0; font-size: 0.95rem; color: #5c4d4d; line-height: 1.4;">
+                    Al ingresar al salón, por favor tomen una captura de esta pantalla o den clic abajo para guardar el enlace de nuestro álbum de fotos digital.
+                </p>
+                <a href="URL_DE_TU_ALBUM_DE_GOOGLE_PHOTOS_O_ICLOUD" target="_blank" 
+                   style="display: block; padding: 12px; background-color: #b58d88; color: white; text-decoration: none; font-weight: bold; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                   👉 ENLACE AL ÁLBUM COMPARTIDO
+                </a>
+            `;
+            
+            // Colocamos el nuevo bloque al final del contenedor principal
+            document.querySelector(".container").appendChild(contenedorAlbum);
         })
         .catch(err => {
             console.error("Error al hacer check-in:", err);

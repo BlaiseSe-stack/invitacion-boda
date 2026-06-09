@@ -346,7 +346,7 @@
             font-size: 1.1rem;
             border: 1px solid #cbd9b8;
         }
-        
+
         /* ESTILOS PARA EL FOOTER FLUIDO Y VISIBLE */
         footer, .footer-dedicatoria {
             position: relative; /* Cambiar de 'fixed' o 'absolute' a 'relative' es el secreto */
@@ -366,7 +366,7 @@
             color: #5c4d4d; /* Tu color de texto principal */
             font-style: italic; /* Cursiva elegante */
             line-height: 1.8; /* Mayor espacio entre líneas para una lectura poética */
-            max-width: 550px; /* Evita que las líneas se estiren demasiado a lo ancho */
+            max-width: 100%; /* Evita que las líneas se estiren demasiado a lo ancho */
             margin: 0 auto; /* Centra el bloque de texto perfectamente */
         }
 
