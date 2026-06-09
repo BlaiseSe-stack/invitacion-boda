@@ -346,12 +346,36 @@
             font-size: 1.1rem;
             border: 1px solid #cbd9b8;
         }
+        
+        /* ESTILOS PARA EL FOOTER FLUIDO Y VISIBLE */
+        footer, .footer-dedicatoria {
+            position: relative; /* Cambiar de 'fixed' o 'absolute' a 'relative' es el secreto */
+            width: 100%;
+            margin-top: 50px; /* Le da un espacio generoso después del formulario RSVP */
+            padding: 40px 20px; /* Más espaciado interno para que la dedicatoria respire */
+            background-color: #fbf6f5; /* Tu fondo crema suave para que resalte del resto */
+            text-align: center;
+            box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.02); /* Una sombra invertida muy tenue arriba */
+            border-top: 1px solid rgba(181, 141, 136, 0.2); /* Una finísima línea café arriba */
+        }
 
-        footer {
-            margin: 60px 0 30px 0;
-            font-size: 0.9rem;
-            color: #a89692;
-            letter-spacing: 1px;
+        /* ESTILO EXCLUSIVO PARA EL TEXTO DE LA DEDICATORIA */
+        .dedicatoria-texto {
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 1.15rem; /* Un tamaño ligeramente mayor para que se lea sin esfuerzo */
+            color: #5c4d4d; /* Tu color de texto principal */
+            font-style: italic; /* Cursiva elegante */
+            line-height: 1.8; /* Mayor espacio entre líneas para una lectura poética */
+            max-width: 550px; /* Evita que las líneas se estiren demasiado a lo ancho */
+            margin: 0 auto; /* Centra el bloque de texto perfectamente */
+        }
+
+        /* UN DETALLE DIVISOR ADICIONAL (OPCIONAL) */
+        .dedicatoria-icono {
+            color: #b58d88; /* Tu color café sutil */
+            font-size: 1rem;
+            margin-bottom: 15px;
+            letter-spacing: 4px;
         }
 
         /* --- RESPONSIVIDAD (Media Queries) --- */
