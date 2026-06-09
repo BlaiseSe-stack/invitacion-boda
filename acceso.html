@@ -132,16 +132,6 @@
 
 <script src="baseDatos/invitados.js"></script>
 
-<!-- BLOQUE DE DIAGNÓSTICO CORRECTO (Sin la función print) -->
-<script>
-    console.log("=== PRUEBA DE DIAGNÓSTICO ===");
-    if (typeof baseInvitadosEstricta !== 'undefined') {
-        console.log("¡Éxito! La base de datos cargó correctamente:", baseInvitadosEstricta);
-    } else {
-        console.error("❌ Error: 'baseInvitadosEstricta' sigue sin existir en la memoria.");
-    }
-</script>
-
 <script>
     // URL exacta de tu Google Apps Script (Debe ser la misma que usas en app.js)
     const URL_WEBHOOK_GOOGLE = "https://script.google.com/macros/s/AKfycbwbY21MiOreZ0-e4GaNChXScB5BVLm1IFlaC14fcd5xy4W5xHOqKnQrOWvRTcbZR8l4HA/exec";
