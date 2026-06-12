@@ -173,25 +173,55 @@
                 });
             });
 
-        function abrirSobre(elementoSobre) {
-            // 1. Forzar al navegador a ir al inicio de la página inmediatamente
-            window.scrollTo({
-                top: 0,
-                behavior: 'instant' // 'instant' asegura que suba de golpe antes de que se quite el sobre
-            });
-            
-            // También aseguramos el scroll a elementos internos si el body tuviera restricciones
-            document.documentElement.scrollTop = 0;
-            document.body.scrollTop = 0;
+            // =========================================================================
+            // 5.1 LOGÍSTICA DEL REPRODUCTOR OCULTO DE YOUTUBE (CORREGIDO)
+            // =========================================================================
+            var tag = document.createElement('script');
+            // Se corrigió el doble "https://" que causaba error de red
+            tag.src = "https://www.youtube.com/iframe_api"; 
+            var firstScriptTag = document.getElementsByTagName('script')[0];
+            firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
-            // 2. Activa la animación CSS de la solapa levantándose
-            elementoSobre.classList.add("open");
-            
-            // 3. Espera a que termine de levantarse la solapa y desvanece el sobre
-            setTimeout(function() {
-                document.getElementById("envelope-layer").classList.add("fade-out");
-            }, 800);
-        }
+            var player;
+            function onYouTubeIframeAPIReady() {
+                player = new YT.Player('youtube-player', {
+                    height: '0',
+                    width: '0',
+                    videoId: 'p_-50n89C5I', 
+                    playerVars: {
+                        'autoplay': 0,
+                        'controls': 0,
+                        'loop': 1,
+                        'playlist': 'p_-50n89C5I' 
+                    }
+                });
+            }
+
+            // =========================================================================
+            // 5.2 FUNCIÓN UNIFICADA: APERTURA DEL SOBRE + INICIO DE MÚSICA
+            // =========================================================================
+            function abrirSobre(elementoSobre) {
+                // A. Forzar al navegador a ir al inicio de la página inmediatamente[cite: 2]
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'instant'
+                });
+                document.documentElement.scrollTop = 0;
+                document.body.scrollTop = 0;
+                
+                // B. Disparar la música de fondo de manera segura aprovechando la interacción del usuario
+                if (player && typeof player.playVideo === 'function') {
+                    player.playVideo();
+                }
+
+                // C. Activar la animación CSS de la solapa levantándose[cite: 2]
+                elementoSobre.classList.add("open");
+                
+                // D. Esperar a que termine de levantarse la solapa y desvanecer el sobre completo[cite: 2]
+                setTimeout(function() {
+                    document.getElementById("envelope-layer").classList.add("fade-out");
+                }, 800);
+            }
 
         // =========================================================================
         // CONFIGURACIÓN DE FECHAS LÍMITE (Modifica con tus fechas reales)
@@ -242,36 +272,4 @@
             const sStr = segundos < 10 ? "0" + segundos : segundos;
 
             return `${dStr}d ${hStr}h ${mStr}m ${sStr}s`;
-        }
-
-        // Cargar la API de reproducción de YouTube de forma asíncrona
-        var tag = document.createElement('script');
-        tag.src = "https://www.youtube.com/iframe_api";
-        var firstScriptTag = document.getElementsByTagName('script')[0];
-        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-
-        var player;
-        function onYouTubeIframeAPIReady() {
-            player = new YT.Player('youtube-player', {
-                height: '0',
-                width: '0',
-                videoId: 'p_-50n89C5I', // ID de tu canción de Il Divo (Hasta Mi Final - Piano)
-                playerVars: {
-                    'autoplay': 0,
-                    'controls': 0,
-                    'loop': 1 // Requerido por YouTube para que repita la canción infinitamente
-                }
-            });
-        }
-
-        // Función que se activa al presionar el botón "Abrir Invitación"
-        function abrirSobre() {
-            // 1. Desvanecer la pantalla de bienvenida
-            var overlay = document.getElementById('envelope-layer');
-            overlay.classList.add('oculto');
-            
-            // 2. Reproducir la música de fondo de manera segura
-            if (player && typeof player.playVideo === 'function') {
-                player.playVideo();
-            }
         }
