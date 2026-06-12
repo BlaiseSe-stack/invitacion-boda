@@ -192,7 +192,9 @@
                         'autoplay': 0,
                         'controls': 0,
                         'loop': 1,
-                        'playlist': 'p_-50n89C5I' 
+                        'playlist': 'p_-50n89C5I',
+                        // 🍏 PARÁMETRO VITAL PARA IPHONE / IOS:
+                        'playsinline': 1 
                     }
                 });
             }
