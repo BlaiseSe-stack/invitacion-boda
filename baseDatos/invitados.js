@@ -19,6 +19,6 @@ const nombresVisualesFamilias = {
     "sanchez perez": "Sánchez Pérez",
     "espinosa rodriguez": "Espinosa Rodríguez",
     "sanabria betancourt": "Sanabria Betancourt",
-    "sanchez leon": "Sanchez Lopez",
+    "sanchez leon": "Sánchez León",
     "rosas rosas": "Rosas Rosas"
 };
