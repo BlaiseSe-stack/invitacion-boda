@@ -9,7 +9,7 @@ const baseInvitadosEstricta = {
     "espinosa rodriguez": { integrantes: ["Ricardo", "Sofía", "Pedro"], confirmado: false },
     "sanabria betancourt": { integrantes: ["Erick"], confirmado: false },
     "sanchez leon": { integrantes: ["Niels", "Silvia", "Meli", "Lilith", "Elena"], confirmado: false },
-    "rosas rosas": { integrantes: ["David", "Cela", "Felix"], confirmado: false }
+    "rosas galicia": { integrantes: ["David", "Cela", "Felix"], confirmado: false }
     // Aquí puedes seguir agregando todas las familias que necesites...
 };
 
