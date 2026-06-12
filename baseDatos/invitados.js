@@ -8,7 +8,7 @@ const baseInvitadosEstricta = {
     "sanchez perez": { integrantes: ["Juan", "María"], confirmado: false },
     "espinosa rodriguez": { integrantes: ["Ricardo", "Sofía", "Pedro"], confirmado: false },
     "sanabria betancourt": { integrantes: ["Erick"], confirmado: false },
-    "sanchez lopez": { integrantes: ["Niels Isaac Claudio", "Silvia", "Meli", "Lilith", "Suegra"], confirmado: false },
+    "sanchez leon": { integrantes: ["Niels", "Silvia", "Meli", "Lilith", "Elena"], confirmado: false },
     "rosas rosas": { integrantes: ["David", "Cela", "Felix"], confirmado: false }
     // Aquí puedes seguir agregando todas las familias que necesites...
 };
@@ -19,6 +19,6 @@ const nombresVisualesFamilias = {
     "sanchez perez": "Sánchez Pérez",
     "espinosa rodriguez": "Espinosa Rodríguez",
     "sanabria betancourt": "Sanabria Betancourt",
-    "sanchez lopez": "Sanchez Lopez",
+    "sanchez leon": "Sanchez Lopez",
     "rosas rosas": "Rosas Rosas"
 };
