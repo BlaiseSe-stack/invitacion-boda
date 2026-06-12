@@ -3,22 +3,30 @@
 // =========================================================================
 
 const baseInvitadosEstricta = {
+    // Invitados novio INICIO
     "sanchez espinosa": { integrantes: ["Donaldo", "Martha"], confirmado: false },
-    "sanchez espinoza": { integrantes: ["Atzareel", "Andrew", "Panque", "Cow", "Capuchina", "Maple"], confirmado: false },
-    "sanchez perez": { integrantes: ["Juan", "María"], confirmado: false },
-    "espinosa rodriguez": { integrantes: ["Ricardo", "Sofía", "Pedro"], confirmado: false },
-    "sanabria betancourt": { integrantes: ["Erick"], confirmado: false },
-    "sanchez leon": { integrantes: ["Niels", "Silvia", "Meli", "Lilith", "Elena"], confirmado: false },
-    "rosas galicia": { integrantes: ["David", "Cela", "Felix"], confirmado: false }
-    // Aquí puedes seguir agregando todas las familias que necesites...
+    "sanchez aguilera": { integrantes: ["Illi", "Jooy", "Julián"], confirmado: false },
+    "sanchez miranda": { integrantes: ["Jesús", "Gricelda", "Cristopher", "Desari", "Lucian"], confirmado: false },
+    "sanchez castillo": { integrantes: ["Armando", "Doan", "Kareem"], confirmado: false },
+    "sanchez hernandez": { integrantes: ["Nestor", "Elizabeth", "Hannia", "Alice"], confirmado: false },
+    "sanchez leon": { integrantes: ["Niels", "Silvia", "Melanie", "Lilith", "Elena"], confirmado: false },
+    "sanabria betancourt": { integrantes: ["Erik"], confirmado: false },
+    "rosas galicia": { integrantes: ["David", "Cela", "Félix"], confirmado: false },
+    // Inivitados novio FIN
+
+    // Invitados novia INICIO
+    "espinosa rodriguez": { integrantes: ["Ricardo", "Sofía", "Pedro"], confirmado: false }
+    // Inivitados novia FIN
 };
 
 const nombresVisualesFamilias = {
     "sanchez espinosa": "Sánchez Espinosa",
-    "sanchez espinoza": "Sánchez Espinoza",
-    "sanchez perez": "Sánchez Pérez",
-    "espinosa rodriguez": "Espinosa Rodríguez",
-    "sanabria betancourt": "Sanabria Betancourt",
+    "sanchez aguilera": "Sánchez León",
+    "sanchez miranda": "Sánchez Miranda",
+    "sanchez castillo": "Sánchez Castillo",
+    "sanchez hernandez": "Sánchez Hernández",
     "sanchez leon": "Sánchez León",
-    "rosas galicia": "Rosas Galicia"
+    "sanabria betancourt": "Sanabria Betancourt",
+    "rosas galicia": "Rosas Galicia",
+    "espinosa rodriguez": "Espinosa Rodríguez"
 };

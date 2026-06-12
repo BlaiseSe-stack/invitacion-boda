@@ -31,8 +31,10 @@ y en caso de no estar en dicha área que los padres nos apoyen 100% con cuidar a
 
 - Terminar la BD por familias [InProgres]
 
-- Nota aclarando la fecha de cierre en el área de confirmación [ToDo]
+- Nota aclarando la fecha de cierre en el área de confirmación [OK]
 
-- Nota para informar que se cobrara 50 pesitos por cuidar el carro toda la fiesta [ToDo]
+- Nota para informar que se cobrara 50 pesitos por cuidar el carro toda la fiesta [OK]
 
-- Aclarar en pequeños invitados que en el área de juegos tendrán un encargado que los cuide [ToDo]
+- Aclarar en pequeños invitados que en el área de juegos tendrán un encargado que los cuide [OK]
+
+- Agregar música de fondo [OK]
