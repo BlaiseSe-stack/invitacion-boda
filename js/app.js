@@ -174,52 +174,31 @@
             });
 
             // =========================================================================
-            // 5.1 LOGÍSTICA DEL REPRODUCTOR OCULTO DE YOUTUBE (CORREGIDO)
-            // =========================================================================
-            var tag = document.createElement('script');
-            // Se corrigió el doble "https://" que causaba error de red
-            tag.src = "https://www.youtube.com/iframe_api"; 
-            var firstScriptTag = document.getElementsByTagName('script')[0];
-            firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-
-            var player;
-            function onYouTubeIframeAPIReady() {
-                player = new YT.Player('youtube-player', {
-                    height: '0',
-                    width: '0',
-                    videoId: 'p_-50n89C5I', 
-                    playerVars: {
-                        'autoplay': 0,
-                        'controls': 0,
-                        'loop': 1,
-                        'playlist': 'p_-50n89C5I',
-                        // 🍏 PARÁMETRO VITAL PARA IPHONE / IOS:
-                        'playsinline': 1 
-                    }
-                });
-            }
-
-            // =========================================================================
-            // 5.2 FUNCIÓN UNIFICADA: APERTURA DEL SOBRE + INICIO DE MÚSICA
+            // 5. FUNCIÓN UNIFICADA: APERTURA DEL SOBRE + INICIO DE MÚSICA NATIVA (HTML5)
             // =========================================================================
             function abrirSobre(elementoSobre) {
-                // A. Forzar al navegador a ir al inicio de la página inmediatamente[cite: 2]
+                // 1. Obtener el elemento de audio nativo
+                const musica = document.getElementById("musica-boda");
+
+                // 2. Disparar la música de inmediato (Síncrono para engañar el bloqueo de iOS y Android)
+                if (musica) {
+                    musica.play().catch(function(error) {
+                        console.log("El navegador bloqueó el audio temporalmente:", error);
+                    });
+                }
+
+                // 3. Forzar al navegador a ir al inicio de la página inmediatamente
                 window.scrollTo({
                     top: 0,
                     behavior: 'instant'
                 });
                 document.documentElement.scrollTop = 0;
                 document.body.scrollTop = 0;
-                
-                // B. Disparar la música de fondo de manera segura aprovechando la interacción del usuario
-                if (player && typeof player.playVideo === 'function') {
-                    player.playVideo();
-                }
 
-                // C. Activar la animación CSS de la solapa levantándose[cite: 2]
+                // 4. Activar la animación CSS de la solapa levantándose
                 elementoSobre.classList.add("open");
                 
-                // D. Esperar a que termine de levantarse la solapa y desvanecer el sobre completo[cite: 2]
+                // 5. Esperar a que termine de levantarse la solapa y desvanecer el sobre completo
                 setTimeout(function() {
                     document.getElementById("envelope-layer").classList.add("fade-out");
                 }, 800);
