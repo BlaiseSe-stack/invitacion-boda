@@ -243,3 +243,35 @@
 
             return `${dStr}d ${hStr}h ${mStr}m ${sStr}s`;
         }
+
+        // Cargar la API de reproducción de YouTube de forma asíncrona
+        var tag = document.createElement('script');
+        tag.src = "https://www.youtube.com/iframe_api";
+        var firstScriptTag = document.getElementsByTagName('script')[0];
+        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+        var player;
+        function onYouTubeIframeAPIReady() {
+            player = new YT.Player('youtube-player', {
+                height: '0',
+                width: '0',
+                videoId: 'p_-50n89C5I', // ID de tu canción de Il Divo (Hasta Mi Final - Piano)
+                playerVars: {
+                    'autoplay': 0,
+                    'controls': 0,
+                    'loop': 1 // Requerido por YouTube para que repita la canción infinitamente
+                }
+            });
+        }
+
+        // Función que se activa al presionar el botón "Abrir Invitación"
+        function abrirSobre() {
+            // 1. Desvanecer la pantalla de bienvenida
+            var overlay = document.getElementById('envelope-layer');
+            overlay.classList.add('oculto');
+            
+            // 2. Reproducir la música de fondo de manera segura
+            if (player && typeof player.playVideo === 'function') {
+                player.playVideo();
+            }
+        }

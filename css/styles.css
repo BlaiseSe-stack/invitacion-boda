@@ -386,3 +386,157 @@
             .details-section, .rsvp-container { padding: 25px 15px; }
             body { padding: 10px; }
         }
+
+        /* SECCIÓN DE ESTACIONAMIENTO Y CUIDADO DE AUTOS */
+        .parking-section {
+            max-width: 550px;
+            margin: 25px auto;
+            padding: 20px;
+            text-align: center;
+            background-color: rgba(251, 246, 245, 0.6); /* Fondo suave translúcido */
+            border-radius: 12px;; /* Línea café muy fina */
+            border: 1px dashed #e8d0cb;
+        }
+
+        .parking-icon {
+            font-size: 1.5rem;
+            margin-bottom: 8px;
+        }
+
+        .parking-title {
+            font-family: 'Georgia', serif;
+            font-size: 1.2rem;
+            color: #b58d88; /* Tu color café sutil */
+            margin: 0 0 10px 0;
+            letter-spacing: 1px;
+        }
+
+        .parking-text {
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 1.05rem;
+            color: #5c4d4d; /* Tu color de texto principal */
+            font-style: italic;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0 10px;
+        }
+
+        /* BANNER DE FECHA LÍMITE (DISCLAIMER) */
+        .disclaimer-rsvp {
+            max-width: 550px;
+            margin: 40px auto 20px auto; /* Margen amplio arriba para separarlo de la sección anterior */
+            padding: 25px 20px;
+            text-align: center;
+            background-color: #fbf6f5; /* Tu color crema base de fondo */
+            border-radius: 12px;
+            border: 2px solid #b58d88; /* Borde completo en tu color café para que resalte visualmente */
+            box-shadow: 0 4px 15px rgba(181, 141, 136, 0.15); /* Sombra suave con tono café */
+            position: relative;
+        }
+
+        /* Etiqueta pequeña superior para dar contexto de urgencia */
+        .disclaimer-badge {
+            display: inline-block;
+            background-color: #b58d88; /* Tu color café */
+            color: #ffffff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 0.75rem;
+            font-weight: bold;
+            letter-spacing: 2px;
+            padding: 4px 12px;
+            border-radius: 50px;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+        }
+
+        /* Texto principal del aviso */
+        .disclaimer-text {
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 1.1rem;
+            color: #5c4d4d; /* Tu color de texto principal */
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        /* Resaltado de la fecha */
+        .disclaimer-text strong {
+            color: #b58d88; /* Resalta la fecha en café oscuro */
+            font-size: 1.2rem;
+            font-family: 'Georgia', serif;
+            display: inline-block;
+            margin: 0 4px;
+        }
+
+        /* Nota aclaratoria en la parte inferior del aviso */
+        .disclaimer-text span {
+            display: block;
+            margin-top: 10px;
+            font-size: 0.9rem;
+            font-style: italic;
+            color: #7d6c6c; /* Un tono un poco más suave */
+        }
+
+        /* PANTALLA DE INICIO / OVERLAY */
+        #overlay-bienvenida {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background-color: #fbf6f5; /* Tu color crema base */
+            z-index: 9999; /* Asegura que tape todo al inicio */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 1s ease, visibility 1s ease;
+        }
+
+        /* Efecto para desaparecer la pantalla */
+        #overlay-bienvenida.oculto {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .bienvenida-contenido {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .bienvenida-titulo {
+            font-family: 'Georgia', serif;
+            font-size: 2.5rem;
+            color: #b58d88; /* Tu color café sutil */
+            margin-bottom: 5px;
+        }
+
+        .bienvenida-sub {
+            font-family: 'Times New Roman', serif;
+            font-size: 1.2rem;
+            font-style: italic;
+            color: #5c4d4d;
+            margin-bottom: 30px;
+        }
+
+        /* BOTÓN DE ENTRADA */
+        #btn-comenzar {
+            background-color: #b58d88;
+            color: #ffffff;
+            border: none;
+            padding: 12px 30px;
+            font-family: 'Segoe UI', sans-serif;
+            font-size: 1rem;
+            font-weight: bold;
+            letter-spacing: 1px;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(181, 141, 136, 0.4);
+            transition: transform 0.2s ease;
+        }
+
+        #btn-comenzar:active {
+            transform: scale(0.95);
+        }
+
+        .icono-musica {
+            margin-right: 6px;
+        }
