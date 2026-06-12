@@ -20,5 +20,5 @@ const nombresVisualesFamilias = {
     "espinosa rodriguez": "Espinosa Rodríguez",
     "sanabria betancourt": "Sanabria Betancourt",
     "sanchez leon": "Sánchez León",
-    "rosas rosas": "Rosas Rosas"
+    "rosas galicia": "Rosas Galicia"
 };
