@@ -275,42 +275,66 @@ let idFamiliaSeleccionada = "";
             return `${dStr}d ${hStr}h ${mStr}m ${sStr}s`;
         }
 
+
 // =========================================================================
-// 6. CONTROL INTELIGENTE DE VISIBILIDAD (SOPORTE COMPLETO PARA MÓVILES Y BLOQUEO)
+// 6. CONTROL INTELIGENTE DE VISIBILIDAD (DESTRUCCIÓN DE BUFFER PARA MÓVILES)
 // =========================================================================
 const reproductorMusica = document.getElementById("musica-boda");
 
+// Guardamos la ruta original de tu canción para no perderla
+const RUTA_MUSICA_ORIGINAL = reproductorMusica ? reproductorMusica.src : "";
+
 function forzarPausaMúsica() {
-    if (reproductorMusica && !reproductorMusica.paused) {
+    if (reproductorMusica) {
+        // Guardamos el segundo exacto en el que iba la canción
+        if (!reproductorMusica.paused && reproductorMusica.currentTime > 0) {
+            localStorage.setItem("progreso_musica_boda", reproductorMusica.currentTime);
+        }
+        
+        // 🚨 EL TRUCO AGRESIVO: Pausamos, vaciamos el src y forzamos la limpieza del buffer
         reproductorMusica.pause();
-        console.log("Música pausada con éxito.");
+        reproductorMusica.src = ""; 
+        reproductorMusica.load(); 
+        console.log("Audio completamente destruido en segundo plano.");
     }
 }
 
 function forzarReanudacionMúsica() {
-    if (reproductorMusica && !document.hidden && document.hasFocus()) {
+    if (reproductorMusica) {
         const sobreAbierto = document.getElementById("envelope-layer")?.classList.contains("fade-out");
-        if (sobreAbierto) {
+        
+        // Solo intentamos reconstruir si el sobre ya se abrió y la pestaña está al frente
+        if (sobreAbierto && !document.hidden && document.hasFocus()) {
+            
+            // Si el src está vacío, restauramos la canción original
+            if (!reproductorMusica.src || reproductorMusica.src === window.location.href) {
+                reproductorMusica.src = RUTA_MUSICA_ORIGINAL;
+                reproductorMusica.load();
+            }
+
+            // Recuperamos el segundo en el que se quedó antes de salir
+            const tiempoGuardado = localStorage.getItem("progreso_musica_boda");
+            if (tiempoGuardado) {
+                reproductorMusica.currentTime = parseFloat(tiempoGuardado);
+            }
+
+            // Intentamos reproducir de nuevo
             reproductorMusica.play().catch(function(error) {
-                console.log("Reanudación automática bloqueada:", error);
+                console.log("El navegador bloqueó la reanudación tras el enfoque:", error);
             });
         }
     }
 }
 
-// 📱 TRUCO PARA MÓVILES: Detectar congelamiento del sistema (Page Lifecycle API)
-// El evento 'pagehide' se dispara justo antes de que el móvil suspenda la pestaña por bloqueo.
-window.addEventListener("pagehide", forzarPausaMúsica);
-
-// Eventos estándar para computadoras y cambios de pestaña rápidos
+// Eventos para capturar la salida (Pestañas, bloqueo, minimizar, cambio de app)
 document.addEventListener("visibilitychange", function() {
     if (document.hidden) {
         forzarPausaMúsica();
     } else {
-        // Añadimos un pequeño retraso al regresar en móviles para esperar que el JS se descongele
-        setTimeout(forzarReanudacionMúsica, 300);
+        setTimeout(forzarReanudacionMúsica, 400); // Margen de tiempo para descongelar JS
     }
 });
 
 window.addEventListener("blur", forzarPausaMúsica);
 window.addEventListener("focus", forzarReanudacionMúsica);
+window.addEventListener("pagehide", forzarPausaMúsica);
