@@ -1,6 +1,6 @@
 
-            const URL_WEBHOOK_GOOGLE = "https://script.google.com/macros/s/AKfycbwbY21MiOreZ0-e4GaNChXScB5BVLm1IFlaC14fcd5xy4W5xHOqKnQrOWvRTcbZR8l4HA/exec";
-            let idFamiliaSeleccionada = "";
+const URL_WEBHOOK_GOOGLE = "https://script.google.com/macros/s/AKfycbzWFD5d69o2J_QFXnlCIgo0gVeRoqrpx0dvDIj7RbgXRRTXdbnDYXSFmWh5xhzve1m3rQ/exec";
+let idFamiliaSeleccionada = "";
 
             function normalizarApellidos(texto) {
                 return texto.toLowerCase()
@@ -30,11 +30,14 @@
 
                 let contenedorCheckboxes = "";
                 integrantes.forEach((nombre, index) => {
+                    // ✨ TIP EXTRA: Si el nombre contiene la etiqueta, la cambiamos por un emoji tierno en la pantalla
+                    let nombreVisualInvitado = nombre.replace("[niño]", "👶");
+
                     contenedorCheckboxes += `
                         <div style="display: flex; align-items: center; margin-bottom: 12px; font-size: 1.1rem;">
                             <input type="checkbox" id="invitado_${index}" name="asistentes_boda" value="${nombre}" checked 
                                    style="width: 18px; height: 18px; margin-right: 12px; accent-color: #b58d88; cursor: pointer;" class="individual-check">
-                            <label for="invitado_${index}" style="cursor: pointer; user-select: none;">${nombre}</label>
+                            <label for="invitado_${index}" style="cursor: pointer; user-select: none;">${nombreVisualInvitado}</label>
                         </div>`;
                 });
                 
@@ -121,7 +124,7 @@
             });
 
             // =========================================================================
-            // BOTÓN DE CONFIRMACIÓN EN APP.JS (CORREGIDO CON LA VARIABLE TIPO)
+            // BOTÓN DE CONFIRMACIÓN EN APP.JS (CORREGIDO CON CONTEO DE NIÑOS AUTOMÁTICO)
             // =========================================================================
             document.getElementById("btn-submit-rsvp").addEventListener("click", function() {
                 const checkboxes = document.querySelectorAll(".individual-check");
@@ -138,6 +141,18 @@
                     return;
                 }
 
+                // 👶 LÓGICA AUTOMÁTICA DE CONTEO TRAS BAMBALINAS
+                let adultosConfirmados = 0;
+                let ninosConfirmados = 0;
+
+                seleccionados.forEach(nombre => {
+                    if (nombre.includes("[niño]")) {
+                        ninosConfirmados++;
+                    } else {
+                        adultosConfirmados++;
+                    }
+                });
+
                 const nombreFamiliaVisual = nombresVisualesFamilias[idFamiliaSeleccionada];
                 const listaAsistentes = seleccionados.join(", ");
 
@@ -149,8 +164,11 @@
                 const datosFormulario = new URLSearchParams();
                 datosFormulario.append("familia", nombreFamiliaVisual);
                 datosFormulario.append("asistieron", listaAsistentes);
-                // ⚠️ ESTA ES LA LÍNEA CRUCIAL QUE FALTABA:
                 datosFormulario.append("tipo", "rsvp"); 
+                
+                // 📊 ENVIAMOS LOS TOTALES AUTOMÁTICOS A LAS NUEVAS COLUMNAS DE TU GOOGLE SHEETS
+                datosFormulario.append("adultos", adultosConfirmados);
+                datosFormulario.append("ninos", ninosConfirmados);
 
                 // FETCH HACIA GOOGLE SHEETS
                 fetch(URL_WEBHOOK_GOOGLE, {
