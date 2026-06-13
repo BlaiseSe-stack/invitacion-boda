@@ -277,61 +277,69 @@ let idFamiliaSeleccionada = "";
 
 
 // =========================================================================
-// 6. CONTROL INTELIGENTE DE VISIBILIDAD (DESTRUCCIÓN DE BUFFER PARA MÓVILES)
+// 6. CONTROL INTELIGENTE DE VISIBILIDAD (ELIMINACIÓN DE HARDWARE POR CLONACIÓN)
 // =========================================================================
-const reproductorMusica = document.getElementById("musica-boda");
-
-// Guardamos la ruta original de tu canción para no perderla
+let reproductorMusica = document.getElementById("musica-boda");
 const RUTA_MUSICA_ORIGINAL = reproductorMusica ? reproductorMusica.src : "";
 
 function forzarPausaMúsica() {
+    reproductorMusica = document.getElementById("musica-boda");
+    
     if (reproductorMusica) {
-        // Guardamos el segundo exacto en el que iba la canción
+        // 1. Guardamos el segundo exacto antes de que el sistema intente congelar el hilo
         if (!reproductorMusica.paused && reproductorMusica.currentTime > 0) {
             localStorage.setItem("progreso_musica_boda", reproductorMusica.currentTime);
         }
-        
-        // 🚨 EL TRUCO AGRESIVO: Pausamos, vaciamos el src y forzamos la limpieza del buffer
+
+        // 2. DETENCIÓN ABSOLUTA: Pausamos y vaciamos el origen del buffer
         reproductorMusica.pause();
-        reproductorMusica.src = ""; 
-        reproductorMusica.load(); 
-        console.log("Audio completamente destruido en segundo plano.");
+        reproductorMusica.src = "";
+        reproductorMusica.load();
+
+        // 3. EL TRUCO MAESTRO: Clonamos el nodo para destruir el proceso flotante en el sistema operativo
+        const clonLimpio = reproductorMusica.cloneNode(true);
+        reproductorMusica.parentNode.replaceChild(clonLimpio, reproductorMusica);
+        
+        console.log("Proceso multimedia destruido del sistema operativo.");
     }
 }
 
 function forzarReanudacionMúsica() {
+    // Volvemos a capturar el elemento (ya que ahora es el clon)
+    reproductorMusica = document.getElementById("musica-boda");
+    
     if (reproductorMusica) {
         const sobreAbierto = document.getElementById("envelope-layer")?.classList.contains("fade-out");
         
-        // Solo intentamos reconstruir si el sobre ya se abrió y la pestaña está al frente
+        // Solo reconstruimos si el sobre ya fue abierto y la ventana está activa
         if (sobreAbierto && !document.hidden && document.hasFocus()) {
             
-            // Si el src está vacío, restauramos la canción original
+            // Si el reproductor no tiene la música cargada, se la reinyectamos
             if (!reproductorMusica.src || reproductorMusica.src === window.location.href) {
                 reproductorMusica.src = RUTA_MUSICA_ORIGINAL;
                 reproductorMusica.load();
             }
 
-            // Recuperamos el segundo en el que se quedó antes de salir
+            // Viajamos al segundo guardado
             const tiempoGuardado = localStorage.getItem("progreso_musica_boda");
             if (tiempoGuardado) {
                 reproductorMusica.currentTime = parseFloat(tiempoGuardado);
             }
 
-            // Intentamos reproducir de nuevo
+            // Volvemos a reproducir
             reproductorMusica.play().catch(function(error) {
-                console.log("El navegador bloqueó la reanudación tras el enfoque:", error);
+                console.log("El navegador requirió una nueva interacción para sonar:", error);
             });
         }
     }
 }
 
-// Eventos para capturar la salida (Pestañas, bloqueo, minimizar, cambio de app)
+// Eventos globales de salida del usuario
 document.addEventListener("visibilitychange", function() {
     if (document.hidden) {
         forzarPausaMúsica();
     } else {
-        setTimeout(forzarReanudacionMúsica, 400); // Margen de tiempo para descongelar JS
+        setTimeout(forzarReanudacionMúsica, 400);
     }
 });
 
