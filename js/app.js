@@ -1,4 +1,3 @@
-
 const URL_WEBHOOK_GOOGLE = "https://script.google.com/macros/s/AKfycbwxIu-RCkTtZW82GARIlSXdcj9-zt6fhzjLsUolTHg3iqW9RMbMK0nLniTRkHeJjlFP_A/exec";
 let idFamiliaSeleccionada = "";
 
@@ -15,7 +14,7 @@ let idFamiliaSeleccionada = "";
             function desplegarFormularioInvitados(integrantes, apellidoVisual, busqueda) {
                 document.getElementById("search-error-msg").style.display = "none";
                 document.getElementById("rsvp-search-box").style.display = "none";
-                
+
                 idFamiliaSeleccionada = busqueda;
                 const totalPases = integrantes.length; 
                 const textoPlural = totalPases > 1 ? "pases asignados" : "pase asignado";
@@ -40,7 +39,7 @@ let idFamiliaSeleccionada = "";
                             <label for="invitado_${index}" style="cursor: pointer; user-select: none;">${nombreVisualInvitado}</label>
                         </div>`;
                 });
-                
+
                 document.getElementById("rsvp-guests-list").innerHTML = contenedorCheckboxes;
                 document.getElementById("wedding-rsvp-form").style.display = "block";
                 configurarSuperCheck();
@@ -52,7 +51,7 @@ let idFamiliaSeleccionada = "";
             window.respuestaGoogleJSONP = function(data) {
                 const errorMsg = document.getElementById("search-error-msg");
                 const btnBuscar = document.getElementById("btn-search-family");
-                
+
                 btnBuscar.disabled = false;
                 errorMsg.style.color = "#cc0000"; 
 
@@ -108,14 +107,14 @@ let idFamiliaSeleccionada = "";
                 btnBuscar.disabled = true;
 
                 const apellidoVisual = nombresVisualesFamilias[busqueda];
-                
+
                 // Configuración de la petición JSONP inyectando una etiqueta script
                 const src = `${URL_WEBHOOK_GOOGLE}?familia=${encodeURIComponent(apellidoVisual)}&callback=respuestaGoogleJSONP`;
-                
+
                 const script = document.createElement("script");
                 script.id = "jsonp-google-script";
                 script.src = src;
-                
+
                 script.onerror = function() {
                     console.log("Fallo de red, usando datos locales...");
                     btnBuscar.disabled = false;
@@ -138,7 +137,7 @@ let idFamiliaSeleccionada = "";
                         seleccionados.push(chk.value);
                     }
                 });
-                
+
                 if (seleccionados.length === 0) {
                     alert("Si ningún integrante puede asistir, por favor avísanos de forma personal. ¡Muchas gracias!");
                     return;
@@ -168,7 +167,7 @@ let idFamiliaSeleccionada = "";
                 datosFormulario.append("familia", nombreFamiliaVisual);
                 datosFormulario.append("asistieron", listaAsistentes);
                 datosFormulario.append("tipo", "rsvp"); 
-                
+
                 // 📊 ENVIAMOS LOS TOTALES AUTOMÁTICOS A LAS NUEVAS COLUMNAS DE TU GOOGLE SHEETS
                 datosFormulario.append("adultos", adultosConfirmados);
                 datosFormulario.append("ninos", ninosConfirmados);
@@ -218,7 +217,7 @@ let idFamiliaSeleccionada = "";
 
                 // 4. Activar la animación CSS de la solapa levantándose
                 elementoSobre.classList.add("open");
-                
+
                 // 5. Esperar a que termine de levantarse la solapa y desvanecer el sobre completo
                 setTimeout(function() {
                     document.getElementById("envelope-layer").classList.add("fade-out");
@@ -230,7 +229,7 @@ let idFamiliaSeleccionada = "";
         // =========================================================================
         // Ejemplo: Cierre de listas el 5 de Septiembre a las 23:59:59
         const FECHA_CIERRE_RSVP = new Date(2026, 8, 5, 23, 59, 59).getTime(); 
-        
+
         // Ejemplo: El día de la Boda el 17 de Octubre a las 16:00:00
         const FECHA_BODA = new Date(2026, 9, 17, 16, 0, 0).getTime();
 
@@ -270,27 +269,47 @@ let idFamiliaSeleccionada = "";
             // Agregamos un cero a la izquierda si el número es menor a 10 para mantener la simetría visual
             const dStr = dias < 10 ? "0" + dias : dias;
             const hStr = horas < 10 ? "0" + horas : horas;
-            const mStr = minutos < 10 ? "10" && minutos < 10 ? "0" + minutos : minutos : minutos;
+            const mStr = minutos < 10 ? "0" + minutos : minutos;
             const sStr = segundos < 10 ? "0" + segundos : segundos;
 
             return `${dStr}d ${hStr}h ${mStr}m ${sStr}s`;
         }
 
+// =========================================================================
+// 6. CONTROL INTELIGENTE DE VISIBILIDAD (PAUSAR AUDIO EN SEGUNDO PLANO)
+// =========================================================================
+const reproductorMusica = document.getElementById("musica-boda");
 
-// Seleccionamos el elemento de audio
-const musica = document.getElementById('musica-boda');
+function forzarPausaMúsica() {
+    if (reproductorMusica && !reproductorMusica.paused) {
+        reproductorMusica.pause();
+        console.log("Música pausada: el usuario minimizó o cambió de pestaña.");
+    }
+}
 
-// Escuchamos el evento de cambio de visibilidad de la página
-document.addEventListener('visibilitychange', () => {
-  if (document.hidden) {
-    // Si la pestaña no está visible, pausamos la música
-    musica.pause();
-    console.log("Música pausada porque el usuario salió de la pestaña.");
-  } else {
-    // Si el usuario regresa, reanudamos la música
-    // Nota: El navegador solo la reproducirá si ya había interactuado antes con la página
-    musica.play().catch(error => {
-      console.log("No se pudo reanudar automáticamente por políticas del navegador:", error);
-    });
-  }
+function forzarReanudacionMúsica() {
+    // Solo reanudamos si la pestaña es visible Y la ventana tiene el foco
+    if (reproductorMusica && !document.hidden && document.hasFocus()) {
+        // Solo intentará reproducir si el sobre ya fue abierto (para respetar el flujo inicial)
+        const sobreAbierto = document.getElementById("envelope-layer")?.classList.contains("fade-out");
+        
+        if (sobreAbierto) {
+            reproductorMusica.play().catch(function(error) {
+                console.log("Reanudación automática bloqueada por el navegador:", error);
+            });
+        }
+    }
+}
+
+// Escuchar cambios de pestaña activas (Page Visibility API)
+document.addEventListener("visibilitychange", function() {
+    if (document.hidden) {
+        forzarPausaMúsica();
+    } else {
+        forzarReanudacionMúsica();
+    }
 });
+
+// Escuchar pérdidas de foco (minimizar, cambiar de app/ventana o dar clic fuera)
+window.addEventListener("blur", forzarPausaMúsica);
+window.addEventListener("focus", forzarReanudacionMúsica);
