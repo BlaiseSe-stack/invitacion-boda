@@ -4,13 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Buscador de Pases - Control de Recepción</title>
+    <link rel="stylesheet" type="text/css" href="css\styles.css">
     <style>
-        :root {
-            --color-fondo: #fbf6f5;
-            --color-texto: #5c4d4d;
-            --color-detalles: #b58d88;
-        }
-
         body {
             font-family: 'Times New Roman', Times, serif;
             background-color: var(--color-fondo);
@@ -29,123 +24,6 @@
             background-size: cover;           /* Cubre toda la pantalla sin importar el monitor o tablet */
             background-position: center;      /* Centra la imagen de fondo */
             background-attachment: fixed;
-        }
-
-        .buscador-container {
-            background-color: #ffffff;
-            max-width: 480px;
-            width: 100%;
-            padding: 30px 20px;
-            border-radius: 16px;
-            text-align: center;
-            box-shadow: 0 8px 24px rgba(181, 141, 136, 0.15);
-            border: 1px solid rgba(181, 141, 136, 0.3);
-        }
-
-        h1 {
-            font-size: 1.6rem;
-            color: var(--color-detalles);
-            margin-bottom: 5px;
-            letter-spacing: 1px;
-        }
-
-        .subtitulo {
-            font-size: 0.95rem;
-            font-style: italic;
-            margin-bottom: 25px;
-            color: #8c7673;
-        }
-
-        .grupo-input {
-            margin-bottom: 20px;
-            text-align: left;
-        }
-
-        label {
-            display: block;
-            font-size: 1rem;
-            margin-bottom: 8px;
-            font-weight: bold;
-        }
-
-        input[type="text"] {
-            width: 100%;
-            padding: 12px;
-            font-size: 1.1rem;
-            border: 1px solid rgba(181, 141, 136, 0.5);
-            border-radius: 8px;
-            box-sizing: border-box;
-            background-color: var(--color-fondo);
-            color: var(--color-texto);
-            font-family: inherit;
-        }
-
-        input[type="text"]:focus {
-            outline: 2px solid var(--color-detalles);
-        }
-
-        .btn-principal {
-            width: 100%;
-            padding: 14px;
-            font-size: 1.1rem;
-            background-color: var(--color-detalles);
-            color: #ffffff;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: bold;
-            letter-spacing: 1px;
-            transition: background 0.3s ease;
-        }
-
-        .btn-principal:hover {
-            background-color: #a07873;
-        }
-
-        /* Contenedor de la Respuesta Visual */
-        #resultado-pase {
-            display: none;
-            margin-top: 20px;
-            animation: fadeIn 0.5s ease;
-        }
-
-        .contenedor-imagen {
-            margin: 20px auto;
-            max-width: 100%;
-            border: 3px solid var(--color-detalles);
-            border-radius: 12px;
-            overflow: hidden;
-            background-color: #ffffff;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        }
-
-        .contenedor-imagen img {
-            width: 100%;
-            height: auto;
-            display: block;
-        }
-
-        .btn-regresar {
-            background-color: transparent;
-            color: var(--color-detalles);
-            border: 1px solid var(--color-detalles);
-            margin-top: 15px;
-        }
-
-        .btn-regresar:hover {
-            background-color: rgba(181, 141, 136, 0.1);
-        }
-
-        #mensaje-error {
-            display: none;
-            color: #cc0000;
-            margin-top: 15px;
-            font-size: 0.95rem;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
         }
     </style>
 </head>

@@ -22,6 +22,313 @@
             text-align: center;
         }
 
+        /* CONTENEDOR PRINCIPAL DEL SOBRE */
+        .envelope-wrapper {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #dfd5d4; /* Color de fondo exterior suave */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999; /* Se asegura de cubrir toda la pantalla */
+            transition: opacity 0.8s ease, visibility 0.8s ease;
+        }
+
+        /* EL SOBRE FISICO */
+        .envelope {
+            position: relative;
+            width: 340px;
+            height: 240px;
+            background-color: #b58d88; /* Tu color de detalles (Marrón sutil) */
+            border-radius: 0 0 8px 8px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+            cursor: pointer;
+        }
+
+        /* LA SOLAPA DEL SOBRE (TRIÁNGULO SUPERIOR) */
+        .envelope::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 0;
+            border-left: 170px solid transparent;
+            border-right: 170px solid transparent;
+            border-top: 130px solid #a37c77; /* Un tono ligeramente más oscuro para dar profundidad */
+            transform-origin: top;
+            transition: transform 0.5s ease-in-out;
+            z-index: 3;
+        }
+
+        /* EL FRENTE DEL SOBRE (CORTES DIAGONALES) */
+        .envelope::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 0;
+            border-left: 170px solid #bd9691;
+            border-right: 170px solid #bd9691;
+            border-bottom: 120px solid #b58d88;
+            border-radius: 0 0 8px 8px;
+            z-index: 2;
+        }
+
+        /* TEXTO O SELLO DE "TÓCAME" */
+        .envelope-text {
+            position: absolute;
+            width: 100%;
+            top: 65%;
+            left: 0;
+            text-align: center;
+            color: #fbf6f5;
+            font-family: 'Georgia', serif;
+            font-size: 1.1rem;
+            letter-spacing: 2px;
+            z-index: 4;
+            pointer-events: none;
+            animation: pulse 1.8s infinite;
+        }
+
+        /* ANIMACIÓN DE PULSACIÓN EN EL TEXTO */
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 0.8; }
+            50% { transform: scale(1.05); opacity: 1; }
+            100% { transform: scale(1); opacity: 0.8; }
+        }
+
+        /* EFECTO DE APERTURA (ACTIVADO POR JAVASCRIPT) */
+        .envelope.open::before {
+            transform: rotateX(180deg);
+            z-index: 1; /* Pasa atrás al abrirse */
+        }
+
+        /* CUANDO EL SOBRE DESAPARECE */
+        .envelope-wrapper.fade-out {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        /*ESTILOS PARA ACCESO*/
+        .container {
+            max-width: 500px;
+            margin: 20px auto;
+            padding: 30px 20px;
+            border-radius: 16px;
+            text-align: center;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+
+            background-image: 
+                linear-gradient(rgba(251, 246, 245, 0.85), rgba(251, 246, 245, 0.85)), 
+                url('img/img4.png');
+                
+            background-size: cover;       /* Escala la imagen para que cubra todo el recuadro */
+            background-position: center;  /* Centra la imagen de fondo */
+            background-repeat: no-repeat;
+        }
+        h1 {
+            font-size: 1.6rem;
+            margin-bottom: 20px;
+            color: #4a4a4a;
+        }
+        /* ESTADOS VISUALES */
+        .status-box {
+            padding: 25px;
+            border-radius: 12px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 25px;
+            display: none;
+            line-height: 1.5;
+        }
+        .loading {
+            background-color: #e2e3e5;
+            color: #383d41;
+            display: block;
+        }
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 2px solid #c3e6cb;
+        }
+        .duplicate {
+            background-color: #fff3cd;
+            color: #856404;
+            border: 2px solid #ffeeba;
+        }
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 2px solid #f5c6cb;
+        }
+        .info-panel {
+            text-align: left;
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 5px solid #b58d88;
+            display: none;
+        }
+        .info-panel p {
+            margin: 8px 0;
+            font-size: 1rem;
+        }
+        .info-panel strong {
+            color: #555;
+        }
+        .btn-action {
+            width: 100%;
+            padding: 15px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: white;
+            background-color: #28a745;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            display: none;
+            box-shadow: 0 4px 6px rgba(40, 167, 69, 0.2);
+            transition: background 0.2s;
+        }
+        .btn-action:hover {
+            background-color: #218838;
+        }
+        .btn-action:disabled {
+            background-color: #6c757d;
+            cursor: not-allowed;
+        }
+
+        /*ESTILOS PARA buscarPase*/
+        :root {
+            --color-fondo: #fbf6f5;
+            --color-texto: #5c4d4d;
+            --color-detalles: #b58d88;
+        }
+
+        .buscador-container {
+            background-color: #ffffff;
+            max-width: 480px;
+            width: 100%;
+            padding: 30px 20px;
+            border-radius: 16px;
+            text-align: center;
+            box-shadow: 0 8px 24px rgba(181, 141, 136, 0.15);
+            border: 1px solid rgba(181, 141, 136, 0.3);
+        }
+
+        h1 {
+            font-size: 1.6rem;
+            color: var(--color-detalles);
+            margin-bottom: 5px;
+            letter-spacing: 1px;
+        }
+
+        .subtitulo {
+            font-size: 0.95rem;
+            font-style: italic;
+            margin-bottom: 25px;
+            color: #8c7673;
+        }
+
+        .grupo-input {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        label {
+            display: block;
+            font-size: 1rem;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            font-size: 1.1rem;
+            border: 1px solid rgba(181, 141, 136, 0.5);
+            border-radius: 8px;
+            box-sizing: border-box;
+            background-color: var(--color-fondo);
+            color: var(--color-texto);
+            font-family: inherit;
+        }
+
+        input[type="text"]:focus {
+            outline: 2px solid var(--color-detalles);
+        }
+
+        .btn-principal {
+            width: 100%;
+            padding: 14px;
+            font-size: 1.1rem;
+            background-color: var(--color-detalles);
+            color: #ffffff;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            letter-spacing: 1px;
+            transition: background 0.3s ease;
+        }
+
+        .btn-principal:hover {
+            background-color: #a07873;
+        }
+
+        /* Contenedor de la Respuesta Visual */
+        #resultado-pase {
+            display: none;
+            margin-top: 20px;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .contenedor-imagen {
+            margin: 20px auto;
+            max-width: 100%;
+            border: 3px solid var(--color-detalles);
+            border-radius: 12px;
+            overflow: hidden;
+            background-color: #ffffff;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .contenedor-imagen img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .btn-regresar {
+            background-color: transparent;
+            color: var(--color-detalles);
+            border: 1px solid var(--color-detalles);
+            margin-top: 15px;
+        }
+
+        .btn-regresar:hover {
+            background-color: rgba(181, 141, 136, 0.1);
+        }
+
+        #mensaje-error {
+            display: none;
+            color: #cc0000;
+            margin-top: 15px;
+            font-size: 0.95rem;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
         /* ESTILOS GENERALES PARA LAS IMÁGENES DE LA INVITACIÓN */
         .invitation-img {
             width: 150px;  /* Forzado a 150px de ancho */

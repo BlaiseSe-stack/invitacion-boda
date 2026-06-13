@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Control de Acceso - Validación de QR</title>
+    <link rel="stylesheet" type="text/css" href="css\styles.css">
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -19,96 +20,9 @@
             background-image: 
                 linear-gradient(rgba(251, 246, 245, 0.4), rgba(251, 246, 245, 0.4)), 
                 url('img/img4.png');
-            background-size: cover;           /* Cubre toda la pantalla sin importar el tamaño del celular */
-            background-position: center;
-        }
-        .container {
-            max-width: 500px;
-            margin: 20px auto;
-            padding: 30px 20px;
-            border-radius: 16px;
-            text-align: center;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
-
-            background-image: 
-                linear-gradient(rgba(251, 246, 245, 0.85), rgba(251, 246, 245, 0.85)), 
-                url('img/img4.png');
-                
-            background-size: cover;       /* Escala la imagen para que cubra todo el recuadro */
-            background-position: center;  /* Centra la imagen de fondo */
-            background-repeat: no-repeat;
-        }
-        h1 {
-            font-size: 1.6rem;
-            margin-bottom: 20px;
-            color: #4a4a4a;
-        }
-        /* ESTADOS VISUALES */
-        .status-box {
-            padding: 25px;
-            border-radius: 12px;
-            font-size: 1.2rem;
-            font-weight: bold;
-            margin-bottom: 25px;
-            display: none;
-            line-height: 1.5;
-        }
-        .loading {
-            background-color: #e2e3e5;
-            color: #383d41;
-            display: block;
-        }
-        .success {
-            background-color: #d4edda;
-            color: #155724;
-            border: 2px solid #c3e6cb;
-        }
-        .duplicate {
-            background-color: #fff3cd;
-            color: #856404;
-            border: 2px solid #ffeeba;
-        }
-        .error {
-            background-color: #f8d7da;
-            color: #721c24;
-            border: 2px solid #f5c6cb;
-        }
-        .info-panel {
-            text-align: left;
-            background: #f8f9fa;
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            border-left: 5px solid #b58d88;
-            display: none;
-        }
-        .info-panel p {
-            margin: 8px 0;
-            font-size: 1rem;
-        }
-        .info-panel strong {
-            color: #555;
-        }
-        .btn-action {
-            width: 100%;
-            padding: 15px;
-            font-size: 1.1rem;
-            font-weight: bold;
-            color: white;
-            background-color: #28a745;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            display: none;
-            box-shadow: 0 4px 6px rgba(40, 167, 69, 0.2);
-            transition: background 0.2s;
-        }
-        .btn-action:hover {
-            background-color: #218838;
-        }
-        .btn-action:disabled {
-            background-color: #6c757d;
-            cursor: not-allowed;
+            background-size: cover;           /* Cubre toda la pantalla sin importar el monitor o tablet */
+            background-position: center;      /* Centra la imagen de fondo */
+            background-attachment: fixed;
         }
     </style>
 </head>
