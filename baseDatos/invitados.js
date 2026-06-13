@@ -19,12 +19,12 @@ const baseInvitadosEstricta = {
     "garcia alfaro": { integrantes: ["Roman", "Elvira", "Ángel", "Logan", "Matias", "Romina"], confirmado: false },
     "calixto garcia": { integrantes: ["Natalia", "Pedro"], confirmado: false },
     "sanchez jaramillo": { integrantes: ["J. Consepcion", "Elena", "Brandon", "Brenda"], confirmado: false },
-    "sanchez rodriguez": { integrantes: ["Hugo", "Marce", "Sofía [niño]en"], confirmado: false },
+    "sanchez rodriguez": { integrantes: ["Hugo", "Marce", "Sofía [niño]"], confirmado: false },
     "guerrero sanchez": { integrantes: ["Hayde", "Jorge", "Emilio [niño]", "Valentina [niño]"], confirmado: false },
     "salas sanchez": { integrantes: ["Marisol", "Andres", "Camila Monserrat [niño]", "Liam Santiago [niño]"], confirmado: false },
-    "baez anastacio": { integrantes: ["José Eduardo", "+1 pase"], confirmado: false },
-    "montiel": { integrantes: ["Donaldo", "esposa", " hijo [niño]"], confirmado: false },
-    "romero flores": { integrantes: ["Alejandro", "+1 pase"], confirmado: false },
+    "baez anastasio": { integrantes: ["José Eduardo", "+1 pase"], confirmado: false },
+    "montiel matilde": { integrantes: ["Donaldo", "Victoria", " Lyan [niño]"], confirmado: false },
+    "romero velazquez": { integrantes: ["Alejandro", "+1 pase"], confirmado: false },
 
     // Invitados novia INICIO
     "espinoza salvador": { integrantes: ["Edgardo", "Elvia", "Joan"], confirmado: false },
