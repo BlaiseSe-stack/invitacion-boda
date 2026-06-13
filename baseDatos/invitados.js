@@ -5,7 +5,7 @@
 const baseInvitadosEstricta = {
     // Invitados novio INICIO
     "sanchez espinosa": { integrantes: ["Donaldo", "Martha"], confirmado: false },
-    "sanchez aguilera": { integrantes: ["Illi", "Jooy", "Julián [niño]"], confirmado: false },
+    "sanchez aguilera": { integrantes: ["Illi", "Jooy", "Julián [niño]", "José", "Irma"], confirmado: false },
     "sanchez miranda": { integrantes: ["Jesús", "Griselda", "Cristopher", "Desari [niño]", "Lucian [niño]"], confirmado: false },
     "sanchez castillo": { integrantes: ["Armando", "Doan [niño]", "Kareem [niño]"], confirmado: false },
     "sanchez hernandez": { integrantes: ["Nestor", "Elizabeth", "Hannia [niño]", "Alice [niño]"], confirmado: false },
@@ -14,7 +14,7 @@ const baseInvitadosEstricta = {
     "rosas galicia": { integrantes: ["David", "Cela", "Félix"], confirmado: false },
     "rosas juarez": { integrantes: ["Fernando", "Brenda", "Tania Fernanda"], confirmado: false },
     "escobar aguilera": { integrantes: ["Carlos", "Irma", "Carla", "Martines A. Sharim"], confirmado: false },
-    "garcia espinoza": { integrantes: ["", "", ""], confirmado: false },
+    "garcia espinosa": { integrantes: ["Ángel", "", "Hayde"], confirmado: false },
     "": { integrantes: ["", "", ""], confirmado: false },
     "": { integrantes: ["", "", ""], confirmado: false },
     "": { integrantes: ["", "", ""], confirmado: false },
