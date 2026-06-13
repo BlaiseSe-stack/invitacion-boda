@@ -14,7 +14,7 @@ const baseInvitadosEstricta = {
     "rosas galicia": { integrantes: ["David", "Cela", "Félix"], confirmado: false },
     "rosas juarez": { integrantes: ["Fernando", "Brenda", "Tania Fernanda"], confirmado: false },
     "escobar aguilera": { integrantes: ["Carlos", "Irma", "Carla", "Martines A. Sharim"], confirmado: false },
-    "garcia espinosa": { integrantes: ["Ángel", "", "Hayde"], confirmado: false },
+    "garcia espinosa": { integrantes: ["Ángel", "Eugenia", "Hayde"], confirmado: false },
     "": { integrantes: ["", "", ""], confirmado: false },
     "": { integrantes: ["", "", ""], confirmado: false },
     "": { integrantes: ["", "", ""], confirmado: false },
