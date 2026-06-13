@@ -14,7 +14,7 @@ const baseInvitadosEstricta = {
     "rosas galicia": { integrantes: ["David", "Cela", "Félix"], confirmado: false },
     "rosas juarez": { integrantes: ["Fernando", "Brenda", "Tania Fernanda"], confirmado: false },
     "escobar aguilera": { integrantes: ["Carlos", "Irma", "Carla", "Martines A. Sharim"], confirmado: false },
-    "garcia espino": { integrantes: ["", "", ""], confirmado: false },
+    "garcia espinoza": { integrantes: ["", "", ""], confirmado: false },
     "": { integrantes: ["", "", ""], confirmado: false },
     "": { integrantes: ["", "", ""], confirmado: false },
     "": { integrantes: ["", "", ""], confirmado: false },
@@ -22,19 +22,18 @@ const baseInvitadosEstricta = {
     "": { integrantes: ["", "", ""], confirmado: false },
     "": { integrantes: ["", "", ""], confirmado: false },
     "": { integrantes: ["", "", ""], confirmado: false },
-    // Inivitados novio FIN
 
     // Invitados novia INICIO
-    "espinosa salvador": { integrantes: ["Edgardo", "Elvia", "Joan"], confirmado: false },
+    "espinoza salvador": { integrantes: ["Edgardo", "Elvia", "Joan"], confirmado: false },
     "meza salvador": { integrantes: ["Adelina", "Juan Carlos", "Ariana", "Ximena", "Isaac"], confirmado: false },
     "salvador remigio": { integrantes: ["Ricardo", "Sofía", "Pedro"], confirmado: false },
-    "espinosa rodriguez": { integrantes: ["Roberto", "Griselda", "Renata", "Isai", "Carla"], confirmado: false },
+    "espinoza rodriguez": { integrantes: ["Roberto", "Griselda", "Renata", "Isai", "Carla"], confirmado: false },
     "salvador lopez": { integrantes: ["Adelina", "Roberto"], confirmado: false },
     "maldonado salvador": { integrantes: ["Rocio", "Angeles", "Rocio h.", "Norberto", "Josue"], confirmado: false },
-    "espinosa martinez": { integrantes: ["Margarita", "Ricardo"], confirmado: false },
-    "espinosa cardoso": { integrantes: ["Ángel", "Paula", "Alison", "Santiago [niño]"], confirmado: false },
-    "mendoza espinosa": { integrantes: ["Arelí", "Samantha", "Johan", "Andrik"], confirmado: false },
-    "jaramillo espinosa": { integrantes: ["Víctor", "Verónica", "Cristian", "Estefania", "Sebastián [niño]"], confirmado: false },
+    "espinoza martinez": { integrantes: ["Margarita", "Ricardo"], confirmado: false },
+    "espinoza cardoso": { integrantes: ["Ángel", "Paula", "Alison", "Santiago [niño]"], confirmado: false },
+    "mendoza espinoza": { integrantes: ["Arelí", "Samantha", "Johan", "Andrik"], confirmado: false },
+    "jaramillo espinoza": { integrantes: ["Víctor", "Verónica", "Cristian", "Estefania", "Sebastián [niño]"], confirmado: false },
     "salvador beristain": { integrantes: ["Omar", "Alejandra", "Mariana", "Omar h."], confirmado: false },
     "salvador gonzalez": { integrantes: ["Rubén", "Marcos"], confirmado: false },
     "salvador eulogio": { integrantes: ["Jesús", "Carolina", "Jazmín", "Samuel", "Monserrat"], confirmado: false },
@@ -55,6 +54,7 @@ const baseInvitadosEstricta = {
 };
 
 const nombresVisualesFamilias = {
+    // Invitados novio INICIO
     "sanchez espinosa": "Sánchez Espinosa",
     "sanchez aguilera": "Sánchez Aguilera",
     "sanchez miranda": "Sánchez Miranda",
@@ -63,5 +63,32 @@ const nombresVisualesFamilias = {
     "sanchez leon": "Sánchez León",
     "sanabria betancourt": "Sanabria Betancourt",
     "rosas galicia": "Rosas Galicia",
-    "espinosa rodriguez": "Espinosa Rodríguez"
+    // Invitados novia INICIO
+    "espinoza salvador": "Espinoza Salvador",
+    "meza salvador": "Meza Salvador",
+    "salvador remigio": "Salvador Remigio",
+    "espinoza rodriguez": "Espinoza Rodríguez",
+    "salvador lopez": "Salvador López",
+    "maldonado salvador": "Maldonado Salvador",
+    "espinoza martinez": "Espinoza Martínez",
+    "espinoza cardoso": "Espinoza Cardoso",
+    "mendoza espinoza": "Mendoza Espinoza",
+    "jaramillo espinoza": "Jaramillo Espinoza",
+    "salvador beristain": "Salvador Beristain",
+    "salvador gonzalez": "Salvador González",
+    "salvador eulogio": "Salvador Eulogio",
+    "corpus carrazco": "Corpus Carrazco",
+    "guzman gaspar": "Gúzman Gaspar",
+    "garcia gallaga": "García Gallaga",
+    "oropeza herrera": "Oropeza Herrera",
+    "perez sanchez": "Pérez Sánchez",
+    "lopez morales": "López Morales",
+    "quiroz martinez": "Quiroz Martínez",
+    "garcia diaz": "García Díaz",
+    "torres benavides": "Torrez Benavides",
+    "ledezma ": "Ledezma",
+    "velazquez soriano": "Velázquez Soriano",
+    "venta martinez": "Venta Martínez",
+    "rivera cortes": "Rivera Córtes"
+    // Inivitados novia FIN
 };
