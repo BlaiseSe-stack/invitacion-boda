@@ -45,7 +45,7 @@ const baseInvitadosEstricta = {
     "lopez morales": { integrantes: ["Enrique"], confirmado: false },
     "quiroz martinez": { integrantes: ["Misael"], confirmado: false },
     "garcia diaz": { integrantes: ["Elizabeth Ketzalzin", "+1 pase"], confirmado: false },
-    "torres benavides": { integrantes: ["Alberto", "Maria", "Angelica", "Diego", "",""], confirmado: false },
+    "torres benavides": { integrantes: ["Alberto", "Maria", "Angelica", "Diego", "+1 pase","+1 pase"], confirmado: false },
     "ledezma ": { integrantes: ["Liliana"], confirmado: false },
     "velazquez soriano": { integrantes: ["Zelzin"], confirmado: false },
     "venta martinez": { integrantes: ["Mitzi"], confirmado: false },
