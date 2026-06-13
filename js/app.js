@@ -275,3 +275,22 @@ let idFamiliaSeleccionada = "";
 
             return `${dStr}d ${hStr}h ${mStr}m ${sStr}s`;
         }
+
+
+// Seleccionamos el elemento de audio
+const musica = document.getElementById('musica-boda');
+
+// Escuchamos el evento de cambio de visibilidad de la página
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden) {
+    // Si la pestaña no está visible, pausamos la música
+    musica.pause();
+    console.log("Música pausada porque el usuario salió de la pestaña.");
+  } else {
+    // Si el usuario regresa, reanudamos la música
+    // Nota: El navegador solo la reproducirá si ya había interactuado antes con la página
+    musica.play().catch(error => {
+      console.log("No se pudo reanudar automáticamente por políticas del navegador:", error);
+    });
+  }
+});
