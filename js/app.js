@@ -74,9 +74,12 @@ let idFamiliaSeleccionada = "";
             };
 
             // =========================================================================
-            // 3. EVENTO: BOTÓN DE BÚSQUEDA (GET VIA JSONP) - CORREGIDO
+            // 3. EVENTO: FORMULARIO DE BÚSQUEDA (SOPORTA ENTER Y TECLADOS MÓVILES)
             // =========================================================================
-            document.getElementById("btn-search-family").addEventListener("click", function() {
+            document.getElementById("rsvp-search-form").addEventListener("submit", function(event) {
+                // Evitamos que la página se recargue al dar Enter o Buscar
+                event.preventDefault(); 
+
                 const inputTexto = document.getElementById("rsvp-search-input").value;
                 let busqueda = normalizarApellidos(inputTexto); 
                 const errorMsg = document.getElementById("search-error-msg");

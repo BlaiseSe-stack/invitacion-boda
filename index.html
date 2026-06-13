@@ -205,13 +205,16 @@
                     <p style="font-size: 1rem; margin-bottom: 20px; line-height: 1.4; padding: 0 10px;">
                         <strong>Nota: </strong> Escribe tus apellidos para encontrar tus pases. <br><br>• <strong>Si asistes solo:</strong> Ingresa tus dos apellidos (ej: <strong>Pérez Ruiz</strong>).<br>• <strong>Si asistes en familia:</strong> Ingresa los apellidos de tu núcleo familiar (los apellidos de tus hijos ej: <strong>Sánchez Espinoza</strong>).
                     </p>
-                    <input type="text" id="rsvp-search-input" placeholder="Ej: Sánchez Espinoza" 
-                           style="width: 80%; max-width: 300px; padding: 10px 15px; border: 1px solid #e8d0cb; font-family: 'Times New Roman', serif; font-size: 1.1rem; color: #5c4d4d; outline: none; text-align: center; margin-bottom: 15px; border-radius: 4px;">
-                    <br>
-                    <button type="button" id="btn-search-family" 
-                            style="background-color: #b58d88; color: white; border: none; padding: 10px 25px; font-family: 'Georgia', serif; font-size: 0.95rem; cursor: pointer; letter-spacing: 1px; transition: background 0.3s; border-radius: 4px;">
-                        BUSCAR PASES
-                    </button>
+                    <form id="rsvp-search-form" onsubmit="return false;">
+                        <div id="rsvp-search-box">
+                            <div class="grupo-input">
+                                <label for="rsvp-search-input">Apellidos de la Familia:</label>
+                                <input type="text" id="rsvp-search-input" placeholder="Ej: Sánchez Espinosa" autocomplete="off">
+                            </div>
+                            <button type="submit" class="btn-principal" id="btn-search-family">BUSCAR INVITACIÓN</button>
+                        </div>
+                    </form>
+                    <div id="search-error-msg" style="display: none;"></div>
                     <div id="search-error-msg" style="color: #cc0000; font-style: italic; font-size: 0.95rem; margin-top: 15px; display: none;"></div>
                 </div>
 
