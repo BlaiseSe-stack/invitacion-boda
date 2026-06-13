@@ -276,40 +276,41 @@ let idFamiliaSeleccionada = "";
         }
 
 // =========================================================================
-// 6. CONTROL INTELIGENTE DE VISIBILIDAD (PAUSAR AUDIO EN SEGUNDO PLANO)
+// 6. CONTROL INTELIGENTE DE VISIBILIDAD (SOPORTE COMPLETO PARA MÓVILES Y BLOQUEO)
 // =========================================================================
 const reproductorMusica = document.getElementById("musica-boda");
 
 function forzarPausaMúsica() {
     if (reproductorMusica && !reproductorMusica.paused) {
         reproductorMusica.pause();
-        console.log("Música pausada: el usuario minimizó o cambió de pestaña.");
+        console.log("Música pausada con éxito.");
     }
 }
 
 function forzarReanudacionMúsica() {
-    // Solo reanudamos si la pestaña es visible Y la ventana tiene el foco
     if (reproductorMusica && !document.hidden && document.hasFocus()) {
-        // Solo intentará reproducir si el sobre ya fue abierto (para respetar el flujo inicial)
         const sobreAbierto = document.getElementById("envelope-layer")?.classList.contains("fade-out");
-        
         if (sobreAbierto) {
             reproductorMusica.play().catch(function(error) {
-                console.log("Reanudación automática bloqueada por el navegador:", error);
+                console.log("Reanudación automática bloqueada:", error);
             });
         }
     }
 }
 
-// Escuchar cambios de pestaña activas (Page Visibility API)
+// 📱 TRUCO PARA MÓVILES: Detectar congelamiento del sistema (Page Lifecycle API)
+// El evento 'pagehide' se dispara justo antes de que el móvil suspenda la pestaña por bloqueo.
+window.addEventListener("pagehide", forzarPausaMúsica);
+
+// Eventos estándar para computadoras y cambios de pestaña rápidos
 document.addEventListener("visibilitychange", function() {
     if (document.hidden) {
         forzarPausaMúsica();
     } else {
-        forzarReanudacionMúsica();
+        // Añadimos un pequeño retraso al regresar en móviles para esperar que el JS se descongele
+        setTimeout(forzarReanudacionMúsica, 300);
     }
 });
 
-// Escuchar pérdidas de foco (minimizar, cambiar de app/ventana o dar clic fuera)
 window.addEventListener("blur", forzarPausaMúsica);
 window.addEventListener("focus", forzarReanudacionMúsica);
