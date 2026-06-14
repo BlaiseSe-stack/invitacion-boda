@@ -72,13 +72,10 @@ let idFamiliaSeleccionada = "";
                 desplegarFormularioInvitados(integrantes, apellidoVisual, idFamiliaSeleccionada);
             };
 
+// =========================================================================
+            // 3. FUNCIÓN DE BÚSQUEDA COMPARTIDA (SOPORTA CLIC, ENTER Y MÓVILES)
             // =========================================================================
-            // 3. EVENTO: FORMULARIO DE BÚSQUEDA (SOPORTA ENTER Y TECLADOS MÓVILES)
-            // =========================================================================
-            document.getElementById("rsvp-search-form").addEventListener("submit", function(event) {
-                // Evitamos que la página se recargue al dar Enter o Buscar
-                event.preventDefault(); 
-
+            function ejecutarBusquedaRSVP() {
                 const inputTexto = document.getElementById("rsvp-search-input").value;
                 let busqueda = normalizarApellidos(inputTexto); 
                 const errorMsg = document.getElementById("search-error-msg");
@@ -90,7 +87,7 @@ let idFamiliaSeleccionada = "";
                     return;
                 }   
 
-                // 2. ASIGNACIÓN ASÍGNEA: Guardamos la llave REAL de la base de datos
+                // Guardamos la llave REAL de la base de datos
                 idFamiliaSeleccionada = busqueda; 
 
                 const datosFamilia = baseInvitadosEstricta[busqueda];
@@ -107,14 +104,14 @@ let idFamiliaSeleccionada = "";
                 btnBuscar.disabled = true;
 
                 const apellidoVisual = nombresVisualesFamilias[busqueda];
-
+                
                 // Configuración de la petición JSONP inyectando una etiqueta script
                 const src = `${URL_WEBHOOK_GOOGLE}?familia=${encodeURIComponent(apellidoVisual)}&callback=respuestaGoogleJSONP`;
-
+                
                 const script = document.createElement("script");
                 script.id = "jsonp-google-script";
                 script.src = src;
-
+                
                 script.onerror = function() {
                     console.log("Fallo de red, usando datos locales...");
                     btnBuscar.disabled = false;
@@ -123,6 +120,19 @@ let idFamiliaSeleccionada = "";
                 };
 
                 document.body.appendChild(script);
+            }
+
+            // --- DISPARADORES DE LA BUSQUEDA ---
+
+            // Disparador 1: Clic directo al botón físico
+            document.getElementById("btn-search-family").addEventListener("click", ejecutarBusquedaRSVP);
+
+            // Disparador 2: Presionar la tecla Enter dentro del cuadro de entrada (PC y Celulares)
+            document.getElementById("rsvp-search-input").addEventListener("keypress", function(event) {
+                if (event.key === "Enter" || event.keyCode === 13) {
+                    event.preventDefault(); // Evita cualquier acción secundaria en entornos móviles
+                    ejecutarBusquedaRSVP();
+                }
             });
 
             // =========================================================================
