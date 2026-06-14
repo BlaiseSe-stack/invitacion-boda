@@ -274,3 +274,70 @@ let idFamiliaSeleccionada = "";
 
             return `${dStr}d ${hStr}h ${mStr}m ${sStr}s`;
         }
+
+// =========================================================================
+// 6. CONTROL INTELIGENTE DE VISIBILIDAD (TÉCNICA DE AUDIO FANTASMA)
+// =========================================================================
+const reproductorMusica = document.getElementById("musica-boda");
+const RUTA_MUSICA_ORIGINAL = reproductorMusica ? reproductorMusica.src : "";
+
+// 🤫 Un segundo de silencio absoluto en formato Base64 (así no necesitas descargar ningún archivo extra)
+const AUDIO_SILENCIO_BASE64 = "data:audio/wav;base64,UklGRigAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQQAAAAAAAoA";
+
+function forzarPausaMúsica() {
+    if (reproductorMusica) {
+        // 1. Guardamos el segundo exacto de la canción antes de salir
+        if (!reproductorMusica.paused && reproductorMusica.currentTime > 0) {
+            localStorage.setItem("progreso_musica_boda", reproductorMusica.currentTime);
+        }
+
+        // 2. Interceptamos el reproductor y le inyectamos el silencio absoluto
+        reproductorMusica.pause();
+        reproductorMusica.src = AUDIO_SILENCIO_BASE64;
+        reproductorMusica.loop = true; // Lo dejamos en bucle para que sature el canal de audio del sistema
+        reproductorMusica.load();
+        
+        // Le damos play al silencio. El sistema operativo detendrá la canción real por completo para poner este "silencio".
+        reproductorMusica.play().catch(function(e) { console.log("Silencio inyectado de fondo."); });
+    }
+}
+
+function forzarReanudacionMúsica() {
+    if (reproductorMusica) {
+        const sobreAbierto = document.getElementById("envelope-layer")?.classList.contains("fade-out");
+        
+        if (sobreAbierto && !document.hidden && document.hasFocus()) {
+            
+            // Si el reproductor tiene el audio fantasma puesto, le regresamos la canción real
+            if (reproductorMusica.src.startsWith("data:") || reproductorMusica.src === window.location.href) {
+                reproductorMusica.src = RUTA_MUSICA_ORIGINAL;
+                reproductorMusica.loop = false; // O true, dependiendo de si quieres que tu canción se repita al acabar
+                reproductorMusica.load();
+            }
+
+            // Recuperamos el segundo exacto donde se quedó el invitado
+            const tiempoGuardado = localStorage.getItem("progreso_musica_boda");
+            if (tiempoGuardado) {
+                reproductorMusica.currentTime = parseFloat(tiempoGuardado);
+            }
+
+            // Volvemos a encender la música real
+            reproductorMusica.play().catch(function(error) {
+                console.log("Reanudación bloqueada por el navegador:", error);
+            });
+        }
+    }
+}
+
+// Escuchas globales agresivas para móviles y ordenadores
+document.addEventListener("visibilitychange", function() {
+    if (document.hidden) {
+        forzarPausaMúsica();
+    } else {
+        setTimeout(forzarReanudacionMúsica, 400);
+    }
+});
+
+window.addEventListener("blur", forzarPausaMúsica);
+window.addEventListener("focus", forzarReanudacionMúsica);
+window.addEventListener("pagehide", forzarPausaMúsica);
