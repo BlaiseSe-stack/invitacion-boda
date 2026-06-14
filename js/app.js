@@ -9,7 +9,15 @@ function normalizarApellidos(texto) {
                 .trim();
 }
 
-function configurarSuperCheck() {}
+function configurarSuperCheck() {
+    const superCheck = document.getElementById("super-check");
+    if (superCheck) {
+        superCheck.addEventListener("change", function() {
+            const checkboxes = document.querySelectorAll(".individual-check");
+            checkboxes.forEach(chk => chk.checked = this.checked);
+        });
+    }
+}
 
 function desplegarFormularioInvitados(integrantes, apellidoVisual, busqueda) {
     document.getElementById("search-error-msg").style.display = "none";
@@ -45,7 +53,7 @@ function desplegarFormularioInvitados(integrantes, apellidoVisual, busqueda) {
 }
 
 // =========================================================================
-// 2. FUNCIÓN GLOBAL DE RESPUESTA (JSONP) - EVITA TOTALMENTE EL CORS
+// INTERCEPCIÓN JSONP (EVITA ERRORES CORS EN EL GET DE CONSULTA)
 // =========================================================================
 window.respuestaGoogleJSONP = function(data) {
     const errorMsg = document.getElementById("search-error-msg");
@@ -63,7 +71,8 @@ window.respuestaGoogleJSONP = function(data) {
 
     if (data.confirmado === true) {
         errorMsg.innerHTML = `<span style="font-size: 1.1rem; color: #b58d88; font-weight: bold;">✨ ¡Tu familia ya está confirmada!</span><br>
-        <span style="font-size:0.95rem; color:#5c4d4d; display:block; margin-top:5px;">Ya contamos con tu asistencia registrada en nuestro sistema. ¡Muchas gracias por bloquear la fecha, nos vemos muy pronto!</span>`;
+        <span style="font-size:0.95rem; color:#5c4d4d; display:block; margin-top:5px;">Ya contamos con tu asistencia registrada en nuestro sistema. ¡Muchas gracias!</span>`;
+        errorMsg.style.display = "block";
         return;
     }
 
@@ -71,7 +80,7 @@ window.respuestaGoogleJSONP = function(data) {
 };
 
 // =========================================================================
-// 3. EVENTO: FORMULARIO DE BÚSQUEDA (SOPORTA ENTER Y TECLADOS MÓVILES)
+// ENVÍO DEL FORMULARIO DE BÚSQUEDA
 // =========================================================================
 document.getElementById("rsvp-search-form").addEventListener("submit", function(event) {
     event.preventDefault(); 
@@ -97,7 +106,7 @@ document.getElementById("rsvp-search-form").addEventListener("submit", function(
     }
 
     errorMsg.style.color = "#b58d88"; 
-    errorMsg.innerText = "Verificando pases inyectando la consulta...";
+    errorMsg.innerText = "Verificando pases en el sistema...";
     errorMsg.style.display = "block";
     btnBuscar.disabled = true;
 
@@ -118,9 +127,11 @@ document.getElementById("rsvp-search-form").addEventListener("submit", function(
 });
 
 // =========================================================================
-// 4. BOTÓN DE CONFIRMACIÓN (RECONECTADO Y CONFIGURADO AL 100%)
+// PROCESAMIENTO Y ENVÍO DE CONFIRMACIÓN A GOOGLE SHEETS
 // =========================================================================
-document.getElementById("btn-submit-rsvp").addEventListener("click", function() {
+document.getElementById("btn-submit-rsvp").addEventListener("click", function(e) {
+    e.preventDefault();
+    
     const checkboxes = document.querySelectorAll(".individual-check");
     let seleccionados = [];
 
@@ -181,31 +192,29 @@ document.getElementById("btn-submit-rsvp").addEventListener("click", function() 
 });
 
 // =========================================================================
-// 5. FUNCIÓN UNIFICADA: APERTURA DEL SOBRE + INICIO DE MÚSICA NATIVA
+// APERTURA DEL SOBRE Y DESBLOQUEO DE AUDIO
 // =========================================================================
 function abrirSobre(elementoSobre) {
     const musica = document.getElementById("musica-boda");
 
     if (musica) {
-        musica.muted = false; // Desbloqueo nativo del canal
+        musica.muted = false; 
         musica.play().catch(function(error) {
-            console.log("El navegador bloqueó el audio temporalmente:", error);
+            console.log("El navegador requería interacción previa:", error);
         });
     }
 
     window.scrollTo({ top: 0, behavior: 'instant' });
-    document.documentElement.scrollTop = 0;
-    document.body.scrollTop = 0;
-
     elementoSobre.classList.add("open");
 
     setTimeout(function() {
-        document.getElementById("envelope-layer").classList.add("fade-out");
+        const capaSobre = document.getElementById("envelope-layer");
+        if (capaSobre) capaSobre.classList.add("fade-out");
     }, 800);
 }
 
 // =========================================================================
-// CONFIGURACIÓN DE FECHAS LÍMITE
+// CONTADORES REVERSIVOS
 // =========================================================================
 const FECHA_CIERRE_RSVP = new Date(2026, 8, 5, 23, 59, 59).getTime(); 
 const FECHA_BODA = new Date(2026, 9, 17, 16, 0, 0).getTime();
@@ -213,21 +222,28 @@ const FECHA_BODA = new Date(2026, 9, 17, 16, 0, 0).getTime();
 const intervaloRelojes = setInterval(function() {
     const ahora = new Date().getTime();
 
-    const distanciaRsvp = FECHA_CIERRE_RSVP - ahora;
-    if (distanciaRsvp < 0) {
-        document.getElementById("timer-rsvp").innerText = "Lista Cerrada";
-    } else {
-        document.getElementById("timer-rsvp").innerText = formatearTiempo(distanciaRsvp);
+    const distanciaRsvp = FECHA_CIERRE_RSVP - nowOrTarget(ahora, FECHA_CIERRE_RSVP);
+    const timerRsvpElement = document.getElementById("timer-rsvp");
+    if (timerRsvpElement) {
+        if (FECHA_CIERRE_RSVP - ahora < 0) {
+            timerRsvpElement.innerText = "Lista Cerrada";
+        } else {
+            timerRsvpElement.innerText = formatearTiempo(FECHA_CIERRE_RSVP - ahora);
+        }
     }
 
-    const distanciaBoda = FECHA_BODA - ahora;
-    if (distanciaBoda < 0) {
-        document.getElementById("timer-wedding").innerText = "¡Llegó el Gran Día!";
-        clearInterval(intervaloRelojes);
-    } else {
-        document.getElementById("timer-wedding").innerText = formatearTiempo(distanciaBoda);
+    const timerWeddingElement = document.getElementById("timer-wedding");
+    if (timerWeddingElement) {
+        if (FECHA_BODA - ahora < 0) {
+            timerWeddingElement.innerText = "¡Llegó el Gran Día!";
+            clearInterval(intervaloRelojes);
+        } else {
+            timerWeddingElement.innerText = formatearTiempo(FECHA_BODA - ahora);
+        }
     }
 }, 1000);
+
+function nowOrTarget(now, target) { return now; }
 
 function formatearTiempo(milisegundos) {
     const dias = Math.floor(milisegundos / (1000 * 60 * 60 * 24));
@@ -244,13 +260,12 @@ function formatearTiempo(milisegundos) {
 }
 
 // =========================================================================
-// 6. CONTROL INTELIGENTE DE AUDIO MEDIANTE API DE MUTADO DE HARDWARE
+// SISTEMA AUTOMÁTICO DE CONTROL DE AUDIO DE HARDWARE
 // =========================================================================
 const reproductorMusica = document.getElementById("musica-boda");
 
 function gestionarSilencioSalida() {
     if (reproductorMusica && !reproductorMusica.paused) {
-        // En lugar de clonar o borrar el objeto, alteramos las propiedades de hardware directas
         localStorage.setItem("progreso_musica_boda", reproductorMusica.currentTime);
         reproductorMusica.muted = true; 
         reproductorMusica.pause();
@@ -259,8 +274,8 @@ function gestionarSilencioSalida() {
 
 function gestionarAudioRegreso() {
     if (reproductorMusica && !document.hidden && document.hasFocus()) {
-        const sobreAbierto = document.getElementById("envelope-layer")?.classList.contains("fade-out");
-        
+        const sobreAbierto = document.querySelector(".envelope-wrapper.fade-out") || document.getElementById("envelope-layer")?.classList.contains("fade-out");
+
         if (sobreAbierto) {
             const tiempoGuardado = localStorage.getItem("progreso_musica_boda");
             if (tiempoGuardado) {
@@ -268,13 +283,12 @@ function gestionarAudioRegreso() {
             }
             reproductorMusica.muted = false;
             reproductorMusica.play().catch(function(e) {
-                console.log("Bloqueo de reanudación móvil controlado.");
+                console.log("Reanudación móvil protegida.");
             });
         }
     }
 }
 
-// Escuchas seguras que respetan el ciclo de vida sin congelar el envío de formularios
 document.addEventListener("visibilitychange", function() {
     if (document.hidden) {
         gestionarSilencioSalida();
