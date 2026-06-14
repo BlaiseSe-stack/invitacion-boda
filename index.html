@@ -4,28 +4,29 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nuestra Boda - Invitación Oficial</title>
-    <link rel="stylesheet" type="text/css" href="css\styles.css">
+    <link rel="stylesheet" type="text/css" href="css/styles.css">
 </head>
 <body>
+    <!-- CAPA DEL SOBRE (CORREGIDO APERTURA ÚNICA) -->
     <div id="envelope-layer" class="envelope-wrapper">
-        <div id="envelope-layer" class="envelope-wrapper">
-           <div class="envelope-container"> 
-                <div class="countdown-envelope">
-                    <h3>Tiempo restante para confirmar asistencia:</h3>
-                    <div id="timer-rsvp" class="timer-display">00d 00h 00m 00s</div>
-                </div>
+        <div class="envelope-container"> 
+            <div class="countdown-envelope">
+                <h3>Tiempo restante para confirmar asistencia:</h3>
+                <div id="timer-rsvp" class="timer-display">00d 00h 00m 00s</div>
+            </div>
 
-                <div class="envelope" onclick="abrirSobre(this)">
-                    <div class="envelope-text">ABRIR INVITACIÓN</div>
-                </div>
+            <div class="envelope" onclick="abrirSobre(this)">
+                <div class="envelope-text">ABRIR INVITACIÓN</div>
             </div>
         </div>
     </div>
 
+    <!-- CONTENIDO PRINCIPAL DE LA INVITACIÓN -->
     <div class="wrapper">
-        <header><h1>💐♡<br>Atzareel <br>&<br> Andrew<br>♡💐</h1>
+        <header>
+            <h1>💐♡<br>Atzareel <br>&<br> Andrew<br>♡💐</h1>
             <h1>¡Nos Casamos!</h1>
-            
+
             <div class="subtitle">DESEAMOS COMPARTIR ESTE DÍA CONTIGO</div>
             <div class="countdown-wedding">
                 <h2>FALTAN SOLO:</h2>
@@ -34,137 +35,150 @@
             </div>
         </header>
 
-<!-- CALENDARIO INI -->        
-        <div style="max-width: 350px; margin: 30px auto; background-color: #ffffff; padding: 20px; border-radius: 15px; border: 1px solid #f3dbd5; box-shadow: 0 4px 12px rgba(181, 141, 136, 0.1);">
-            
+        <!-- SECCIÓN CALENDARIO -->        
+        <div style="max-width: 350px; margin: 30px auto; background-color: #ffffff; padding: 20px; border-radius: 15px; border: 1px solid #f3dbd5; box-shadow: 0 4px 12px rgba(181, 141, 136, 0.1); text-align: center;">
             <div style="font-family: 'Georgia', serif; font-size: 1.6rem; color: #b58d88; margin-bottom: 5px;">Octubre</div>
             <div style="font-size: 0.9rem; color: #a89692; letter-spacing: 2px; margin-bottom: 15px;">2026</div>
-            
+
             <div style="display: grid; grid-template-columns: repeat(7, 1fr); font-weight: bold; color: #8c7671; font-size: 0.85rem; margin-bottom: 10px;">
                 <div>L</div><div>M</div><div>M</div><div>J</div><div>V</div><div>S</div><div>D</div>
             </div>
-            
+
             <div style="display: grid; grid-template-columns: repeat(7, 1fr); row-gap: 8px; font-family: 'Times New Roman', serif; color: #5c4d4d;">
                 <div></div><div></div><div></div>
-                
                 <div>1</div><div>2</div><div>3</div><div>4</div>
                 <div>5</div><div>6</div><div>7</div><div>8</div><div>9</div><div>10</div><div>11</div>
                 <div>12</div><div>13</div><div>14</div><div>15</div><div>16</div>
-                
+
                 <div style="position: relative; display: flex; align-items: center; justify-content: center;">
                     <span style="background-color: #f0c9c2; color: #5c4d4d; font-weight: bold; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 1px dashed #b58d88; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
                         17
                     </span>
                 </div>
-                
+
                 <div>18</div><div>19</div><div>20</div><div>21</div><div>22</div><div>23</div><div>24</div>
                 <div>25</div><div>26</div><div>27</div><div>28</div><div>29</div><div>30</div><div>31</div>
             </div>
-            
+
             <div style="margin-top: 15px; font-family: 'Georgia', serif; font-style: italic; color: #9c746f; font-size: 1rem; letter-spacing: 1px;">
                 ¡Nuestra Boda! 🤍
             </div>
-        </div><!-- CALENDARIO FIN -->
+        </div>
 
+        <!-- DETALLES DE LA CELEBRACIÓN -->
         <div class="details-section">
             <div class="date">SAVE THE DATE:<br>SÁBADO, 17 DE OCTUBRE DE 2026</div>
             <div class="divider"></div>
-            
+
+            <!-- CEREMONIA RELIGIOSA -->
             <div class="info-block">
                 <div class="single-image-container">
                     <img src="img/church.png" alt="Church" class="invitation-img">
                 </div>
                 <strong>Ceremonia Religiosa</strong><br>
                 Parroquia de Nuestra Señora de San Juan de los Lagos - 16:00 hrs<br>
-                <span style="font-size: 0.9rem; color: #8c7671;"> C. Plutarco Elías Calles 162, Constitucion de 1857, 57950 Cdad. Nezahualcóyotl, Méx.<br><br><a href="https://maps.app.goo.gl/B1A2YHB2rVFn5Psm7" target="_blank" style="color: inherit; text-decoration: none;"><img src="img/pin.png" alt="ubi" width="30" height="30"></a>
+                <span style="font-size: 0.9rem; color: #8c7671;">
+                    C. Plutarco Elías Calles 162, Constitucion de 1857, 57950 Cdad. Nezahualcóyotl, Méx.<br><br>
+                    <a href="https://maps.app.goo.gl/B1A2YHB2rVFn5Psm7" target="_blank" style="color: inherit; text-decoration: none;">
+                        <img src="img/pin.png" alt="ubi" width="30" height="30">
+                    </a>
                     <p style="font-family: 'Times New Roman', Times, serif; font-size: 0.9rem; color: #8c7671; font-style: italic; margin-top: 5px; margin-bottom: 20px;">
-                        (Haz clic en el pin para abrir google Maps)
+                        (Haz clic en el pin para abrir Google Maps)
                     </p>
 
-                <div class="family-section" style="margin: auto; max-width: 600px;  font-family: 'Times New Roman', Times, serif; color: #5c4d4d;">
-    
-                <div class="parents-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; ">
-                    
-                    <div class="parents-column">
-                        <div style="font-family: 'Georgia', serif; font-style: italic; font-size: 1.05rem; color: #b58d88; margin-bottom: 5px;">
-                            Quienes la guiaron con amor
-                        </div>
-                        <div style="font-size: 0.85rem; line-height: 1.5; font-weight: bold; letter-spacing: 0.5px;">
-                            Edgardo Espinoza Martínez<br>
-                            Elvia Salvador López
-                        </div>
-                    </div>
+                    <!-- SECCIÓN PADRES Y PADRINOS -->
+                    <div class="family-section" style="margin: auto; max-width: 600px; font-family: 'Times New Roman', Times, serif; color: #5c4d4d; text-align: center;">
+                        <div class="parents-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px;">
+                            <div class="parents-column">
+                                <div style="font-family: 'Georgia', serif; font-style: italic; font-size: 1.05rem; color: #b58d88; margin-bottom: 5px;">
+                                    Quienes la guiaron con amor
+                                </div>
+                                <div style="font-size: 0.85rem; line-height: 1.5; font-weight: bold; letter-spacing: 0.5px;">
+                                    Edgardo Espinoza Martínez<br>
+                                    Elvia Salvador López
+                                </div>
+                            </div>
 
-                    <div class="parents-column">
-                        <div style="font-family: 'Georgia', serif; font-style: italic; font-size: 1.05rem; color: #b58d88; margin-bottom: 5px;">
-                            Quienes lo guiaron con amor
+                            <div class="parents-column">
+                                <div style="font-family: 'Georgia', serif; font-style: italic; font-size: 1.05rem; color: #b58d88; margin-bottom: 5px;">
+                                    Quienes lo guiaron con amor
+                                </div>
+                                <div style="font-size: 0.85rem; line-height: 1.5; font-weight: bold; letter-spacing: 0.5px;">
+                                    J. Donaldo Sánchez Rodríguez<br>
+                                    Matha Lucina Espinosa Ángeles
+                                </div>
+                            </div>
                         </div>
-                        <div style="font-size: 0.85rem; line-height: 1.5; font-weight: bold; letter-spacing: 0.5px;">
-                            J. Donaldo Sánchez Rodríguez<br>
-                            Matha Lucina Espinosa Ángeles
-                        </div>
-                    </div>
-                    
-                </div>
 
-                <div class="godparents-section" style="margin-top: 20px;">
-                    <div style="font-family: 'Georgia', serif; font-style: italic; font-size: 1.05rem; color: #b58d88; margin-bottom: 5px;">
-                        Con el apoyo y guía de nuestros Padrinos de Honor
+                        <div class="godparents-section" style="margin-top: 20px;">
+                            <div style="font-family: 'Georgia', serif; font-style: italic; font-size: 1.05rem; color: #b58d88; margin-bottom: 5px;">
+                                Con el apoyo y guía de nuestros Padrinos de Honor
+                            </div>
+                            <div style="font-size: 0.85rem; line-height: 1.5; font-weight: bold; letter-spacing: 0.5px;">
+                                Enrique García García<br>
+                                Silvia Gallaga Jiménez
+                            </div>
+                        </div>
                     </div>
-                    <div style="font-size: 0.85rem; line-height: 1.5; font-weight: bold; letter-spacing: 0.5px;">
-                        Enrique García García<br>
-                        Silvia Gallaga Jiménez
-                    </div>
-                </div>
-                </div></span>
+                </span>
             </div>
-            
+
             <div class="divider"></div>
-            
+
+            <!-- RECEPCIÓN -->
             <div class="info-block">
                 <div class="single-image-container">
                     <img src="img/recepcion.png" alt="recepcion" class="invitation-img">
                 </div>
                 <strong>Recepción</strong><br>
                 Jardín de fiestas Montreal - 18:00 hrs<br>
-                <span style="font-size: 0.9rem; color: #8c7671;">Calle Pesqueros, Naranjos esq, Villa Xochitenco, 56334 Chimalhuacán, Méx.<br><br><a href="https://maps.app.goo.gl/fonnjxwTuxXDcRhc6" target="_blank" style="color: inherit; text-decoration: none;"><img src="img/pin.png" alt="ubi" width="30" height="30"></a>
+                <span style="font-size: 0.9rem; color: #8c7671;">
+                    Calle Pesqueros, Naranjos esq, Villa Xochitenco, 56334 Chimalhuacán, Méx.<br><br>
+                    <a href="https://maps.app.goo.gl/fonnjxwTuxXDcRhc6" target="_blank" style="color: inherit; text-decoration: none;">
+                        <img src="img/pin.png" alt="ubi" width="30" height="30">
+                    </a>
                     <p style="font-family: 'Times New Roman', Times, serif; font-size: 0.9rem; color: #8c7671; font-style: italic; margin-top: 5px; margin-bottom: 20px;">
-                        (Haz clic en el pin para abrir google Maps)
+                        (Haz clic en el pin para abrir Google Maps)
                     </p>
-                    <div style="margin:auto; font-family: 'Georgia', serif; text-align: center; color: #5c4d4d;">
-                    <div style="font-size: 1.2rem; color: #b58d88; font-style: italic; margin-bottom: 5px;">Para celebrar juntos con gran gala, les solicitamos asistir con</div>
-                    <div style="font-size: 1.05rem; font-weight: bold; letter-spacing: 1px;">VESTIMENTA DE ETIQUETA</div><div style="font-size: 1.2rem; color: #b58d88; font-style: italic; margin-bottom: 5px;">(Agradecemos evitar el color blanco y beige).</div></div>
+                    
+                    <!-- CÓDIGO DE VESTIMENTA -->
+                    <div style="margin: auto; font-family: 'Georgia', serif; text-align: center; color: #5c4d4d;">
+                        <div style="font-size: 1.2rem; color: #b58d88; font-style: italic; margin-bottom: 5px;">Para celebrar juntos con gran gala, les solicitamos asistir con</div>
+                        <div style="font-size: 1.05rem; font-weight: bold; letter-spacing: 1px;">VESTIMENTA DE ETIQUETA</div>
+                        <div style="font-size: 1.2rem; color: #b58d88; font-style: italic; margin-bottom: 5px;">(Agradecemos evitar el color blanco y beige).</div>
+                    </div>
 
                     <div class="single-image-container">
                         <img src="img/dressCode.png" alt="DressCode" class="invitation-img">
                     </div>
                 </span>
-                <!-- NOTA DE ESTACIONAMIENTO / CUIDADO DE AUTOS -->
+
+                <!-- ESTACIONAMIENTO -->
                 <div class="parking-section">
                     <h3 class="parking-title">Estacionamiento y Seguridad</h3>
                     <p class="parking-text">
                         Para tu tranquilidad y comodidad, el lugar contará con personal dedicado al 
                         cuidado de los vehículos durante todo el evento, con un costo único de $50 pesos por toda la fiesta.
                     </p>
-
                     <div class="single-image-container">
                         <img src="img/parking.png" alt="parking" class="invitation-img">
                     </div>
                 </div>
 
-                <div style="margin: 35px auto; max-width: 450px; background-color: #fbf6f5; padding: 20px; border-radius: 10px; border: 1px dashed #e8d0cb; font-family: 'Times New Roman', Times, serif; color: #5c4d4d;">
+                <!-- ÁREA DE NIÑOS -->
+                <div style="margin: 35px auto; max-width: 450px; background-color: #fbf6f5; padding: 20px; border-radius: 10px; border: 1px dashed #e8d0cb; font-family: 'Times New Roman', Times, serif; color: #5c4d4d; text-align: center;">
                     <div style="font-family: 'Georgia', serif; font-style: italic; font-size: 1.2rem; color: #b58d88; margin-bottom: 8px;">
                         Pequeños Invitados
                     </div>
-                    <div style="font-size: 0.95rem; line-height: 1.5; font-weight: bold; letter-spacing: 0.5px; padding: 0 10px;">
+                    <div style="font-size: 0.95rem; line-height: 1.5; font-weight: bold; letter-spacing: 0.5px; padding: 0 10px; text-align: justify;">
                         Queremos que todos disfruten al máximo de la celebración. Tendremos un área de niños exclusiva con cuidadoras para que jueguen y se diviertan de manera segura durante el evento. <br>Fuera de esta área la supervisión y cuidado de los pequeños es responsabilidad exclusiva de sus papás, para mantener un ambiente seguro y ordenado. ¡Gracias por su apoyo!
                     </div>
-
                     <div class="single-image-container">
                         <img src="img/kidsArea.png" alt="kidsArea" class="invitation-img">
                     </div>
                 </div>
 
+                <!-- MESA DE REGALOS / EFECTIVO -->
                 <div class="gift-section" style="border-radius: 10px; border: 1px dashed #e8d0cb;">
                     <h2 class="gift-title">Detalles</h2>
                     <p class="gift-text">
@@ -172,7 +186,6 @@
                         si desean hacernos un obsequio opcional, su aportación económica voluntaria 
                         será un hermoso apoyo para ayudarnos a iniciar esta nueva etapa juntos.
                     </p>
-                    
                     <div class="bank-details">
                         <p><strong>Banco:</strong> Banco Azteca</p>
                         <p><strong>CLABE:</strong> 1271 8001 3906 2379 16</p>
@@ -182,7 +195,7 @@
             </div>
         </div>
 
-        <!-- BANNER DISCLAIMER: FECHA LÍMITE DE CONFIRMACIÓN -->
+        <!-- BANNER DE FECHA LÍMITE -->
         <div class="disclaimer-rsvp">
             <div class="disclaimer-badge">AVISO IMPORTANTE</div>
             <p class="disclaimer-text">
@@ -193,58 +206,61 @@
             </p>
         </div>
 
+        <!-- =========================================================================
+             SECCIÓN RSVP - TOTALMENTE CONTROLADA Y ENLAZADA
+             ========================================================================= -->
         <section id="rsvp-section" class="details-section">
-            <div style="max-width: 500px; margin: 0 auto; background: #fbf6f5; padding: 40px 30px; border-radius: 4px; border: 1px solid #e8d0cb; position: relative; box-shadow: 0 4px 15px rgba(0,0,0,0.02);">
-                
+            <div style="max-width: 500px; margin: 0 auto; background: #fbf6f5; padding: 40px 30px; border-radius: 4px; border: 1px solid #e8d0cb; position: relative; box-shadow: 0 4px 15px rgba(0,0,0,0.02); text-align: center;">
+
                 <div style="position: absolute; top: 10px; bottom: 10px; left: 10px; right: 10px; border: 1px solid #b58d88; pointer-events: none;"></div>
 
                 <h2 style="font-family: 'Georgia', serif; color: #b58d88; font-size: 1.8rem; margin: 0 0 5px 0; font-style: italic; letter-spacing: 1px;">Confirmar Asistencia</h2>
                 <div style="width: 80px; height: 1px; background-color: #b58d88; margin: 15px auto 25px auto;"></div>
 
+                <!-- BLOQUE DE BÚSQUEDA -->
                 <div id="rsvp-search-box">
-                    <p style="font-size: 1rem; margin-bottom: 20px; line-height: 1.4; padding: 0 10px;">
+                    <p style="font-size: 1rem; margin-bottom: 20px; line-height: 1.4; padding: 0 10px; text-align: justify;">
                         <strong>Nota: </strong> Escribe tus apellidos para encontrar tus pases. <br><br>• <strong>Si asistes solo:</strong> Ingresa tus dos apellidos (ej: <strong>Pérez Ruiz</strong>).<br>• <strong>Si asistes en familia:</strong> Ingresa los apellidos de tu núcleo familiar (los apellidos de tus hijos ej: <strong>Sánchez Espinoza</strong>).
                     </p>
-                   
-                        <div id="rsvp-search-box">
-                            <div class="grupo-input">
-                                <label for="rsvp-search-input">Apellidos de la Familia:</label>
-                                <input type="text" id="rsvp-search-input" placeholder="Ej: Sánchez Espinosa" autocomplete="off">
-                            </div>
-                            <button type="submit" class="btn-principal" id="btn-search-family">BUSCAR INVITACIÓN</button>
+
+                    <form id="rsvp-search-form">
+                        <div class="grupo-input" style="text-align: left; margin-bottom: 15px;">
+                            <label for="rsvp-search-input" style="display: block; margin-bottom: 5px; font-weight: bold;">Apellidos de la Familia:</label>
+                            <input type="text" id="rsvp-search-input" placeholder="Ej: Sánchez Espinosa" autocomplete="off" required style="width: 100%; padding: 8px; border: 1px solid #e8d0cb; border-radius: 4px;">
                         </div>
-                    
-                    <div id="search-error-msg" style="display: none;"></div>
+                        <button type="submit" class="btn-principal" id="btn-search-family">BUSCAR INVITACIÓN</button>
+                    </form>
+
                     <div id="search-error-msg" style="color: #cc0000; font-style: italic; font-size: 0.95rem; margin-top: 15px; display: none;"></div>
                 </div>
 
+                <!-- FORMULARIO DE INVITADOS (SE MUESTRA TRAS BUSCAR) -->
                 <form id="wedding-rsvp-form" style="display: none;">
                     <div id="rsvp-family-header"></div>
-                    
+
                     <div id="super-check-container" style="background-color: #fbf6f5; padding: 12px; max-width: 320px; margin: 0 auto 20px auto; display: flex; align-items: center; border-radius: 4px; border: 1px dashed #e8d0cb;">
-                        <input type="checkbox" id="super-check" checked 
-                               style="width: 20px; height: 20px; margin-right: 12px; accent-color: #b58d88; cursor: pointer;">
+                        <input type="checkbox" id="super-check" checked style="width: 20px; height: 20px; margin-right: 12px; accent-color: #b58d88; cursor: pointer;">
                         <label for="super-check" style="cursor: pointer; user-select: none; font-weight: bold; font-size: 1rem; color: #b58d88;">
                             Confirmar todos los pases ✔
                         </label>
                     </div>
 
                     <div id="rsvp-guests-list" style="text-align: left; max-width: 320px; margin: 0 auto 30px auto;"></div>
-                    
-                    <button type="submit" id="btn-submit-rsvp" 
-                            style="background-color: #b58d88; color: white; border: none; padding: 12px 35px; font-family: 'Georgia', serif; font-size: 1rem; cursor: pointer; letter-spacing: 1px; transition: background 0.3s; border-radius: 4px;">
+
+                    <button type="button" id="btn-submit-rsvp" style="background-color: #b58d88; color: white; border: none; padding: 12px 35px; font-family: 'Georgia', serif; font-size: 1rem; cursor: pointer; letter-spacing: 1px; transition: background 0.3s; border-radius: 4px;">
                         CONFIRMAR ASISTENCIA
                     </button>
                 </form>
 
+                <!-- MENSAJE DE ÉXITO -->
                 <div id="rsvp-success-msg" style="display: none; font-size: 1.25rem; color: #b58d88; font-style: italic; line-height: 1.5; padding: 20px 0;">
                     ✨ ¡Tu asistencia ha sido confirmada con éxito! <br>Gracias por bloquear la fecha, nos vemos muy pronto.
 
-                    <div style="margin: 35px auto; max-width: 450px; background-color: #fbf6f5; padding: 20px; border-radius: 10px; border: 1px dashed #e8d0cb; font-family: 'Times New Roman', Times, serif; color: #5c4d4d;">
+                    <div style="margin: 35px auto; max-width: 450px; background-color: #fbf6f5; padding: 20px; border-radius: 10px; border: 1px dashed #e8d0cb; font-family: 'Times New Roman', Times, serif; color: #5c4d4d; text-align: center;">
                         <div style="font-family: 'Georgia', serif; font-style: italic; font-size: 1.2rem; color: #b58d88; margin-bottom: 8px;">
                             Pases virtuales 
                         </div>
-                        <div style="font-size: 0.95rem; line-height: 1.5; font-weight: bold; letter-spacing: 0.5px; padding: 0 10px;">
+                        <div style="font-size: 0.95rem; line-height: 1.5; font-weight: bold; letter-spacing: 0.5px; padding: 0 10px; text-align: justify;">
                             Tu acceso al salón se agilizará escaneando el código QR de tus pases virtuales mostrados por los recepcionistas en la entrada.<br><br>
                             Nota: Para cualquier cambio o confirmación de lugares adicionales, por favor contáctanos directamente a nosotros para garantizar la perfecta distribución de las mesas.
                         </div>
@@ -253,20 +269,18 @@
             </div>
         </section>
 
+        <!-- CARGA DE SCRIPTS EN ORDEN CORRECTO -->
         <script src="baseDatos/invitados.js"></script>
-        
         <script src="js/app.js"></script>
 
-        <!-- PIE DE PÁGINA: DEDICATORIA FINAL -->
-        <footer class="footer-dedicatoria">
-            <!-- Un pequeño adorno clásico antes del texto -->
+        <!-- PIE DE PÁGINA -->
+        <footer class="footer-dedicatoria" style="text-align: center; margin-top: 40px; padding: 20px;">
             <div class="dedicatoria-icono">✦ ✦ ✦</div>
-            
-            <p class="dedicatoria-texto">
+            <p class="dedicatoria-texto" style="font-family: 'Georgia', serif; font-style: italic; color: #5c4d4d; max-width: 600px; margin: 10px auto; line-height: 1.6;">
                 "Porque el amor no se mide en el tiempo, sino en las almas que deciden caminar juntas. 
                 Gracias por ser parte del día más feliz de nuestras vidas y por acompañarnos a escribir 
                 este maravilloso nuevo capítulo."
-                <br>
+                <br><br>
                 <span style="font-size: 0.95rem; letter-spacing: 1px; color: #b58d88; font-style: normal; font-weight: bold;">
                     Hecho con amor para nuestra boda<br>♡ Atzareel & Andrew ♡ • 2026
                 </span>
@@ -274,7 +288,7 @@
         </footer>
     </div>
 
-    <!-- REPRODUCTOR DE AUDIO NATIVO (Ponlo justo antes de cerrar </body>) -->
+    <!-- REPRODUCTOR DE AUDIO NATIVO BLINDADO -->
     <audio id="musica-boda" src="music/hasta_mi_final.mp3" loop preload="auto"></audio>
 </body>
 </html>
