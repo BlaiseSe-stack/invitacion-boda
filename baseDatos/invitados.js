@@ -73,7 +73,7 @@ const nombresVisualesFamilias = {
     "sanchez rodriguez": "Sánchez Rodríguez",
     "guerrero sanchez": "Guerrero Sánchez",
     "salas sanchez": "Salas Sánchez",
-    "baez anastacio": "Báez Anastacio",
+    "baez anastasio": "Báez Anastasio",
     "montiel matilde": "Montiel Matilde",
     "romero velazquez": "Romero Velázquez",
     // Invitados novia INICIO
@@ -98,7 +98,7 @@ const nombresVisualesFamilias = {
     "quiroz martinez": "Quiroz Martínez",
     "garcia diaz": "García Díaz",
     "torres benavides": "Torrez Benavides",
-    "ledezma Luna": "Ledezma Luna",
+    "ledezma luna": "Ledezma Luna",
     "velazquez soriano": "Velázquez Soriano",
     "venta martinez": "Venta Martínez",
     "rivera cortes": "Rivera Córtes"
