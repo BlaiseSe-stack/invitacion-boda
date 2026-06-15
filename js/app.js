@@ -1,4 +1,4 @@
-const URL_WEBHOOK_GOOGLE = "https://script.google.com/macros/s/AKfycbz3PufyT0MeQMMISZOSnD8m3x2uSFAnvdJAeOKjkXVEa8orCqxtn6uMqYJU0SVMh5ivFw/exec";
+const URL_WEBHOOK_GOOGLE = "https://script.google.com/macros/s/AKfycbyjs73j2GA-WWjn5Fvklum8Jo-gVTp7B6fLI5_P3lp2dYQNm6VXpKBuq04xL5o5tZhZ/exec";
 let idFamiliaSeleccionada = "";
 
 function normalizarApellidos(texto) {
@@ -19,6 +19,19 @@ function configurarSuperCheck() {
     }
 }
 
+function configurarSuperCheck() {
+    const superCheck = document.getElementById("super-check");
+    if (superCheck) {
+        superCheck.addEventListener("change", function() {
+            const checkboxes = document.querySelectorAll(".individual-check");
+            checkboxes.forEach(chk => {
+                chk.checked = this.checked;
+            });
+            actualizarEstadoBotonRsvp(); // Monitorear el cambio global
+        });
+    }
+}
+
 function desplegarFormularioInvitados(integrantes, apellidoVisual, busqueda) {
     document.getElementById("search-error-msg").style.display = "none";
     document.getElementById("rsvp-search-box").style.display = "none";
@@ -31,7 +44,7 @@ function desplegarFormularioInvitados(integrantes, apellidoVisual, busqueda) {
         <div style="font-size: 1.35rem; font-weight: bold; margin-bottom: 4px;">Familia ${apellidoVisual}</div>
         <div style="font-size: 0.95rem; color: #b58d88; font-style: italic; margin-bottom: 20px;">(${totalPases} ${textoPlural})</div>
         <p style="font-size: 0.95rem; margin-bottom: 20px; line-height: 1.4; padding: 0 10px;">
-            Selecciona únicamente a las personas que asistirán:
+            Usa los interruptores para indicar quién asistirá (Verde) y quién no (Rojo):
         </p>
     `;
 
@@ -40,17 +53,144 @@ function desplegarFormularioInvitados(integrantes, apellidoVisual, busqueda) {
         let nombreVisualInvitado = nombre.replace("[niño]", "👶");
 
         contenedorCheckboxes += `
-            <div style="display: flex; align-items: center; margin-bottom: 12px; font-size: 1.1rem;">
-                <input type="checkbox" id="invitado_${index}" name="asistentes_boda" value="${nombre}" checked 
-                       style="width: 18px; height: 18px; margin-right: 12px; accent-color: #b58d88; cursor: pointer;" class="individual-check">
-                <label for="invitado_${index}" style="cursor: pointer; user-select: none;">${nombreVisualInvitado}</label>
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 15px; font-size: 1.1rem; background: #fff; padding: 8px 12px; border-radius: 6px; border: 1px solid #f3dbd5;">
+                <label for="invitado_${index}" style="cursor: pointer; user-select: none; flex-grow: 1; text-align: left; margin-right: 10px;">${nombreVisualInvitado}</label>
+                <label class="switch-asistencia">
+                    <input type="checkbox" id="invitado_${index}" name="asistentes_boda" value="${nombre}" checked class="individual-check">
+                    <span class="slider-switch"></span>
+                </label>
             </div>`;
     });
 
     document.getElementById("rsvp-guests-list").innerHTML = contenedorCheckboxes;
     document.getElementById("wedding-rsvp-form").style.display = "block";
+    
+    // Escuchar cambios individuales en los switches para alterar el botón principal
+    document.querySelectorAll(".individual-check").forEach(chk => {
+        chk.addEventListener("change", actualizarEstadoBotonRsvp);
+    });
+
     configurarSuperCheck();
+    actualizarEstadoBotonRsvp(); // Estado inicial
 }
+
+// =========================================================================
+// FUNCIÓN PARA CAMBIAR DINÁMICAMENTE EL BOTÓN PRINCIPAL
+// =========================================================================
+function actualizarEstadoBotonRsvp() {
+    const checkboxes = document.querySelectorAll(".individual-check");
+    const btn = document.getElementById("btn-submit-rsvp");
+    let algunoChecked = false;
+
+    checkboxes.forEach(chk => {
+        if (chk.checked) algunoChecked = true;
+    });
+
+    if (!algunoChecked) {
+        // Si nadie del grupo confirma asistencia
+        btn.innerText = "LIBERAR LUGARES";
+        btn.style.backgroundColor = "#cc0000"; // Cambia a fondo rojo de aviso
+    } else {
+        // Si al menos una persona asiste
+        btn.innerText = "CONFIRMAR ASISTENCIA";
+        btn.style.backgroundColor = "#b58d88"; // Tu color original de la boda
+    }
+}
+
+// =========================================================================
+// PROCESAMIENTO Y ENVÍO DE CONFIRMACIÓN A GOOGLE SHEETS
+// =========================================================================
+document.getElementById("btn-submit-rsvp").addEventListener("click", function(e) {
+    e.preventDefault();
+    
+    const checkboxes = document.querySelectorAll(".individual-check");
+    let seleccionados = [];
+
+    checkboxes.forEach(chk => {
+        if (chk.checked) {
+            seleccionados.push(chk.value);
+        }
+    });
+
+    // Detectamos qué acción se está ejecutando en base a la selección
+    const esLiberacionTotal = (seleccionados.length === 0);
+
+    let adultosConfirmados = 0;
+    let ninosConfirmados = 0;
+
+    seleccionados.forEach(nombre => {
+        if (nombre.includes("[niño]")) {
+            ninosConfirmados++;
+        } else {
+            adultosConfirmados++;
+        }
+    });
+
+    const nombreFamiliaVisual = nombresVisualesFamilias[idFamiliaSeleccionada];
+    // Si se liberan los lugares, enviamos un texto explícito al Sheets para tu control
+    const listaAsistentes = esLiberacionTotal ? "NINGUNO - LUGARES LIBERADOS" : seleccionados.join(", ");
+
+    const btn = document.getElementById("btn-submit-rsvp");
+    btn.innerText = "ENVIANDO...";
+    btn.className = "btn-enviando"; 
+    btn.disabled = true;
+
+    const datosFormulario = new URLSearchParams();
+    datosFormulario.append("familia", nombreFamiliaVisual);
+    datosFormulario.append("asistieron", listaAsistentes);
+    datosFormulario.append("tipo", "rsvp"); 
+    datosFormulario.append("adultos", adultosConfirmados);
+    datosFormulario.append("ninos", ninosConfirmados);
+
+    fetch(URL_WEBHOOK_GOOGLE, {
+        method: "POST",
+        mode: "no-cors", 
+        headers: { 
+            "Content-Type": "application/x-www-form-urlencoded" 
+        },
+        body: datosFormulario.toString()
+    })
+    .then(() => {
+        document.getElementById("wedding-rsvp-form").style.display = "none";
+        const contenedorMensajeExito = document.getElementById("rsvp-success-msg");
+
+        if (esLiberacionTotal) {
+            // Reemplazo dinámico del mensaje para cancelación completa
+            contenedorMensajeExito.innerHTML = `
+                <div style="font-size: 1.2rem; color: #cc0000; font-style: italic; line-height: 1.6; padding: 20px 0; font-weight: bold;">
+                    💔 Lamentamos no poder contar con tu asistencia, gracias por tu tiempo.
+                </div>
+                <p style="font-size: 0.95rem; color: #5c4d4d; margin-top: 10px;">
+                    Tus lugares han sido liberados en el sistema correctamente.
+                </p>
+            `;
+        } else {
+            // Mantenemos tu hermoso diseño original si sí asiste alguien
+            contenedorMensajeExito.innerHTML = `
+                ✨ ¡Tu asistencia ha sido confirmada con éxito! <br>Gracias por bloquear la fecha, nos vemos muy pronto.
+
+                <div style="margin: 35px auto; max-width: 450px; background-color: #fbf6f5; padding: 20px; border-radius: 10px; border: 1px dashed #e8d0cb; font-family: 'Times New Roman', Times, serif; color: #5c4d4d; text-align: center;">
+                    <div style="font-family: 'Georgia', serif; font-style: italic; font-size: 1.2rem; color: #b58d88; margin-bottom: 8px;">
+                        Pases virtuales 
+                    </div>
+                    <div style="font-size: 0.95rem; line-height: 1.5; font-weight: bold; letter-spacing: 0.5px; padding: 0 10px; text-align: justify;">
+                        Tu acceso al salón se agilizará escaneando el código QR de tus pases virtuales mostrados por los recepcionistas en la entrada.<br><br>
+                        Nota: Para cualquier cambio o confirmación de lugares adicionales, por favor contáctanos directamente a nosotros para garantizar la perfecta distribución de las mesas.
+                    </div>
+                </div>
+            `;
+        }
+        
+        contenedorMensajeExito.style.display = "block";
+    })
+    .catch(err => {
+        console.error("Error al guardar asistencia:", err);
+        alert("Ocurrió un error al enviar la confirmación. Inténtalo de nuevo.");
+        btn.className = "";
+        btn.disabled = false;
+        actualizarEstadoBotonRsvp();
+    });
+});
 
 // =========================================================================
 // INTERCEPCIÓN JSONP (EVITA ERRORES CORS EN EL GET DE CONSULTA)

@@ -867,3 +867,54 @@
             cursor: not-allowed !important; /* Cambia el cursor para indicar que está bloqueado */
             opacity: 0.8;
         }
+
+        /* --- NUEVOS ESTILOS PARA LOS SWITCHES DE ASISTENCIA --- */
+        .switch-asistencia {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 26px;
+        }
+
+        /* Ocultar el checkbox nativo */
+        .switch-asistencia input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        /* El cuerpo del Switch (Por defecto: ROJO / NO) */
+        .slider-switch {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #cc0000; /* Rojo */
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        /* El círculo interno del Switch */
+        .slider-switch::before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        /* Cuando está activo (VERDE / SÍ) */
+        .switch-asistencia input:checked + .slider-switch {
+            background-color: #28a745; /* Verde */
+        }
+
+        /* Desplazamiento del círculo al activarse */
+        .switch-asistencia input:checked + .slider-switch::before {
+            transform: translateX(24px);
+        }

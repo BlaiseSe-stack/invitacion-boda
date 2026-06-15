@@ -242,20 +242,23 @@
                     <div id="search-error-msg" style="color: #cc0000; font-style: italic; font-size: 0.95rem; margin-top: 15px; display: none;"></div>
                 </div>
 
-                <!-- FORMULARIO DE INVITADOS (SE MUESTRA TRAS BUSCAR) -->
+                <!-- FORMULARIO DE INVITADOS (MODIFICADO CON SWITCHES) -->
                 <form id="wedding-rsvp-form" style="display: none;">
                     <div id="rsvp-family-header"></div>
 
-                    <div id="super-check-container" style="background-color: #fbf6f5; padding: 12px; max-width: 320px; margin: 0 auto 20px auto; display: flex; align-items: center; border-radius: 4px; border: 1px dashed #e8d0cb;">
-                        <input type="checkbox" id="super-check" checked style="width: 20px; height: 20px; margin-right: 12px; accent-color: #b58d88; cursor: pointer;">
-                        <label for="super-check" style="cursor: pointer; user-select: none; font-weight: bold; font-size: 1rem; color: #b58d88;">
-                            Confirmar todos los pases ✔
+                    <!-- Switch Global / Super Switch -->
+                    <div id="super-check-container" style="background-color: #fbf6f5; padding: 12px; max-width: 320px; margin: 0 auto 20px auto; display: flex; align-items: center; justify-content: space-between; border-radius: 4px; border: 1px dashed #e8d0cb;">
+                        <span style="font-weight: bold; font-size: 1rem; color: #b58d88; user-select: none;">Confirmar todos los pases</span>
+                        <label class="switch-asistencia">
+                            <input type="checkbox" id="super-check" checked>
+                            <span class="slider-switch"></span>
                         </label>
                     </div>
 
                     <div id="rsvp-guests-list" style="text-align: left; max-width: 320px; margin: 0 auto 30px auto;"></div>
 
-                    <button type="button" id="btn-submit-rsvp" style="background-color: #b58d88; color: white; border: none; padding: 12px 35px; font-family: 'Georgia', serif; font-size: 1rem; cursor: pointer; letter-spacing: 1px; transition: background 0.3s; border-radius: 4px;">
+                    <!-- El botón cambiará de texto, color y acción dinámicamente -->
+                    <button type="button" id="btn-submit-rsvp" style="background-color: #b58d88; color: white; border: none; padding: 12px 35px; font-family: 'Georgia', serif; font-size: 1rem; cursor: pointer; letter-spacing: 1px; transition: all 0.3s; border-radius: 4px; width: 100%; max-width: 320px;">
                         CONFIRMAR ASISTENCIA
                     </button>
                 </form>
