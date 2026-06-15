@@ -260,42 +260,50 @@ function formatearTiempo(milisegundos) {
 }
 
 // =========================================================================
-// SISTEMA AUTOMÁTICO DE CONTROL DE AUDIO DE HARDWARE
+// 6. CONTROL INTELIGENTE DE AUDIO MEDIANTE API DE VISIBILIDAD EN MÓVILES
 // =========================================================================
 const reproductorMusica = document.getElementById("musica-boda");
 
-function gestionarSilencioSalida() {
+function pausarMusicaSistema() {
     if (reproductorMusica && !reproductorMusica.paused) {
         localStorage.setItem("progreso_musica_boda", reproductorMusica.currentTime);
-        reproductorMusica.muted = true; 
         reproductorMusica.pause();
     }
 }
 
-function gestionarAudioRegreso() {
-    if (reproductorMusica && !document.hidden && document.hasFocus()) {
-        const sobreAbierto = document.querySelector(".envelope-wrapper.fade-out") || document.getElementById("envelope-layer")?.classList.contains("fade-out");
+function reanudarMusicaSistema() {
+    if (!reproductorMusica || document.hidden) return;
 
-        if (sobreAbierto) {
-            const tiempoGuardado = localStorage.getItem("progreso_musica_boda");
-            if (tiempoGuardado) {
-                reproductorMusica.currentTime = parseFloat(tiempoGuardado);
-            }
-            reproductorMusica.muted = false;
-            reproductorMusica.play().catch(function(e) {
-                console.log("Reanudación móvil protegida.");
-            });
+    // Verificamos si el sobre ya se abrió (viendo si la capa tiene 'open' o 'fade-out')
+    const capaSobre = document.getElementById("envelope-layer");
+    const sobreAbierto = capaSobre && (capaSobre.classList.contains("fade-out") || capaSobre.style.display === "none");
+
+    if (sobreAbierto) {
+        const tiempoGuardado = localStorage.getItem("progreso_musica_boda");
+        if (tiempoGuardado) {
+            reproductorMusica.currentTime = parseFloat(tiempoGuardado);
         }
+        
+        // Ejecución con promesa segura para burlar el bloqueo de autoplay de Chrome/Safari móvil
+        reproductorMusica.play().catch(function(e) {
+            console.log("El navegador móvil bloqueó la reanudación automática hasta que el usuario interactúe con la pantalla.");
+        });
     }
 }
 
+// Escucha cuando el usuario minimiza la app, cambia de pestaña o bloquea el celular
 document.addEventListener("visibilitychange", function() {
     if (document.hidden) {
-        gestionarSilencioSalida();
+        pausarMusicaSistema();
     } else {
-        setTimeout(gestionarAudioRegreso, 250);
+        // Un pequeño retraso de 300ms le da tiempo al navegador móvil de recuperar el hilo de ejecución
+        setTimeout(reanudarMusicaSistema, 300);
     }
 });
 
-window.addEventListener("pagehide", gestionarSilencioSalida);
-window.addEventListener("pageshow", gestionarAudioRegreso);
+// Eventos complementarios para navegadores antiguos o vistas embebidas (como el navegador de Facebook/Instagram)
+window.addEventListener("blur", pausarMusicaSistema);
+window.addEventListener("focus", function() {
+    setTimeout(reanudarMusicaSistema, 300);
+});
+window.addEventListener("pagehide", pausarMusicaSistema);
