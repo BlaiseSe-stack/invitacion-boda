@@ -107,6 +107,7 @@ document.getElementById("rsvp-search-form").addEventListener("submit", function(
 
     errorMsg.style.color = "#b58d88"; 
     errorMsg.innerText = "Verificando pases en el sistema...";
+    errorMsg.className = "texto-cargando"; // <-- Añade el movimiento
     errorMsg.style.display = "block";
     btnBuscar.disabled = true;
 
@@ -162,6 +163,7 @@ document.getElementById("btn-submit-rsvp").addEventListener("click", function(e)
 
     const btn = document.getElementById("btn-submit-rsvp");
     btn.innerText = "ENVIANDO...";
+    btn.className = "btn-enviando"; // <-- AGREGAMOS LA ANIMACIÓN AQUÍ
     btn.disabled = true;
 
     const datosFormulario = new URLSearchParams();

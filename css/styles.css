@@ -846,3 +846,24 @@
         .icono-musica {
             margin-right: 6px;
         }
+
+        /* Animación de pulsación */
+        @keyframes parpadeoCarga {
+            0% { opacity: 0.4; }
+            50% { opacity: 1; }
+            100% { opacity: 0.4; }
+        }
+
+        /* Clase que aplicará el movimiento */
+        .texto-cargando {
+            animation: parpadeoCarga 1.5s infinite ease-in-out;
+            color: #b58d88; /* Tu color rosa elegante de la boda */
+            font-weight: bold;
+        }
+
+        /* Clase específica para el botón en estado de envío */
+        .btn-enviando {
+            animation: parpadeoCarga 1.5s infinite ease-in-out;
+            cursor: not-allowed !important; /* Cambia el cursor para indicar que está bloqueado */
+            opacity: 0.8;
+        }
