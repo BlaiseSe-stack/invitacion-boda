@@ -46,7 +46,7 @@ const baseInvitadosEstricta = {
     "quiroz martinez": { integrantes: ["Misael"], confirmado: false },
     "garcia diaz": { integrantes: ["Elizabeth Ketzalzin", "+1 pase"], confirmado: false },
     "torres benavides": { integrantes: ["Alberto", "Marisela", "Angelica", "+1 pase", "Diego", "+1 pase","+1 pase"], confirmado: false },
-    "ledezma ": { integrantes: ["Liliana"], confirmado: false },
+    "ledezma luna": { integrantes: ["Liliana"], confirmado: false },
     "velazquez soriano": { integrantes: ["Zelzin"], confirmado: false },
     "venta martinez": { integrantes: ["Mitzi"], confirmado: false },
     "rivera cortes": { integrantes: ["Alexis"], confirmado: false }
@@ -98,7 +98,7 @@ const nombresVisualesFamilias = {
     "quiroz martinez": "Quiroz Martínez",
     "garcia diaz": "García Díaz",
     "torres benavides": "Torrez Benavides",
-    "ledezma ": "Ledezma",
+    "ledezma Luna": "Ledezma Luna",
     "velazquez soriano": "Velázquez Soriano",
     "venta martinez": "Venta Martínez",
     "rivera cortes": "Rivera Córtes"
