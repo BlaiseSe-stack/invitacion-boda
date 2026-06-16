@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Organizador de Mesas Interactivo</title>
+    <title>Asignación de Mesas desde Cero</title>
     <style>
         * {
             box-sizing: border-box;
@@ -14,238 +14,304 @@
             margin: 0;
             display: flex;
             height: 100vh;
-            background-color: #f7f5f0;
+            background-color: #f4f6f9;
+            color: #333;
         }
 
         /* --- PANEL DE INVITADOS --- */
         #panel-invitados {
-            width: 300px;
+            width: 320px;
             background-color: #ffffff;
-            border-right: 2px solid #e0dbd1;
+            border-right: 1px solid #dcdfe6;
             padding: 20px;
             display: flex;
             flex-direction: column;
+            box-shadow: 2px 0 8px rgba(0,0,0,0.05);
         }
 
         #panel-invitados h2 {
             margin-top: 0;
-            color: #4a4a4a;
-            font-size: 1.4rem;
+            color: #2c3e50;
+            font-size: 1.3rem;
+            margin-bottom: 5px;
+        }
+
+        .subtitulo {
+            font-size: 0.85rem;
+            color: #7f8c8d;
+            margin-bottom: 15px;
         }
 
         .lista-scroll {
             overflow-y: auto;
             flex-grow: 1;
-            border: 1px dashed #ccc;
+            border: 2px dashed #dcdfe6;
             padding: 10px;
-            background-color: #fafafa;
+            background-color: #fbfbfc;
             border-radius: 8px;
         }
 
         .invitado {
-            background-color: #e3f2fd;
-            border: 1px solid #90caf9;
+            background-color: #eef5fe;
+            border: 1px solid #b3d8ff;
+            color: #409eff;
             padding: 8px 12px;
             margin-bottom: 8px;
-            border-radius: 4px;
+            border-radius: 6px;
             cursor: grab;
             user-select: none;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             font-weight: 500;
+            transition: transform 0.1s, background-color 0.2s;
+        }
+
+        .invitado:hover {
+            background-color: #ecf5ff;
         }
 
         .invitado:active {
             cursor: grabbing;
+            transform: scale(0.98);
         }
 
-        /* --- PLANO DEL SALÓN --- */
-        #salon-contenedor {
+        /* --- CONTENEDOR DE MESAS --- */
+        #distribucion-mesas {
             flex-grow: 1;
-            position: relative;
-            padding: 20px;
-            overflow: auto;
+            padding: 25px;
+            overflow-y: auto;
             display: grid;
-            grid-template-columns: repeat(12, 1fr);
-            grid-template-rows: repeat(12, 1fr);
-            gap: 15px;
-            min-width: 900px;
-            background-image: radial-gradient(#e0dbd1 1px, transparent 1px);
-            background-size: 20px 20px;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 20px;
+            background-color: #f4f6f9;
         }
 
-        /* Elementos del plano según el bosquejo */
-        .escenario {
-            grid-column: 1 / 3;
-            grid-row: 3 / 7;
-            background-color: #d7ccc8;
-            border: 2px solid #8d6e63;
-            border-radius: 4px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            color: #5d4037;
-        }
-
-        .pista-baile {
-            grid-column: 3 / 10;
-            grid-row: 5 / 7;
-            background-color: #fff9c4;
-            border: 2px dashed #fbc02d;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            color: #f57f17;
-            z-index: 1;
-        }
-
-        /* Extensión de la pista hacia el fondo (L-shape) */
-        .pista-extension {
-            grid-column: 9 / 11;
-            grid-row: 1 / 5;
-            background-color: #fff9c4;
-            border: 2px dashed #fbc02d;
-            border-top: none;
-            border-bottom: none;
-            z-index: 0;
-        }
-
-        .mesa-principal {
-            grid-column: 9 / 11;
-            grid-row: 1 / 2;
-            background-color: #ffccbc;
-            border: 2px solid #ff5722;
-            border-radius: 4px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            color: #d84315;
-        }
-
-        /* --- ESTILO DE LAS MESAS CUADRADAS (12 PAX) --- */
+        /* --- DISEÑO DE CADA MESA --- */
         .mesa-cuadrada {
             background-color: #ffffff;
-            border: 2px solid #b0bec5;
-            border-radius: 8px;
-            padding: 8px;
+            border: 1px solid #e4e7ed;
+            border-radius: 10px;
+            padding: 12px;
+            box-shadow: 0 2px 12px 0 rgba(0,0,0,0.05);
             display: flex;
             flex-direction: column;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
         }
 
         .mesa-titulo {
             text-align: center;
             font-weight: bold;
-            font-size: 0.85rem;
-            margin-bottom: 6px;
-            color: #37474f;
-            border-bottom: 1px solid #cfd8dc;
-            padding-bottom: 2px;
+            font-size: 0.95rem;
+            margin-bottom: 10px;
+            color: #303133;
+            padding-bottom: 6px;
+            border-bottom: 2px solid #f2f6fc;
         }
 
         .asientos-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 4px;
-            flex-grow: 1;
+            gap: 6px;
         }
 
         .asiento {
-            background-color: #f1f1f1;
-            border: 1px dashed #b0bec5;
-            height: 32px;
+            background-color: #f5f7fa;
+            border: 1px dashed #dcdfe6;
+            height: 36px;
             border-radius: 4px;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 0.75rem;
-            color: #78909c;
+            color: #909399;
             overflow: hidden;
+            transition: all 0.2s;
         }
 
         .asiento.ocupado {
             border-style: solid;
-            background-color: #c8e6c9;
-            border-color: #81c784;
-            color: #2e7d32;
+            background-color: #f0f9eb;
+            border-color: #c2e7b0;
+            color: #67c23a;
         }
 
-        /* Posiciones específicas de las mesas rodeando la pista */
-        .m1 { grid-column: 2 / 4; grid-row: 1 / 3; }
-        .m2 { grid-column: 4 / 6; grid-row: 1 / 3; }
-        .m3 { grid-column: 6 / 8; grid-row: 1 / 3; }
-        
-        .m4 { grid-column: 1 / 3; grid-row: 8 / 10; }
-        .m5 { grid-column: 3 / 5; grid-row: 8 / 10; }
-        .m6 { grid-column: 1 / 3; grid-row: 10 / 12; }
-        .m7 { grid-column: 3 / 5; grid-row: 10 / 12; }
+        .asiento.ocupado .invitado {
+            background-color: transparent;
+            border: none;
+            color: #67c23a;
+            padding: 0;
+            margin: 0;
+            width: 100%;
+            text-align: center;
+            font-size: 0.75rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
 
-        .m8  { grid-column: 11 / 13; grid-row: 2 / 4; }
-        .m9  { grid-column: 11 / 13; grid-row: 4 / 6; }
-        .m10 { grid-column: 11 / 13; grid-row: 6 / 8; }
-        .m11 { grid-column: 11 / 13; grid-row: 8 / 10; }
-        .m12 { grid-column: 11 / 13; grid-row: 10 / 12; }
+        /* --- BOTÓN DE REINICIO --- */
+        #btn-reiniciar {
+            margin-top: 10px;
+            background-color: #f56c6c;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 0.85rem;
+        }
+        #btn-reiniciar:hover {
+            background-color: #e6a23c;
+        }
     </style>
 </head>
 <body>
 
     <div id="panel-invitados">
-        <h2>Invitados (<span id="contador">5</span>)</h2>
+        <h2>Por Acomodar (<span id="contador">0</span>)</h2>
+        <div class="subtitulo">Arrastra los nombres hacia los asientos o de vuelta aquí</div>
         <div class="lista-scroll" id="lista-origen" ondragover="allowDrop(event)" ondrop="dropBack(event)">
-            <div class="invitado" id="inv1" draggable="true" ondragstart="drag(event)">Andrés Mendoza</div>
-            <div class="invitado" id="inv2" draggable="true" ondragstart="drag(event)">Beatriz Soto</div>
-            <div class="invitado" id="inv3" draggable="true" ondragstart="drag(event)">Carlos Villa</div>
-            <div class="invitado" id="inv4" draggable="true" ondragstart="drag(event)">Diana Pérez</div>
-            <div class="invitado" id="inv5" draggable="true" ondragstart="drag(event)">Eduardo Gómez</div>
+            </div>
+        <button id="btn-reiniciar" onclick="reiniciarTodo()">Reiniciar Distribución</button>
+    </div>
+
+    <div id="distribucion-mesas">
         </div>
-    </div>
-
-    <div id="salon-contenedor">
-        <div class="escenario">Escenario / DJ</div>
-        <div class="pista-baile">Pista de Baile</div>
-        <div class="pista-extension"></div>
-        <div class="mesa-principal">Mesa Principal</div>
-
-        <script>
-            const contenedor = document.getElementById('salon-contenedor');
-            for (let i = 1; i <= 12; i++) {
-                let mesaHtml = `
-                    <div class="mesa-cuadrada m${i}">
-                        <div class="mesa-titulo">Mesa ${i}</div>
-                        <div class="asientos-grid">
-                `;
-                for (let j = 1; j <= 12; j++) {
-                    mesaHtml += `<div class="asiento" id="m${i}-a${j}" ondragover="allowDrop(event)" ondrop="drop(event)">${j}</div>`;
-                }
-                mesaHtml += `</div></div>`;
-                contenedor.innerHTML += mesaHtml;
-            }
-        </script>
-    </div>
 
     <script>
-        function allowDrop(ev) {
-            ev.preventDefault();
+        // Lista única unificada sin etiquetas de mesa
+        const listaInvitadosUnica = [
+            "Donaldo", "Martha", "Jesús", "Griselda", "Cristopher", "Desari", "Lucian", "Armando", "Doan", "Kareem",
+            "Illi", "Jooy", "Julián", "José", "Irma", "Carlos", "Irma", "Carla", "Martines A. Sharim",
+            "Nestor", "Elizabeth", "Hannia", "Alice", "Niels", "Silvia", "Melanie", "Lilith", "Elena",
+            "David", "Asela", "Roberthor", "Fernando", "Brenda", "Tania Fernanda",
+            "Ángel", "Eugenia", "Hayde", "Zayra", "Armando Alberto", "Leonardo", "Tadeo bb", "Guadalupe", "Angeles", "Natalia", "Pedro",
+            "Roman", "Elvira", "Ángel", "Logan", "Matias", "Romina", "Hayde", "Jorge", "Emilio", "Valentina",
+            "J. Consepcion", "Elena", "Brandon", "Brenda", "Marisol", "Andres", "Camila Monserrat", "Liam Santiago", "Hugo", "Marce", "Sofía",
+            "Edgardo", "Elvia", "Joan", "Enrique", "Silvia",
+            "Roberto", "Griselda", "Renata", "Isai", "Carla", "Adelina", "Juan Carlos", "Ariana", "Ximena", "Isaac", "Emilio [bb]",
+            "Rocio", "Angeles", "Rocio h.", "Norberto", "Josue", "Carlos", "Jesús", "Carolina", "Jazmín", "Samuel", "Monserrat", "+1 pase",
+            "Ángel", "Paula", "Alison", "Santiago", "Margarita", "Ricardo", "Arelí", "Samantha", "Johan", "Andrik",
+            "Víctor", "Verónica", "Cristian", "Estefania", "Sebastián", "Alberto", "Marisela", "Angelica", "+1 pase", "Diego", "+1 pase", "+1 pase [niño]",
+            "César", "Luz", "Giovani", "Nayeli", "José Alfredo", "+1 pase", "Fernando", "Elizabeth Ketzalzin", "+1 pase",
+            "Enrique", "Misael", "Liliana", "Zelzin", "Mitzi", "Alexis",
+            "José Eduardo", "+1 pase", "Donaldo", "Victoria", "Lyan [niño]", "Alejandro", "+1 pase", "Erik",
+            "Adelina", "Roberto", "Omar", "Alejandra", "Mariana", "Omar h.", "Rubén", "Marcos"
+        ];
+
+        const listaOrigen = document.getElementById('lista-origen');
+        const contenedorMesas = document.getElementById('distribucion-mesas');
+
+        // 1. Crear la estructura de las 16 mesas fijas
+        for (let i = 1; i <= 16; i++) {
+            let mesaHtml = `
+                <div class="mesa-cuadrada">
+                    <div class="mesa-titulo">Mesa ${i}</div>
+                    <div class="asientos-grid">
+            `;
+            for (let j = 1; j <= 12; j++) {
+                mesaHtml += `<div class="asiento" id="m${i}-asiento${j}" ondragover="allowDrop(event)" ondrop="drop(event)">${j}</div>`;
+            }
+            mesaHtml += `</div></div>`;
+            contenedorMesas.innerHTML += mesaHtml;
         }
 
-        function drag(ev) {
-            ev.dataTransfer.setData("text", ev.target.id);
+        // 2. Inicializar la aplicación
+        function inicializar() {
+            const mapaGuardado = localStorage.getItem('distribucionBodas');
+            
+            if (mapaGuardado) {
+                cargarProgreso(JSON.parse(mapaGuardado));
+            } else {
+                // Población limpia y directa sin textos de grupos parentesis
+                listaInvitadosUnica.forEach((nombre, index) => {
+                    crearElementoInvitado(`inv-${index + 1}`, nombre, listaOrigen);
+                });
+            }
+            actualizarContador();
         }
+
+        function crearElementoInvitado(id, texto, contenedorPadre) {
+            const div = document.createElement('div');
+            div.className = 'invitado';
+            div.id = id;
+            div.draggable = true;
+            div.innerText = texto;
+            div.ondragstart = drag;
+            contenedorPadre.appendChild(div);
+        }
+
+        // 3. Funciones de guardado y carga automática
+        function guardarProgreso() {
+            const estadoActual = {
+                listaIzquierda: [],
+                asientos: {}
+            };
+
+            Array.from(listaOrigen.children).forEach(nodo => {
+                estadoActual.listaIzquierda.push({ id: nodo.id, texto: nodo.innerText });
+            });
+
+            document.querySelectorAll('.asiento').forEach(asiento => {
+                if (asiento.classList.contains('ocupado')) {
+                    const nodoInvitado = asiento.querySelector('.invitado');
+                    estadoActual.asientos[asiento.id] = {
+                        id: nodoInvitado.id,
+                        texto: nodoInvitado.innerText
+                    };
+                }
+            });
+
+            localStorage.setItem('distribucionBodas', JSON.stringify(estadoActual));
+        }
+
+        function cargarProgreso(estado) {
+            estado.listaIzquierda.forEach(item => {
+                crearElementoInvitado(item.id, item.texto, listaOrigen);
+            });
+
+            Object.keys(estado.asientos).forEach(asientoId => {
+                const asientoEsl = document.getElementById(asientoId);
+                if (asientoEsl) {
+                    asientoEsl.innerHTML = "";
+                    const datosInv = estado.asientos[asientoId];
+                    crearElementoInvitado(datosInv.id, datosInv.texto, asientoEsl);
+                    asientoEsl.classList.add('ocupado');
+                }
+            });
+        }
+
+        function reiniciarTodo() {
+            if (confirm("¿Estás seguro de que quieres restablecer todas las mesas? Se perderá el orden actual.")) {
+                localStorage.removeItem('distribucionBodas');
+                location.reload();
+            }
+        }
+
+        // 4. Lógica de Drag & Drop
+        function allowDrop(ev) { ev.preventDefault(); }
+        function drag(ev) { ev.dataTransfer.setData("text", ev.target.id); }
 
         function drop(ev) {
             ev.preventDefault();
             const data = ev.dataTransfer.getData("text");
             const invitadoNode = document.getElementById(data);
             
-            // Asegurarse de soltar exactamente en un asiento vacío
-            if (ev.target.classList.contains("asiento") && !ev.target.classList.contains("ocupado")) {
-                ev.target.innerHTML = ""; // Limpia el número de asiento
-                ev.target.appendChild(invitadoNode);
-                ev.target.classList.add("ocupado");
+            let destino = ev.target;
+            if (destino.classList.contains("invitado")) { destino = destino.parentNode; }
+
+            if (destino.classList.contains("asiento") && !destino.classList.contains("ocupado")) {
+                const padreAnterior = invitadoNode.parentNode;
+                if (padreAnterior.classList.contains("asiento")) {
+                    padreAnterior.classList.remove("ocupado");
+                    padreAnterior.innerText = padreAnterior.id.split('asiento')[1];
+                }
+
+                destino.innerHTML = "";
+                destino.appendChild(invitadoNode);
+                destino.classList.add("ocupado");
+                
                 actualizarContador();
+                guardarProgreso();
             }
         }
 
@@ -254,23 +320,22 @@
             const data = ev.dataTransfer.getData("text");
             const invitadoNode = document.getElementById(data);
             
-            // Si venía de una mesa, restaurar el estado del asiento de origen
             const padreAnterior = invitadoNode.parentNode;
             if (padreAnterior.classList.contains("asiento")) {
                 padreAnterior.classList.remove("ocupado");
-                // Recuperar el número de asiento a partir del ID (ej. "m1-a5" -> saca el "5")
-                const idAsiento = padreAnterior.id.split('-a')[1];
-                padreAnterior.innerText = idAsiento;
+                padreAnterior.innerText = padreAnterior.id.split('asiento')[1];
             }
 
-            document.getElementById("lista-origen").appendChild(invitadoNode);
+            listaOrigen.appendChild(invitadoNode);
             actualizarContador();
+            guardarProgreso();
         }
 
         function actualizarContador() {
-            const restantes = document.getElementById("lista-origen").children.length;
-            document.getElementById("contador").innerText = restantes;
+            document.getElementById("contador").innerText = listaOrigen.children.length;
         }
+
+        inicializar();
     </script>
 </body>
 </html>
