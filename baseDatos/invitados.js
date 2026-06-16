@@ -15,27 +15,27 @@ const baseInvitadosEstricta = {
     "rosas juarez": { integrantes: ["Fernando", "Brenda", "Tania Fernanda"], confirmado: false },
     "escobar aguilera": { integrantes: ["Carlos", "Irma", "Carla", "Martines A. Sharim"], confirmado: false },
     "garcia espinosa": { integrantes: ["Ángel", "Eugenia", "Hayde"], confirmado: false },
-    "piña garcia": { integrantes: ["Zayra", "Armando Alberto", "Leonardo", "Tadeo", "Guadalupe", "Angeles"], confirmado: false },
+    "piña garcia": { integrantes: ["Zayra", "Armando Alberto", "Leonardo", "Tadeo [bb]", "Guadalupe", "Angeles"], confirmado: false },
     "garcia alfaro": { integrantes: ["Roman", "Elvira", "Ángel", "Logan", "Matias", "Romina"], confirmado: false },
     "calixto garcia": { integrantes: ["Natalia", "Pedro"], confirmado: false },
-    "sanchez jaramillo": { integrantes: ["J. Consepcion", "Elena", "Brandon", "Brenda"], confirmado: false },
+    "sanchez jaramillo": { integrantes: ["J. Consepcion", "Elena", "Brandon", "Brenda"], confirmado: false },//56
     "sanchez rodriguez": { integrantes: ["Hugo", "Marce", "Sofía [niño]"], confirmado: false },
     "guerrero sanchez": { integrantes: ["Hayde", "Jorge", "Emilio [niño]", "Valentina [niño]"], confirmado: false },
     "salas sanchez": { integrantes: ["Marisol", "Andres", "Camila Monserrat [niño]", "Liam Santiago [niño]"], confirmado: false },
     "baez anastasio": { integrantes: ["José Eduardo", "+1 pase"], confirmado: false },
     "montiel matilde": { integrantes: ["Donaldo", "Victoria", " Lyan [niño]"], confirmado: false },
-    "romero velazquez": { integrantes: ["Alejandro", "+1 pase"], confirmado: false },//74 pases sin confirmar
+    "romero velazquez": { integrantes: ["Alejandro", "+1 pase"], confirmado: false },//73 pases sin confirmar
     // Invitados novia INICIO
     "espinoza salvador": { integrantes: ["Edgardo", "Elvia", "Joan"], confirmado: false },
-    "meza salvador": { integrantes: ["Adelina", "Juan Carlos", "Ariana", "Ximena", "Isaac"], confirmado: false },
+    "meza salvador": { integrantes: ["Adelina", "Juan Carlos", "Ariana", "Ximena", "Isaac", "Emilio [bb]"], confirmado: false },
     "salvador remigio": { integrantes: ["Roberto", "Griselda", "Renata", "Isai", "Carla", "Adelina", "Roberto"], confirmado: false },
     "maldonado salvador": { integrantes: ["Rocio", "Angeles", "Rocio h.", "Norberto", "Josue", "Carlos"], confirmado: false },
     "espinoza cardoso": { integrantes: ["Ángel", "Paula", "Alison", "Santiago [niño]", "Margarita", "Ricardo"], confirmado: false },
     "mendoza espinoza": { integrantes: ["Arelí", "Samantha", "Johan", "Andrik"], confirmado: false },
     "jaramillo espinoza": { integrantes: ["Víctor", "Verónica", "Cristian", "Estefania", "Sebastián [niño]"], confirmado: false },
     "salvador beristain": { integrantes: ["Omar", "Alejandra", "Mariana", "Omar h."], confirmado: false },
-    "salvador gonzalez": { integrantes: ["Rubén", "Marcos"], confirmado: false },
-    "salvador eulogio": { integrantes: ["Jesús", "Carolina", "Jazmín", "Samuel", "Monserrat"], confirmado: false },
+    "salvador gonzalez": { integrantes: ["Rubén", "Marcos"], confirmado: false },// FALTAN
+    "salvador eulogio": { integrantes: ["Jesús", "Carolina", "Jazmín", "Samuel", "Monserrat", "+1 pase"], confirmado: false },
     "corpus carrazco": { integrantes: ["César", "Luz"], confirmado: false },
     "guzman gaspar": { integrantes: ["Giovani", "Nayeli"], confirmado: false },
     "garcia gallaga": { integrantes: ["Enrique", "Silvia"], confirmado: false },

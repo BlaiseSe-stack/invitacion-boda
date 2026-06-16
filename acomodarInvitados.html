@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Organizador de Mesas Interactivo</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            margin: 0;
+            display: flex;
+            height: 100vh;
+            background-color: #f7f5f0;
+        }
+
+        /* --- PANEL DE INVITADOS --- */
+        #panel-invitados {
+            width: 300px;
+            background-color: #ffffff;
+            border-right: 2px solid #e0dbd1;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        #panel-invitados h2 {
+            margin-top: 0;
+            color: #4a4a4a;
+            font-size: 1.4rem;
+        }
+
+        .lista-scroll {
+            overflow-y: auto;
+            flex-grow: 1;
+            border: 1px dashed #ccc;
+            padding: 10px;
+            background-color: #fafafa;
+            border-radius: 8px;
+        }
+
+        .invitado {
+            background-color: #e3f2fd;
+            border: 1px solid #90caf9;
+            padding: 8px 12px;
+            margin-bottom: 8px;
+            border-radius: 4px;
+            cursor: grab;
+            user-select: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .invitado:active {
+            cursor: grabbing;
+        }
+
+        /* --- PLANO DEL SALÓN --- */
+        #salon-contenedor {
+            flex-grow: 1;
+            position: relative;
+            padding: 20px;
+            overflow: auto;
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            grid-template-rows: repeat(12, 1fr);
+            gap: 15px;
+            min-width: 900px;
+            background-image: radial-gradient(#e0dbd1 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+
+        /* Elementos del plano según el bosquejo */
+        .escenario {
+            grid-column: 1 / 3;
+            grid-row: 3 / 7;
+            background-color: #d7ccc8;
+            border: 2px solid #8d6e63;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: #5d4037;
+        }
+
+        .pista-baile {
+            grid-column: 3 / 10;
+            grid-row: 5 / 7;
+            background-color: #fff9c4;
+            border: 2px dashed #fbc02d;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: #f57f17;
+            z-index: 1;
+        }
+
+        /* Extensión de la pista hacia el fondo (L-shape) */
+        .pista-extension {
+            grid-column: 9 / 11;
+            grid-row: 1 / 5;
+            background-color: #fff9c4;
+            border: 2px dashed #fbc02d;
+            border-top: none;
+            border-bottom: none;
+            z-index: 0;
+        }
+
+        .mesa-principal {
+            grid-column: 9 / 11;
+            grid-row: 1 / 2;
+            background-color: #ffccbc;
+            border: 2px solid #ff5722;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: #d84315;
+        }
+
+        /* --- ESTILO DE LAS MESAS CUADRADAS (12 PAX) --- */
+        .mesa-cuadrada {
+            background-color: #ffffff;
+            border: 2px solid #b0bec5;
+            border-radius: 8px;
+            padding: 8px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+
+        .mesa-titulo {
+            text-align: center;
+            font-weight: bold;
+            font-size: 0.85rem;
+            margin-bottom: 6px;
+            color: #37474f;
+            border-bottom: 1px solid #cfd8dc;
+            padding-bottom: 2px;
+        }
+
+        .asientos-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 4px;
+            flex-grow: 1;
+        }
+
+        .asiento {
+            background-color: #f1f1f1;
+            border: 1px dashed #b0bec5;
+            height: 32px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            color: #78909c;
+            overflow: hidden;
+        }
+
+        .asiento.ocupado {
+            border-style: solid;
+            background-color: #c8e6c9;
+            border-color: #81c784;
+            color: #2e7d32;
+        }
+
+        /* Posiciones específicas de las mesas rodeando la pista */
+        .m1 { grid-column: 2 / 4; grid-row: 1 / 3; }
+        .m2 { grid-column: 4 / 6; grid-row: 1 / 3; }
+        .m3 { grid-column: 6 / 8; grid-row: 1 / 3; }
+        
+        .m4 { grid-column: 1 / 3; grid-row: 8 / 10; }
+        .m5 { grid-column: 3 / 5; grid-row: 8 / 10; }
+        .m6 { grid-column: 1 / 3; grid-row: 10 / 12; }
+        .m7 { grid-column: 3 / 5; grid-row: 10 / 12; }
+
+        .m8  { grid-column: 11 / 13; grid-row: 2 / 4; }
+        .m9  { grid-column: 11 / 13; grid-row: 4 / 6; }
+        .m10 { grid-column: 11 / 13; grid-row: 6 / 8; }
+        .m11 { grid-column: 11 / 13; grid-row: 8 / 10; }
+        .m12 { grid-column: 11 / 13; grid-row: 10 / 12; }
+    </style>
+</head>
+<body>
+
+    <div id="panel-invitados">
+        <h2>Invitados (<span id="contador">5</span>)</h2>
+        <div class="lista-scroll" id="lista-origen" ondragover="allowDrop(event)" ondrop="dropBack(event)">
+            <div class="invitado" id="inv1" draggable="true" ondragstart="drag(event)">Andrés Mendoza</div>
+            <div class="invitado" id="inv2" draggable="true" ondragstart="drag(event)">Beatriz Soto</div>
+            <div class="invitado" id="inv3" draggable="true" ondragstart="drag(event)">Carlos Villa</div>
+            <div class="invitado" id="inv4" draggable="true" ondragstart="drag(event)">Diana Pérez</div>
+            <div class="invitado" id="inv5" draggable="true" ondragstart="drag(event)">Eduardo Gómez</div>
+        </div>
+    </div>
+
+    <div id="salon-contenedor">
+        <div class="escenario">Escenario / DJ</div>
+        <div class="pista-baile">Pista de Baile</div>
+        <div class="pista-extension"></div>
+        <div class="mesa-principal">Mesa Principal</div>
+
+        <script>
+            const contenedor = document.getElementById('salon-contenedor');
+            for (let i = 1; i <= 12; i++) {
+                let mesaHtml = `
+                    <div class="mesa-cuadrada m${i}">
+                        <div class="mesa-titulo">Mesa ${i}</div>
+                        <div class="asientos-grid">
+                `;
+                for (let j = 1; j <= 12; j++) {
+                    mesaHtml += `<div class="asiento" id="m${i}-a${j}" ondragover="allowDrop(event)" ondrop="drop(event)">${j}</div>`;
+                }
+                mesaHtml += `</div></div>`;
+                contenedor.innerHTML += mesaHtml;
+            }
+        </script>
+    </div>
+
+    <script>
+        function allowDrop(ev) {
+            ev.preventDefault();
+        }
+
+        function drag(ev) {
+            ev.dataTransfer.setData("text", ev.target.id);
+        }
+
+        function drop(ev) {
+            ev.preventDefault();
+            const data = ev.dataTransfer.getData("text");
+            const invitadoNode = document.getElementById(data);
+            
+            // Asegurarse de soltar exactamente en un asiento vacío
+            if (ev.target.classList.contains("asiento") && !ev.target.classList.contains("ocupado")) {
+                ev.target.innerHTML = ""; // Limpia el número de asiento
+                ev.target.appendChild(invitadoNode);
+                ev.target.classList.add("ocupado");
+                actualizarContador();
+            }
+        }
+
+        function dropBack(ev) {
+            ev.preventDefault();
+            const data = ev.dataTransfer.getData("text");
+            const invitadoNode = document.getElementById(data);
+            
+            // Si venía de una mesa, restaurar el estado del asiento de origen
+            const padreAnterior = invitadoNode.parentNode;
+            if (padreAnterior.classList.contains("asiento")) {
+                padreAnterior.classList.remove("ocupado");
+                // Recuperar el número de asiento a partir del ID (ej. "m1-a5" -> saca el "5")
+                const idAsiento = padreAnterior.id.split('-a')[1];
+                padreAnterior.innerText = idAsiento;
+            }
+
+            document.getElementById("lista-origen").appendChild(invitadoNode);
+            actualizarContador();
+        }
+
+        function actualizarContador() {
+            const restantes = document.getElementById("lista-origen").children.length;
+            document.getElementById("contador").innerText = restantes;
+        }
+    </script>
+</body>
+</html>
