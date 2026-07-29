@@ -33,7 +33,7 @@ const baseInvitadosEstricta = {
     "salvador remigio": { integrantes: ["Roberto", "Griselda", "Renata", "Isai", "Carla", "Adelina", "Roberto"], confirmado: false },
     "maldonado salvador": { integrantes: ["Rocio", "Angeles", "Rocio h.", "Norberto", "Josue", "Carlos"], confirmado: false },
     "espinoza cardoso": { integrantes: ["Ángel", "Paula", "Alison", "Santiago [niño]", "Margarita", "Ricardo"], confirmado: false },
-    "mendoza espinoza": { integrantes: ["Arelí", "Samantha", "Johan", "Andrik", "Fabian"], confirmado: false },
+    "mendoza espinoza": { integrantes: ["Arelí", "Samantha", "Johan", "Andrik", "José Fabián Soto Amores"], confirmado: false },
     "jaramillo espinoza": { integrantes: ["Víctor", "Verónica", "Cristian", "Estefania", "Sebastián [niño]"], confirmado: false },
     "salvador beristain": { integrantes: ["Omar", "Alejandra", "Mariana", "Omar h."], confirmado: false },
     "salvador gonzalez": { integrantes: ["Rubén", "Marcos"], confirmado: false },// FALTAN
