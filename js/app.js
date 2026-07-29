@@ -21,12 +21,20 @@ function configurarSuperCheck() {
 
 function configurarSuperCheck() {
     const superCheck = document.getElementById("super-check");
+    const superLabel = document.getElementById("super-check-label");
+
     if (superCheck) {
         superCheck.addEventListener("change", function() {
             const checkboxes = document.querySelectorAll(".individual-check");
             checkboxes.forEach(chk => {
                 chk.checked = this.checked;
             });
+
+            // Cambiar el texto del título según la posición del super switch
+            if (superLabel) {
+                superLabel.innerText = this.checked ? "Liberar todos los pases" : "Confirmar todos los pases";
+            }
+
             actualizarEstadoBotonRsvp(); // Monitorear el cambio global
         });
     }
@@ -80,20 +88,35 @@ function desplegarFormularioInvitados(integrantes, apellidoVisual, busqueda) {
 function actualizarEstadoBotonRsvp() {
     const checkboxes = document.querySelectorAll(".individual-check");
     const btn = document.getElementById("btn-submit-rsvp");
+    const superCheck = document.getElementById("super-check");
+    const superLabel = document.getElementById("super-check-label");
+
     let algunoChecked = false;
+    let todosChecked = checkboxes.length > 0;
 
     checkboxes.forEach(chk => {
-        if (chk.checked) algunoChecked = true;
+        if (chk.checked) {
+            algunoChecked = true;
+        } else {
+            todosChecked = false; // Si al menos uno no está marcado, ya no están todos seleccionados
+        }
     });
 
+    // 1. Sincronizar el Super Switch y su Título
+    if (superCheck) {
+        superCheck.checked = todosChecked;
+    }
+    if (superLabel) {
+        superLabel.innerText = todosChecked ? "Liberar todos los pases" : "Confirmar todos los pases";
+    }
+
+    // 2. Sincronizar el Botón Principal
     if (!algunoChecked) {
-        // Si nadie del grupo confirma asistencia
         btn.innerText = "LIBERAR LUGARES";
-        btn.style.backgroundColor = "#cc0000"; // Cambia a fondo rojo de aviso
+        btn.style.backgroundColor = "#cc0000";
     } else {
-        // Si al menos una persona asiste
         btn.innerText = "CONFIRMAR ASISTENCIA";
-        btn.style.backgroundColor = "#b58d88"; // Tu color original de la boda
+        btn.style.backgroundColor = "#b58d88";
     }
 }
 
@@ -157,9 +180,11 @@ document.getElementById("btn-submit-rsvp").addEventListener("click", function(e)
         if (esLiberacionTotal) {
             // Reemplazo dinámico del mensaje para cancelación completa
             contenedorMensajeExito.innerHTML = `
-                <div style="font-size: 1.2rem; color: #cc0000; font-style: italic; line-height: 1.6; padding: 20px 0; font-weight: bold;">
-                    💔 Lamentamos no poder contar con tu asistencia, gracias por tu tiempo.
+                <div> 💔
+                <div style="font-size: 1.2rem; color: #cc000086; font-style: italic; line-height: 1.6; padding: 20px 0; font-weight: bold;">
+                    Lamentamos no poder contar con tu asistencia, gracias por tu tiempo. 
                 </div>
+                💔 </div>
                 <p style="font-size: 0.95rem; color: #5c4d4d; margin-top: 10px;">
                     Tus lugares han sido liberados en el sistema correctamente.
                 </p>
