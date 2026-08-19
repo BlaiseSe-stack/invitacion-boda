@@ -245,7 +245,7 @@ window.respuestaGoogleJSONP = function(data) {
     // 2. Si la familia NO ha confirmado y el cupo máximo (150) ya se completó
     if (data.cupoLleno === true) {
         errorMsg.innerHTML = `<span style="font-size: 1.1rem; color: #cc0000; font-weight: bold;">⚠️ Cupo Lleno</span><br>
-        <span style="font-size:0.95rem; color:#5c4d4d; display:block; margin-top:5px;">Lo sentimos, hemos alcanzado el límite máximo de asistentes confirmados (150 invitados). Ya no es posible registrar nuevas confirmaciones.</span>`;
+        <span style="font-size:0.95rem; color:#5c4d4d; display:block; margin-top:5px;">Lo sentimos, hemos alcanzado el límite máximo de asistentes confirmados. Ya no es posible registrar nuevas confirmaciones.</span>`;
         errorMsg.style.display = "block";
         return;
     }
