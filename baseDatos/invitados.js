@@ -32,7 +32,7 @@ const baseInvitadosEstricta = {
     "vazquez cano": { integrantes: ["Gustavo", "+1 pase"], confirmado: false },
     "zarate mejia": { integrantes: ["Abraham", "+1 pase"], confirmado: false },
     "silva gonzalez": { integrantes: ["Alejandro", "+1 pase"], confirmado: false },
-    //"garcia ": { integrantes: ["Luis", "Valeria"], confirmado: false },
+    "garcia carreon": { integrantes: ["Luis", "Valentina"], confirmado: false },
     //"espinosa torres": { integrantes: ["Germán", "Lorena", "", ""], confirmado: false },
     // Invitados novia INICIO
     "espinoza salvador": { integrantes: ["Edgardo", "Elvia", "Joan"], confirmado: false },
@@ -93,6 +93,7 @@ const nombresVisualesFamilias = {
     "zarate mejia": "Zárate Mejía",
     "silva gonzalez": "Silva González",
     "mendez olguin": "Méndez Olguín",
+    "garcia carreon": "García Carreón",
     //"espinosa torres": "Espinosa Torres",
     // Invitados novia INICIO
     "espinoza salvador": "Espinoza Salvador",

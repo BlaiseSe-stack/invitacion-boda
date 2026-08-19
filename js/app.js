@@ -1,4 +1,4 @@
-const URL_WEBHOOK_GOOGLE = "https://script.google.com/macros/s/AKfycbyjs73j2GA-WWjn5Fvklum8Jo-gVTp7B6fLI5_P3lp2dYQNm6VXpKBuq04xL5o5tZhZ/exec";
+const URL_WEBHOOK_GOOGLE = "https://script.google.com/macros/s/AKfycbw-WEdF6e0GCkBcCnFOtfYmcokoC2dwg8mxJKFv7E-d_7WW90zSRa4_9RyVn08hMB3xMw/exec";
 let idFamiliaSeleccionada = "";
 
 function normalizarApellidos(texto) {
@@ -234,6 +234,7 @@ window.respuestaGoogleJSONP = function(data) {
     const scriptAntiguo = document.getElementById("jsonp-google-script");
     if (scriptAntiguo) scriptAntiguo.remove();
 
+    // 1. Si la familia ya confirmó antes, se respeta su confirmación previa intacta
     if (data.confirmado === true) {
         errorMsg.innerHTML = `<span style="font-size: 1.1rem; color: #b58d88; font-weight: bold;">✨ ¡Tu familia ya está confirmada!</span><br>
         <span style="font-size:0.95rem; color:#5c4d4d; display:block; margin-top:5px;">Ya contamos con tu asistencia registrada en nuestro sistema. ¡Muchas gracias!</span>`;
@@ -241,6 +242,15 @@ window.respuestaGoogleJSONP = function(data) {
         return;
     }
 
+    // 2. Si la familia NO ha confirmado y el cupo máximo (150) ya se completó
+    if (data.cupoLleno === true) {
+        errorMsg.innerHTML = `<span style="font-size: 1.1rem; color: #cc0000; font-weight: bold;">⚠️ Cupo Lleno</span><br>
+        <span style="font-size:0.95rem; color:#5c4d4d; display:block; margin-top:5px;">Lo sentimos, hemos alcanzado el límite máximo de asistentes confirmados (150 invitados). Ya no es posible registrar nuevas confirmaciones.</span>`;
+        errorMsg.style.display = "block";
+        return;
+    }
+
+    // 3. Si hay cupo disponible y no ha confirmado, se muestra el formulario normalmente
     desplegarFormularioInvitados(integrantes, apellidoVisual, idFamiliaSeleccionada);
 };
 
