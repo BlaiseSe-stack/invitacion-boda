@@ -34,7 +34,7 @@ const baseInvitadosEstricta = {
     "silva gonzalez": { integrantes: ["Alejandro", "+1 pase"], confirmado: false },
     "garcia carreon": { integrantes: ["Luis", "Valentina"], confirmado: false },
     "perez nieto": { integrantes: ["Paulina", "Michael", "Roman [niño]"], confirmado: false },
-    "perez nieto": { integrantes: ["Paulina", "Michael", "Roman [niño]"], confirmado: false },
+    "roma": { integrantes: ["Marijose", "Michael", "Roman [niño]"], confirmado: false },
     //"espinosa torres": { integrantes: ["Germán", "Lorena", "", ""], confirmado: false },
     // Invitados novia INICIO
     "espinoza salvador": { integrantes: ["Edgardo", "Elvia", "Joan"], confirmado: false },
@@ -96,6 +96,8 @@ const nombresVisualesFamilias = {
     "silva gonzalez": "Silva González",
     "mendez olguin": "Méndez Olguín",
     "garcia carreon": "García Carreón",
+    "perez nieto": "Pérez Nieto",
+    "roma": "Roma",
     //"espinosa torres": "Espinosa Torres",
     // Invitados novia INICIO
     "espinoza salvador": "Espinoza Salvador",
