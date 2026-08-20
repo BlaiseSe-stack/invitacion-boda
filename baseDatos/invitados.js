@@ -33,6 +33,8 @@ const baseInvitadosEstricta = {
     "zarate mejia": { integrantes: ["Abraham", "+1 pase"], confirmado: false },
     "silva gonzalez": { integrantes: ["Alejandro", "+1 pase"], confirmado: false },
     "garcia carreon": { integrantes: ["Luis", "Valentina"], confirmado: false },
+    "perez nieto": { integrantes: ["Paulina", "Michael", "Roman [niño]"], confirmado: false },
+    "perez nieto": { integrantes: ["Paulina", "Michael", "Roman [niño]"], confirmado: false },
     //"espinosa torres": { integrantes: ["Germán", "Lorena", "", ""], confirmado: false },
     // Invitados novia INICIO
     "espinoza salvador": { integrantes: ["Edgardo", "Elvia", "Joan"], confirmado: false },
