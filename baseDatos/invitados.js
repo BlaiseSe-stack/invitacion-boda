@@ -123,7 +123,7 @@ const nombresVisualesFamilias = {
     "ledezma luna": "Ledezma Luna",
     "velazquez soriano": "Velázquez Soriano",
     "venta martinez": "Venta Martínez",
-    "torres elizarraras": "Torres Elizarraras"
+    "torres elizarraras": "Torres Elizarraras", 
     "rivera cortes" : "Rivera Cortés"
     // Inivitados novia FIN
 };
