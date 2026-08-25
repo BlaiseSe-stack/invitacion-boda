@@ -94,7 +94,6 @@ const nombresVisualesFamilias = {
     "vazquez cano": "Vázquez Cano",
     "zarate mejia": "Zárate Mejía",
     "silva gonzalez": "Silva González",
-    "mendez olguin": "Méndez Olguín",
     "garcia carreon": "García Carreón",
     "perez nieto": "Pérez Nieto",
     "cabrera bolaños": "Cabrera Bolaños",
@@ -119,10 +118,11 @@ const nombresVisualesFamilias = {
     "lopez morales": "López Morales",
     "quiroz martinez": "Quiroz Martínez",
     "garcia diaz": "García Díaz",
-    "torres benavides": "Torrez Benavides",
+    "torres benavides": "Torres Benavides",
     "ledezma luna": "Ledezma Luna",
     "velazquez soriano": "Velázquez Soriano",
     "venta martinez": "Venta Martínez",
-    "torres elizarraras": "Torres Elizarraras"
+    "torres elizarraras": "Torres Elizarraras", 
+    "rivera cortes" : "Rivera Cortés"
     // Inivitados novia FIN
 };
