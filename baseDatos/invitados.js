@@ -62,7 +62,7 @@ const baseInvitadosEstricta = {
     "rivera cortes": { integrantes: ["Alexis"], confirmado: false },
     "torres elizarraras": { integrantes: ["Kenia"], confirmado: false },
     "martinez eulogio": { integrantes: ["Fernando", "Teresa", "Sandra", "Aldo [niño]"], confirmado: false },
-    "martinez rodriguez": { integrantes: ["Fernando", "Ana Laura", "Iarteh [niño]", "Eithan [niño]"], confirmado: false },
+    "martinez rodriguez": { integrantes: ["Fernando", "Ana Laura", "Yarteh [niño]", "Eithan [niño]"], confirmado: false },
     "hernandez vega": { integrantes: ["Hugo"], confirmado: false }
     // Inivitados novia FIN
 };
