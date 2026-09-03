@@ -16,7 +16,7 @@ const baseInvitadosEstricta = {
     "rosas juarez": { integrantes: ["Fernando", "Brenda", "Tania Fernanda"], confirmado: false },
     "escobar aguilera": { integrantes: ["Carlos", "Irma", "Carla", "Martines A. Sharim"], confirmado: false },
     "garcia espinosa": { integrantes: ["Ángel", "Eugenia", "Hayde"], confirmado: false },
-    "pina garcia": { integrantes: ["Zayra", "Armando Alberto", "Leonardo", "Tadeo [bb]", "M. Tho", "Angeles"], confirmado: false },
+    "pina garcia": { integrantes: ["Zayra", "Armando Alberto", "Leonardo", "Tadeo [bb]", "María Tomasa", "Angeles"], confirmado: false },
     "garcia alfaro": { integrantes: ["Roman", "Elvira", "Ángel", "Logan", "Matias", "Romina"], confirmado: false },
     "calixto garcia": { integrantes: ["Natalia", "Pedro"], confirmado: false },
     "sanchez jaramillo": { integrantes: ["J. Consepcion", "Elena", "Brandon", "Brenda"], confirmado: false },
