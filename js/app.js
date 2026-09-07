@@ -393,7 +393,7 @@ function abrirSobre(elementoSobre) {
 // =========================================================================
 // CONTADORES REVERSIVOS
 // =========================================================================
-const FECHA_CIERRE_RSVP = new Date(2026, 8, 5, 23, 59, 59).getTime(); 
+const FECHA_CIERRE_RSVP = new Date(2026, 8, 11, 23, 59, 59).getTime(); 
 const FECHA_BODA = new Date(2026, 9, 17, 16, 0, 0).getTime();
 
 const intervaloRelojes = setInterval(function() {
