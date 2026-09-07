@@ -63,7 +63,10 @@ const baseInvitadosEstricta = {
     "torres elizarraras": { integrantes: ["Kenia"], confirmado: false },
     "martinez eulogio": { integrantes: ["Fernando", "Teresa", "Sandra", "Aldo [niño]"], confirmado: false },
     "martinez rodriguez": { integrantes: ["Fernando", "Ana Laura", "Yarteh [niño]", "Eithan [niño]"], confirmado: false },
-    "hernandez vega": { integrantes: ["Hugo"], confirmado: false }
+    "hernandez vega": { integrantes: ["Hugo"], confirmado: false },
+    "luna vazquez": { integrantes: ["Guadalupe"], confirmado: false },
+    "hernandez sanchez": { integrantes: ["Isela"], confirmado: false },
+    "pozos avila": { integrantes: ["Rodrigo", "Brenda", "+1 pase [niño]", "+1 pase [niño]", "+1 pase [niño]"], confirmado: false }
     // Inivitados novia FIN
 };
 
@@ -129,6 +132,9 @@ const nombresVisualesFamilias = {
     "rivera cortes" : "Rivera Cortés",
     "martinez eulogio": "Martínez Eulogio",
     "martinez rodriguez": "Martínez Rodríguez",
-    "hernandez vega": "Hernández Vega"
+    "hernandez vega": "Hernández Vega",
+    "luna vazquez": "Luna Vázquez",
+    "hernandez sanchez": "Hernández Sánchez",
+    "pozos avila": "Pozos Avila"
     // Inivitados novia FIN
 };
