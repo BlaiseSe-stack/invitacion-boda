@@ -66,7 +66,9 @@ const baseInvitadosEstricta = {
     "hernandez vega": { integrantes: ["Hugo"], confirmado: false },
     "luna vazquez": { integrantes: ["Guadalupe"], confirmado: false },
     "hernandez sanchez": { integrantes: ["Isela"], confirmado: false },
-    "pozos avila": { integrantes: ["Rodrigo", "Brenda", "+1 pase [niño]", "+1 pase [niño]", "+1 pase [niño]"], confirmado: false }
+    "pozos avila": { integrantes: ["Rodrigo", "Brenda", "Aimy Danae [niño]"], confirmado: false },
+    "garcia diaz": { integrantes: ["Viridiana", "Rogelio", "Yusef R. [niño]", "Elizabeth"], confirmado: false },
+    "casas garcia": { integrantes: ["María Guadalupe", "Oswaldo"], confirmado: false }
     // Inivitados novia FIN
 };
 
@@ -135,6 +137,8 @@ const nombresVisualesFamilias = {
     "hernandez vega": "Hernández Vega",
     "luna vazquez": "Luna Vázquez",
     "hernandez sanchez": "Hernández Sánchez",
-    "pozos avila": "Pozos Avila"
+    "pozos avila": "Pozos Avila",
+    "garcia diaz": "García Díaz",
+    "casas garcia": "Casas García"
     // Inivitados novia FIN
 };
