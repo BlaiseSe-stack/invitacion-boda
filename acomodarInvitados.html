@@ -398,9 +398,9 @@
                     <div class="mesa-header">
                         <span class="mesa-titulo">Mesa ${i}</span>
                         <select class="selector-capacidad" id="capacidad-m${i}" onchange="cambiarCapacidadMesa(${i}, this.value)">
-                            <option value="10">10 Asientos</option>
+                            <option value="10" selected>10 Asientos</option>
                             <option value="11">11 Asientos</option>
-                            <option value="12" selected>12 Asientos</option>
+                            <option value="12">12 Asientos</option>
                         </select>
                     </div>
                     <div class="mesa-redonda-area">
@@ -409,13 +409,14 @@
                     </div>
                 </div>`;
                 contenedorMesas.innerHTML += mesaHtml;
-                renderizarAsientosMesa(i, 10);
+                renderizarAsientosMesa(i, 10); // Inicializa con 10 lugares
             }
         }
 
         function renderizarAsientosMesa(numMesa, capacidad) {
             const contenedorAsientos = document.getElementById(`asientos-m${numMesa}`);
-            const radio = 135;
+            // Ajusta un radio ligeramente mayor para 12 asientos para dar mejor espacio visual
+            const radio = capacidad === 12 ? 140 : 135; 
             
             const estadoActual = {};
             contenedorAsientos.querySelectorAll('.asiento').forEach(asiento => {
