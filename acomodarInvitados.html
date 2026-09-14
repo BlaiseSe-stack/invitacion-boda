@@ -62,7 +62,7 @@
             cursor: grab;
             user-select: none;
             font-size: 0.85rem;
-            font-weight: 500;
+            font-weight: 600;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -72,7 +72,6 @@
         .invitado:hover { background-color: #ecf5ff; }
         .invitado:active { cursor: grabbing; transform: scale(0.98); }
 
-        /* Estilo especial cuando el invitado está confirmado */
         .invitado.confirmado {
             background-color: #fff7e6;
             border-color: #ffd591;
@@ -96,8 +95,8 @@
             padding: 25px;
             overflow-y: auto;
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-            gap: 30px;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 35px;
             background-color: #f4f6f9;
         }
 
@@ -139,18 +138,23 @@
             cursor: pointer;
         }
 
+        /* Área circular perfectamente centrada */
         .mesa-redonda-area {
             position: relative;
-            width: 280px;
-            height: 280px;
+            width: 310px;
+            height: 310px;
             display: flex;
             justify-content: center;
             align-items: center;
             margin: 10px 0;
         }
 
+        /* Centro de la mesa completamente alineado */
         .centro-mesa {
             position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
             width: 120px;
             height: 120px;
             background: #eef2f7;
@@ -160,23 +164,34 @@
             align-items: center;
             justify-content: center;
             font-weight: bold;
-            color: #909399;
+            color: #606266;
             box-shadow: inset 0 0 10px rgba(0,0,0,0.05);
-            font-size: 0.9rem;
+            font-size: 0.95rem;
             z-index: 1;
+        }
+
+        /* Contenedor centralizado para los asientos */
+        .asientos-circulares {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
         }
 
         .asiento {
             position: absolute;
-            width: 75px;
-            height: 38px;
+            width: 65px;
+            height: 36px;
+            margin-left: -32.5px;
+            margin-top: -18px;
             background-color: #f5f7fa;
             border: 1px dashed #dcdfe6;
             border-radius: 6px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 0.72rem;
+            font-size: 0.75rem;
             color: #909399;
             overflow: hidden;
             transition: all 0.2s;
@@ -192,7 +207,6 @@
             color: #67c23a;
         }
 
-        /* Ajustes para el invitado dentro de un asiento */
         .asiento.ocupado .invitado {
             background-color: transparent;
             border: none;
@@ -215,10 +229,11 @@
             text-overflow: ellipsis;
             text-align: center;
             width: 100%;
-            font-size: 0.72rem;
+            font-size: 0.75rem;
+            font-weight: 600;
         }
 
-        /* --- SECCIÓN DE BOTONES --- */
+        /* --- BOTONES DE CONTROL --- */
         .panel-botones {
             margin-top: 15px;
             display: flex;
@@ -253,7 +268,7 @@
 
     <div id="panel-invitados">
         <h2>Por Acomodar (<span id="contador">0</span>)</h2>
-        <div class="subtitulo">💡 <b>Tip:</b> Da doble clic sobre un invitado para marcarlo/desmarcarlo con estrella ⭐.</div>
+        <div class="subtitulo">💡 <b>Tip:</b> Pasa el cursor sobre las tarjetas para ver el nombre completo o haz doble clic para poner estrella ⭐.</div>
         
         <div class="lista-scroll" id="lista-origen" ondragover="allowDrop(event)" ondrop="dropBack(event)">
         </div>
@@ -290,6 +305,12 @@
         const contenedorMesas = document.getElementById('distribucion-mesas');
         const TOTAL_MESAS = 16;
 
+        function obtenerTextoCorto(nombre) {
+            if (!nombre) return "";
+            if (nombre.length <= 4) return nombre;
+            return nombre.substring(0, 3) + "...";
+        }
+
         function generarEstructuraMesas() {
             contenedorMesas.innerHTML = "";
             for (let i = 1; i <= TOTAL_MESAS; i++) {
@@ -314,10 +335,9 @@
         }
 
         function renderizarAsientosMesa(numMesa, capacidad) {
-            const contenedorAsientos = document.getElementById(`asientos-m${i = numMesa}`);
-            const radio = 105; // Distancia desde el centro
+            const contenedorAsientos = document.getElementById(`asientos-m${numMesa}`);
+            const radio = 125; // Radio ajustado para evitar encimados y centrar correctamente
             
-            // Guardar contenido de asientos existentes
             const estadoActual = {};
             contenedorAsientos.querySelectorAll('.asiento').forEach(asiento => {
                 const numAsiento = asiento.id.split('-asiento')[1];
@@ -341,7 +361,6 @@
                 asiento.ondragover = allowDrop;
                 asiento.ondrop = drop;
 
-                // Si previamente estaba ocupado, reinsertar invitado
                 if (estadoActual[j]) {
                     asiento.appendChild(estadoActual[j]);
                     asiento.classList.add('ocupado');
@@ -352,7 +371,6 @@
                 contenedorAsientos.appendChild(asiento);
             }
 
-            // Si se redujo la capacidad y había un invitado en un asiento eliminado, moverlo de vuelta a la lista
             Object.keys(estadoActual).forEach(numAsiento => {
                 if (parseInt(numAsiento) > capacidad) {
                     const inv = estadoActual[numAsiento];
@@ -380,13 +398,14 @@
             actualizarContador();
         }
 
-        function crearElementoInvitado(id, texto, confirmado, contenedorPadre) {
+        function crearElementoInvitado(id, textoCompleto, confirmado, contenedorPadre) {
             const div = document.createElement('div');
             div.className = 'invitado' + (confirmado ? ' confirmado' : '');
             div.id = id;
             div.draggable = true;
             div.ondragstart = drag;
-            div.title = texto; // Muestra el nombre completo en un tooltip al pasar el cursor
+            div.title = textoCompleto; // Al pasar el cursor o presionar muestra el nombre completo
+            div.setAttribute('data-nombre-completo', textoCompleto);
             
             div.ondblclick = function(e) {
                 e.stopPropagation();
@@ -396,7 +415,7 @@
 
             const spanTexto = document.createElement('span');
             spanTexto.className = 'nombre-texto';
-            spanTexto.innerText = texto;
+            spanTexto.innerText = obtenerTextoCorto(textoCompleto);
 
             const spanEstrella = document.createElement('span');
             spanEstrella.className = 'estrella';
@@ -410,24 +429,21 @@
         function obtenerEstadoActual() {
             const estado = { listaIzquierda: [], capacidades: {}, asientos: {} };
             
-            // Guardar capacidades de mesas
             for (let i = 1; i <= TOTAL_MESAS; i++) {
                 const select = document.getElementById(`capacidad-m${i}`);
                 if (select) estado.capacidades[`m${i}`] = select.value;
             }
 
-            // Guardar lista desocupada
             Array.from(listaOrigen.children).forEach(nodo => {
-                const texto = nodo.querySelector('.nombre-texto').innerText;
+                const texto = nodo.getAttribute('data-nombre-completo');
                 const conf = nodo.classList.contains('confirmado');
                 estado.listaIzquierda.push({ id: nodo.id, texto: texto, confirmado: conf });
             });
             
-            // Guardar asientos ocupados
             document.querySelectorAll('.asiento').forEach(asiento => {
                 if (asiento.classList.contains('ocupado')) {
                     const nodoInvitado = asiento.querySelector('.invitado');
-                    const texto = nodoInvitado.querySelector('.nombre-texto').innerText;
+                    const texto = nodoInvitado.getAttribute('data-nombre-completo');
                     const conf = nodoInvitado.classList.contains('confirmado');
                     estado.asientos[asiento.id] = { id: nodoInvitado.id, texto: texto, confirmado: conf };
                 }
@@ -441,7 +457,6 @@
         }
 
         function cargarProgreso(estado) {
-            // Cargar capacidades si existen
             if (estado.capacidades) {
                 Object.keys(estado.capacidades).forEach(key => {
                     const numMesa = key.replace('m', '');
