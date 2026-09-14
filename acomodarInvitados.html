@@ -38,9 +38,10 @@
         }
 
         .subtitulo {
-            font-size: 0.8rem;
+            font-size: 0.78rem;
             color: #7f8c8d;
             margin-bottom: 12px;
+            line-height: 1.3;
         }
 
         .lista-scroll {
@@ -50,6 +51,7 @@
             padding: 8px;
             background-color: #fbfbfc;
             border-radius: 8px;
+            transition: border-color 0.2s, background-color 0.2s;
         }
 
         /* --- FICHAS DE INVITADOS EN LA LISTA LATERAL --- */
@@ -59,13 +61,13 @@
             padding: 6px 10px;
             margin-bottom: 8px;
             border-radius: 8px;
-            cursor: grab;
+            cursor: pointer;
             user-select: none;
             display: flex;
             align-items: center;
             gap: 8px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.02);
-            transition: transform 0.1s, border-color 0.2s, background-color 0.2s;
+            transition: all 0.2s;
         }
 
         .invitado:hover {
@@ -73,7 +75,13 @@
             background-color: #f0f7ff;
         }
 
-        .invitado:active { cursor: grabbing; transform: scale(0.97); }
+        /* Estado Seleccionado para Clic */
+        .invitado.seleccionado {
+            border: 2px solid #409eff !important;
+            background-color: #e6f7ff !important;
+            box-shadow: 0 0 10px rgba(64, 158, 255, 0.5) !important;
+            transform: scale(1.02);
+        }
 
         .invitado.confirmado {
             border-color: #ffd591;
@@ -92,6 +100,7 @@
             overflow: hidden;
             flex-shrink: 0;
             border: 1px solid #dcdfe6;
+            pointer-events: none;
         }
 
         .avatar-box img {
@@ -108,6 +117,7 @@
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+            pointer-events: none;
         }
 
         .invitado.confirmado .nombre-texto { color: #d46b08; }
@@ -116,6 +126,7 @@
             font-size: 0.85rem;
             color: #ffc107;
             visibility: hidden;
+            pointer-events: none;
         }
 
         .invitado.confirmado .estrella { visibility: visible; }
@@ -232,6 +243,12 @@
             color: #909399;
             transition: all 0.2s;
             z-index: 2;
+            cursor: pointer;
+        }
+
+        .asiento:hover {
+            border-color: #409eff;
+            background-color: #e6f7ff;
         }
 
         .asiento.ocupado {
@@ -316,9 +333,13 @@
 
     <div id="panel-invitados">
         <h2>Por Acomodar (<span id="contador">0</span>)</h2>
-        <div class="subtitulo">💡 Cambia el icono/foto o haz doble clic para poner ⭐.</div>
+        <div class="subtitulo">
+            🖱️ <b>Haz clic en un invitado</b> y luego en la silla o panel deseado.<br>
+            ⭐ Doble clic para marcar/desmarcar.<br>
+            🖐️ También puedes arrastrar.
+        </div>
         
-        <div class="lista-scroll" id="lista-origen" ondragover="allowDrop(event)" ondrop="dropBack(event)">
+        <div class="lista-scroll" id="lista-origen" onclick="clicEnPanelOrigen(event)" ondragover="allowDrop(event)" ondrop="dropBack(event)">
         </div>
 
         <div class="panel-botones">
@@ -356,6 +377,7 @@
         const listaOrigen = document.getElementById('lista-origen');
         const contenedorMesas = document.getElementById('distribucion-mesas');
         const TOTAL_MESAS = 16;
+        let invitadoSeleccionado = null;
 
         function detectarTipoPorDefecto(nombre) {
             const min = nombre.toLowerCase();
@@ -413,6 +435,7 @@
                 asiento.style.transform = `translate(${x}px, ${y}px)`;
                 asiento.ondragover = allowDrop;
                 asiento.ondrop = drop;
+                asiento.onclick = function(e) { clicEnAsiento(e, this); };
 
                 if (estadoActual[j]) {
                     asiento.appendChild(estadoActual[j]);
@@ -462,6 +485,11 @@
             div.setAttribute('data-tipo-icono', tipoIcono || 'hombre');
             div.setAttribute('data-url-foto', urlFoto || '');
 
+            div.onclick = function(e) {
+                e.stopPropagation();
+                seleccionarInvitado(div);
+            };
+
             div.ondblclick = function(e) {
                 e.stopPropagation();
                 this.classList.toggle('confirmado');
@@ -491,6 +519,7 @@
                 <option value="custom" ${tipoIcono==='custom'?'selected':''}>🖼️ Foto</option>
             `;
 
+            selectTipo.onclick = function(e) { e.stopPropagation(); };
             selectTipo.onchange = function(e) {
                 e.stopPropagation();
                 let nuevoTipo = this.value;
@@ -518,6 +547,71 @@
             div.appendChild(selectTipo);
 
             contenedorPadre.appendChild(div);
+        }
+
+        /* --- LÓGICA DE SELECCIÓN POR CLIC --- */
+        function seleccionarInvitado(el) {
+            if (invitadoSeleccionado === el) {
+                el.classList.remove('seleccionado');
+                invitadoSeleccionado = null;
+                return;
+            }
+            if (invitadoSeleccionado) {
+                invitadoSeleccionado.classList.remove('seleccionado');
+            }
+            invitadoSeleccionado = el;
+            invitadoSeleccionado.classList.add('seleccionado');
+        }
+
+        function moverInvitadoDestino(destinoAsiento) {
+            if (!invitadoSeleccionado) return;
+
+            const padreAnterior = invitadoSeleccionado.parentNode;
+            if (padreAnterior.classList.contains("asiento")) {
+                padreAnterior.classList.remove("ocupado");
+                padreAnterior.innerText = padreAnterior.id.split('asiento')[1];
+            }
+
+            destinoAsiento.innerHTML = "";
+            destinoAsiento.appendChild(invitadoSeleccionado);
+            destinoAsiento.classList.add("ocupado");
+            invitadoSeleccionado.classList.remove('seleccionado');
+            invitadoSeleccionado = null;
+
+            actualizarContador();
+            guardarProgreso();
+        }
+
+        function clicEnAsiento(e, asientoEl) {
+            e.stopPropagation();
+            if (invitadoSeleccionado) {
+                if (!asientoEl.classList.contains('ocupado')) {
+                    moverInvitadoDestino(asientoEl);
+                } else {
+                    const invitadoExistente = asientoEl.querySelector('.invitado');
+                    if (invitadoExistente !== invitadoSeleccionado) {
+                        seleccionarInvitado(invitadoExistente);
+                    }
+                }
+            } else if (asientoEl.classList.contains('ocupado')) {
+                const invitadoExistente = asientoEl.querySelector('.invitado');
+                if (invitadoExistente) seleccionarInvitado(invitadoExistente);
+            }
+        }
+
+        function clicEnPanelOrigen(e) {
+            if (invitadoSeleccionado) {
+                const padreAnterior = invitadoSeleccionado.parentNode;
+                if (padreAnterior.classList.contains("asiento")) {
+                    padreAnterior.classList.remove("ocupado");
+                    padreAnterior.innerText = padreAnterior.id.split('asiento')[1];
+                }
+                listaOrigen.appendChild(invitadoSeleccionado);
+                invitadoSeleccionado.classList.remove('seleccionado');
+                invitadoSeleccionado = null;
+                actualizarContador();
+                guardarProgreso();
+            }
         }
 
         function actualizarVisualAvatar(element, tipo, url) {
@@ -634,7 +728,7 @@
             }
         }
 
-        // Drag & Drop
+        // Drag & Drop (soporte continuo)
         function allowDrop(ev) { ev.preventDefault(); }
         function drag(ev) { ev.dataTransfer.setData("text", ev.target.id); }
 
@@ -657,6 +751,10 @@
                 destino.innerHTML = "";
                 destino.appendChild(invitadoNode);
                 destino.classList.add("ocupado");
+                if (invitadoSeleccionado === invitadoNode) {
+                    invitadoNode.classList.remove('seleccionado');
+                    invitadoSeleccionado = null;
+                }
                 actualizarContador();
                 guardarProgreso();
             }
@@ -672,6 +770,10 @@
                 padreAnterior.innerText = padreAnterior.id.split('asiento')[1];
             }
             listaOrigen.appendChild(invitadoNode);
+            if (invitadoSeleccionado === invitadoNode) {
+                invitadoNode.classList.remove('seleccionado');
+                invitadoSeleccionado = null;
+            }
             actualizarContador();
             guardarProgreso();
         }
