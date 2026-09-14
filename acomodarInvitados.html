@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Asignación de Mesas Redondas con Confirmación</title>
+    <title>Asignación de Mesas Redondas - Nombre Completo</title>
     <style>
         * {
             box-sizing: border-box;
@@ -20,7 +20,7 @@
 
         /* --- PANEL DE INVITADOS --- */
         #panel-invitados {
-            width: 320px;
+            width: 360px;
             background-color: #ffffff;
             border-right: 1px solid #dcdfe6;
             padding: 20px;
@@ -38,55 +38,101 @@
         }
 
         .subtitulo {
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             color: #7f8c8d;
-            margin-bottom: 15px;
+            margin-bottom: 12px;
         }
 
         .lista-scroll {
             overflow-y: auto;
             flex-grow: 1;
             border: 2px dashed #dcdfe6;
-            padding: 10px;
+            padding: 8px;
             background-color: #fbfbfc;
             border-radius: 8px;
         }
 
+        /* --- FICHAS DE INVITADOS --- */
         .invitado {
-            background-color: #eef5fe;
-            border: 1px solid #b3d8ff;
-            color: #409eff;
-            padding: 8px 12px;
+            background-color: #ffffff;
+            border: 1px solid #dcdfe6;
+            padding: 6px 10px;
             margin-bottom: 8px;
-            border-radius: 6px;
+            border-radius: 8px;
             cursor: grab;
             user-select: none;
-            font-size: 0.85rem;
-            font-weight: 600;
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            transition: transform 0.1s, background-color 0.2s;
+            gap: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+            transition: transform 0.1s, border-color 0.2s, background-color 0.2s;
         }
 
-        .invitado:hover { background-color: #ecf5ff; }
-        .invitado:active { cursor: grabbing; transform: scale(0.98); }
+        .invitado:hover {
+            border-color: #409eff;
+            background-color: #f0f7ff;
+        }
+
+        .invitado:active { cursor: grabbing; transform: scale(0.97); }
 
         .invitado.confirmado {
-            background-color: #fff7e6;
             border-color: #ffd591;
+            background-color: #fffbe6;
+        }
+
+        /* Avatar / Icono / Imagen */
+        .avatar-box {
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            background: #eef2f7;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            overflow: hidden;
+            flex-shrink: 0;
+            border: 1px solid #dcdfe6;
+        }
+
+        .avatar-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Nombre Completo */
+        .nombre-texto {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #2c3e50;
+            flex-grow: 1;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .invitado.confirmado .nombre-texto {
             color: #d46b08;
         }
 
         .estrella {
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             color: #ffc107;
             visibility: hidden;
-            margin-left: 4px;
         }
 
-        .invitado.confirmado .estrella {
-            visibility: visible;
+        .invitado.confirmado .estrella { visibility: visible; }
+
+        /* Selector de Tipo de Icono */
+        .select-tipo {
+            font-size: 0.7rem;
+            border: 1px solid #dcdfe6;
+            border-radius: 4px;
+            padding: 1px 2px;
+            background: #fff;
+            color: #606266;
+            cursor: pointer;
         }
 
         /* --- CONTENEDOR DE MESAS --- */
@@ -95,12 +141,11 @@
             padding: 25px;
             overflow-y: auto;
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
             gap: 35px;
             background-color: #f4f6f9;
         }
 
-        /* --- DISEÑO DE MESA REDONDA Y ASIENTOS --- */
         .mesa-contenedor {
             background-color: #ffffff;
             border: 1px solid #e4e7ed;
@@ -135,13 +180,12 @@
             border: 1px solid #dcdfe6;
             background: #fff;
             color: #606266;
-            cursor: pointer;
         }
 
         .mesa-redonda-area {
             position: relative;
-            width: 310px;
-            height: 310px;
+            width: 340px;
+            height: 340px;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -153,8 +197,8 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 120px;
-            height: 120px;
+            width: 110px;
+            height: 110px;
             background: #eef2f7;
             border: 2px solid #dcdfe6;
             border-radius: 50%;
@@ -164,7 +208,7 @@
             font-weight: bold;
             color: #606266;
             box-shadow: inset 0 0 10px rgba(0,0,0,0.05);
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             z-index: 1;
         }
 
@@ -176,87 +220,80 @@
             height: 0;
         }
 
+        /* --- ASIENTOS EN MESA --- */
         .asiento {
             position: absolute;
-            width: 65px;
-            height: 36px;
-            margin-left: -32.5px;
-            margin-top: -18px;
+            width: 82px;
+            height: 40px;
+            margin-left: -41px;
+            margin-top: -20px;
             background-color: #f5f7fa;
             border: 1px dashed #dcdfe6;
-            border-radius: 6px;
+            border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 0.75rem;
             color: #909399;
-            overflow: hidden;
             transition: all 0.2s;
             z-index: 2;
             padding: 2px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.03);
         }
 
         .asiento.ocupado {
             border-style: solid;
-            background-color: #f0f9eb;
+            background-color: #ffffff;
             border-color: #c2e7b0;
-            color: #67c23a;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.06);
         }
 
         .asiento.ocupado .invitado {
             background-color: transparent;
             border: none;
-            padding: 0 2px;
+            padding: 0;
             margin: 0;
             width: 100%;
             height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            box-shadow: none;
+            justify-content: flex-start;
+            gap: 4px;
         }
 
-        .asiento.ocupado .invitado.confirmado {
-            color: #d46b08;
+        /* Ajustes dentro de la silla */
+        .asiento .select-tipo { display: none; }
+
+        .asiento .avatar-box {
+            width: 20px;
+            height: 20px;
+            font-size: 0.65rem;
         }
 
-        .nombre-texto {
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            text-align: center;
-            width: 100%;
-            font-size: 0.75rem;
-            font-weight: 600;
+        .asiento .nombre-texto {
+            font-size: 0.68rem;
         }
 
-        /* --- BOTONES DE CONTROL --- */
+        /* --- BOTONES --- */
         .panel-botones {
-            margin-top: 15px;
+            margin-top: 12px;
             display: flex;
             flex-direction: column;
             gap: 8px;
         }
 
         .btn {
-            padding: 10px;
+            padding: 9px;
             border: none;
             border-radius: 6px;
             cursor: pointer;
             font-weight: bold;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             text-align: center;
             width: 100%;
         }
 
         .btn-success { background-color: #67c23a; color: white; }
-        .btn-success:hover { background-color: #5daf34; }
-
         .btn-info { background-color: #409eff; color: white; }
-        .btn-info:hover { background-color: #66b1ff; }
-
         .btn-danger { background-color: #f56c6c; color: white; }
-        .btn-danger:hover { background-color: #f78989; }
 
         #input-archivo { display: none; }
     </style>
@@ -265,20 +302,16 @@
 
     <div id="panel-invitados">
         <h2>Por Acomodar (<span id="contador">0</span>)</h2>
-        <div class="subtitulo">💡 <b>Tip:</b> Toca un invitado para ver su nombre completo. Doble clic/toque rápido para agregar ⭐.</div>
+        <div class="subtitulo">💡 Cambia el icono/foto o haz doble clic para poner ⭐.</div>
         
         <div class="lista-scroll" id="lista-origen" ondragover="allowDrop(event)" ondrop="dropBack(event)">
         </div>
 
         <div class="panel-botones">
-            <button class="btn btn-success" onclick="exportarDisposicion()">📤 Guardar / Exportar Archivo</button>
-            
-            <label class="btn btn-info" for="input-archivo">
-                📥 Importar desde Archivo
-            </label>
+            <button class="btn btn-success" onclick="exportarDisposicion()">📤 Guardar / Exportar</button>
+            <label class="btn btn-info" for="input-archivo">📥 Importar Archivo</label>
             <input type="file" id="input-archivo" accept=".json" onchange="importarDisposicion(event)">
-            
-            <button class="btn btn-danger" onclick="reiniciarTodo()">❌ Reiniciar Todo</button>
+            <button class="btn btn-danger" onclick="reiniciarTodo()">❌ Reiniciar</button>
         </div>
     </div>
 
@@ -298,14 +331,24 @@
             "María Guadalupe", "Oswaldo", "Marijose", "Yosafat", "Mya", "Marjorie [niño]", "Mailen [bb]", "Hansel", "Cassandra"
         ];
 
+        const MAPA_ICONOS = {
+            'hombre': '👨',
+            'mujer': '👩',
+            'nino': '👦',
+            'nina': '👧',
+            'bebe': '👶'
+        };
+
         const listaOrigen = document.getElementById('lista-origen');
         const contenedorMesas = document.getElementById('distribucion-mesas');
         const TOTAL_MESAS = 16;
 
-        function obtenerTextoCorto(nombre) {
-            if (!nombre) return "";
-            if (nombre.length <= 4) return nombre;
-            return nombre.substring(0, 3) + "...";
+        function detectarTipoPorDefecto(nombre) {
+            const min = nombre.toLowerCase();
+            if (min.includes('[bb]')) return 'bebe';
+            if (min.includes('[niño]')) return 'nino';
+            if (min.includes('niña')) return 'nina';
+            return 'hombre';
         }
 
         function generarEstructuraMesas() {
@@ -333,14 +376,13 @@
 
         function renderizarAsientosMesa(numMesa, capacidad) {
             const contenedorAsientos = document.getElementById(`asientos-m${numMesa}`);
-            const radio = 125;
+            const radio = 135;
             
             const estadoActual = {};
             contenedorAsientos.querySelectorAll('.asiento').forEach(asiento => {
                 const numAsiento = asiento.id.split('-asiento')[1];
                 if (asiento.classList.contains('ocupado')) {
-                    const inv = asiento.querySelector('.invitado');
-                    estadoActual[numAsiento] = inv;
+                    estadoActual[numAsiento] = asiento.querySelector('.invitado');
                 }
             });
 
@@ -370,8 +412,7 @@
 
             Object.keys(estadoActual).forEach(numAsiento => {
                 if (parseInt(numAsiento) > capacidad) {
-                    const inv = estadoActual[numAsiento];
-                    listaOrigen.appendChild(inv);
+                    listaOrigen.appendChild(estadoActual[numAsiento]);
                 }
             });
             actualizarContador();
@@ -389,13 +430,14 @@
                 cargarProgreso(JSON.parse(mapaGuardado));
             } else {
                 listaInvitadosUnica.forEach((nombre, index) => {
-                    crearElementoInvitado(`inv-${index + 1}`, nombre, false, listaOrigen);
+                    const tipoDefecto = detectarTipoPorDefecto(nombre);
+                    crearElementoInvitado(`inv-${index + 1}`, nombre, false, tipoDefecto, '', listaOrigen);
                 });
             }
             actualizarContador();
         }
 
-        function crearElementoInvitado(id, textoCompleto, confirmado, contenedorPadre) {
+        function crearElementoInvitado(id, textoCompleto, confirmado, tipoIcono, urlFoto, contenedorPadre) {
             const div = document.createElement('div');
             div.className = 'invitado' + (confirmado ? ' confirmado' : '');
             div.id = id;
@@ -403,36 +445,76 @@
             div.ondragstart = drag;
             div.title = textoCompleto;
             div.setAttribute('data-nombre-completo', textoCompleto);
-            
-            // Toque/Clic simple para mostrar el nombre completo en móvil o desktop
-            let clickTimer = null;
-            div.onclick = function(e) {
+            div.setAttribute('data-tipo-icono', tipoIcono || 'hombre');
+            div.setAttribute('data-url-foto', urlFoto || '');
+
+            div.ondblclick = function(e) {
                 e.stopPropagation();
-                if (clickTimer == null) {
-                    clickTimer = setTimeout(() => {
-                        clickTimer = null;
-                        const esConf = this.classList.contains('confirmado') ? ' ⭐ (Confirmado)' : '';
-                        alert(`👤 Invitado: ${textoCompleto}${esConf}`);
-                    }, 250);
-                } else {
-                    clearTimeout(clickTimer);
-                    clickTimer = null;
-                    this.classList.toggle('confirmado');
-                    guardarProgreso();
-                }
+                this.classList.toggle('confirmado');
+                guardarProgreso();
             };
 
-            const spanTexto = document.createElement('span');
-            spanTexto.className = 'nombre-texto';
-            spanTexto.innerText = obtenerTextoCorto(textoCompleto);
+            // Avatar / Icono / Foto
+            const avatarBox = document.createElement('div');
+            avatarBox.className = 'avatar-box';
+            actualizarVisualAvatar(avatarBox, tipoIcono, urlFoto);
+
+            // Texto Nombre Completo
+            const spanNombre = document.createElement('span');
+            spanNombre.className = 'nombre-texto';
+            spanNombre.innerText = textoCompleto;
 
             const spanEstrella = document.createElement('span');
             spanEstrella.className = 'estrella';
             spanEstrella.innerText = '⭐';
 
-            div.appendChild(spanTexto);
+            // Selector de icono / foto personalizada
+            const selectTipo = document.createElement('select');
+            selectTipo.className = 'select-tipo';
+            selectTipo.innerHTML = `
+                <option value="hombre" ${tipoIcono==='hombre'?'selected':''}>👨 Hombre</option>
+                <option value="mujer" ${tipoIcono==='mujer'?'selected':''}>👩 Mujer</option>
+                <option value="nino" ${tipoIcono==='nino'?'selected':''}>👦 Niño</option>
+                <option value="nina" ${tipoIcono==='nina'?'selected':''}>👧 Niña</option>
+                <option value="bebe" ${tipoIcono==='bebe'?'selected':''}>👶 Bebé</option>
+                <option value="custom" ${tipoIcono==='custom'?'selected':''}>🖼️ Foto</option>
+            `;
+
+            selectTipo.onchange = function(e) {
+                e.stopPropagation();
+                let nuevoTipo = this.value;
+                let nuevaFoto = div.getAttribute('data-url-foto') || '';
+
+                if (nuevoTipo === 'custom') {
+                    const url = prompt("Ingresa la URL de la imagen del invitado:", nuevaFoto);
+                    if (url) {
+                        nuevaFoto = url;
+                    } else {
+                        nuevoTipo = 'hombre';
+                        this.value = 'hombre';
+                    }
+                }
+
+                div.setAttribute('data-tipo-icono', nuevoTipo);
+                div.setAttribute('data-url-foto', nuevaFoto);
+                actualizarVisualAvatar(avatarBox, nuevoTipo, nuevaFoto);
+                guardarProgreso();
+            };
+
+            div.appendChild(avatarBox);
+            div.appendChild(spanNombre);
             div.appendChild(spanEstrella);
+            div.appendChild(selectTipo);
+
             contenedorPadre.appendChild(div);
+        }
+
+        function actualizarVisualAvatar(element, tipo, url) {
+            if (tipo === 'custom' && url) {
+                element.innerHTML = `<img src="${url}" alt="foto" onerror="this.src=''; this.parentNode.innerText='👤';">`;
+            } else {
+                element.innerHTML = MAPA_ICONOS[tipo] || '👤';
+            }
         }
 
         function obtenerEstadoActual() {
@@ -444,25 +526,32 @@
             }
 
             Array.from(listaOrigen.children).forEach(nodo => {
-                const texto = nodo.getAttribute('data-nombre-completo');
-                const conf = nodo.classList.contains('confirmado');
-                estado.listaIzquierda.push({ id: nodo.id, texto: texto, confirmado: conf });
+                estado.listaIzquierda.push({
+                    id: nodo.id,
+                    texto: nodo.getAttribute('data-nombre-completo'),
+                    confirmado: nodo.classList.contains('confirmado'),
+                    tipoIcono: nodo.getAttribute('data-tipo-icono'),
+                    urlFoto: nodo.getAttribute('data-url-foto')
+                });
             });
             
             document.querySelectorAll('.asiento').forEach(asiento => {
                 if (asiento.classList.contains('ocupado')) {
-                    const nodoInvitado = asiento.querySelector('.invitado');
-                    const texto = nodoInvitado.getAttribute('data-nombre-completo');
-                    const conf = nodoInvitado.classList.contains('confirmado');
-                    estado.asientos[asiento.id] = { id: nodoInvitado.id, texto: texto, confirmado: conf };
+                    const nodo = asiento.querySelector('.invitado');
+                    estado.asientos[asiento.id] = {
+                        id: nodo.id,
+                        texto: nodo.getAttribute('data-nombre-completo'),
+                        confirmado: nodo.classList.contains('confirmado'),
+                        tipoIcono: nodo.getAttribute('data-tipo-icono'),
+                        urlFoto: nodo.getAttribute('data-url-foto')
+                    };
                 }
             });
             return estado;
         }
 
         function guardarProgreso() {
-            const estado = obtenerEstadoActual();
-            localStorage.setItem('distribucionBodas', JSON.stringify(estado));
+            localStorage.setItem('distribucionBodas', JSON.stringify(obtenerEstadoActual()));
         }
 
         function cargarProgreso(estado) {
@@ -485,15 +574,15 @@
             });
 
             estado.listaIzquierda.forEach(item => {
-                crearElementoInvitado(item.id, item.texto, item.confirmado, listaOrigen);
+                crearElementoInvitado(item.id, item.texto, item.confirmado, item.tipoIcono, item.urlFoto, listaOrigen);
             });
 
             Object.keys(estado.asientos).forEach(asientoId => {
                 const asientoEsl = document.getElementById(asientoId);
                 if (asientoEsl) {
                     asientoEsl.innerHTML = "";
-                    const datosInv = estado.asientos[asientoId];
-                    crearElementoInvitado(datosInv.id, datosInv.texto, datosInv.confirmado, asientoEsl);
+                    const datos = estado.asientos[asientoId];
+                    crearElementoInvitado(datos.id, datos.texto, datos.confirmado, datos.tipoIcono, datos.urlFoto, asientoEsl);
                     asientoEsl.classList.add('ocupado');
                 }
             });
@@ -501,8 +590,7 @@
         }
 
         function exportarDisposicion() {
-            const estado = obtenerEstadoActual();
-            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(estado));
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(obtenerEstadoActual()));
             const downloadAnchor = document.createElement('a');
             downloadAnchor.setAttribute("href", dataStr);
             downloadAnchor.setAttribute("download", "distribucion_mesas_redondas.json");
@@ -518,12 +606,10 @@
             const lector = new FileReader();
             lector.onload = function(e) {
                 try {
-                    const estadoImportado = JSON.parse(e.target.result);
-                    cargarProgreso(estadoImportado);
+                    cargarProgreso(JSON.parse(e.target.result));
                     guardarProgreso();
-                    alert("¡Distribución cargada exitosamente!");
                 } catch (error) {
-                    alert("Error: El archivo seleccionado no es válido.");
+                    alert("Error: El archivo no es válido.");
                 }
             };
             lector.readAsText(archivo);
@@ -531,13 +617,13 @@
         }
 
         function reiniciarTodo() {
-            if (confirm("¿Estás seguro de que deseas reiniciar? Se borrará el progreso de este dispositivo.")) {
+            if (confirm("¿Reiniciar toda la distribución de este dispositivo?")) {
                 localStorage.removeItem('distribucionBodas');
                 location.reload();
             }
         }
 
-        // Lógica Drag & Drop
+        // Drag & Drop
         function allowDrop(ev) { ev.preventDefault(); }
         function drag(ev) { ev.dataTransfer.setData("text", ev.target.id); }
 
@@ -547,13 +633,11 @@
             const invitadoNode = document.getElementById(data);
             let destino = ev.target;
             
-            if (destino.classList.contains("nombre-texto") || destino.classList.contains("estrella")) {
-                destino = destino.parentNode.parentNode;
-            } else if (destino.classList.contains("invitado")) {
+            while (destino && !destino.classList.contains("asiento") && destino.id !== "lista-origen") {
                 destino = destino.parentNode;
             }
 
-            if (destino.classList.contains("asiento") && !destino.classList.contains("ocupado")) {
+            if (destino && destino.classList.contains("asiento") && !destino.classList.contains("ocupado")) {
                 const padreAnterior = invitadoNode.parentNode;
                 if (padreAnterior.classList.contains("asiento")) {
                     padreAnterior.classList.remove("ocupado");
