@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Asignación de Mesas Redondas - Nombre Completo</title>
+    <title>Asignación de Mesas Redondas</title>
     <style>
         * {
             box-sizing: border-box;
@@ -52,7 +52,7 @@
             border-radius: 8px;
         }
 
-        /* --- FICHAS DE INVITADOS --- */
+        /* --- FICHAS DE INVITADOS EN LA LISTA LATERAL --- */
         .invitado {
             background-color: #ffffff;
             border: 1px solid #dcdfe6;
@@ -80,16 +80,15 @@
             background-color: #fffbe6;
         }
 
-        /* Avatar / Icono / Imagen */
         .avatar-box {
-            width: 26px;
-            height: 26px;
+            width: 28px;
+            height: 28px;
             border-radius: 50%;
             background: #eef2f7;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 0.9rem;
+            font-size: 0.95rem;
             overflow: hidden;
             flex-shrink: 0;
             border: 1px solid #dcdfe6;
@@ -101,7 +100,6 @@
             object-fit: cover;
         }
 
-        /* Nombre Completo */
         .nombre-texto {
             font-size: 0.8rem;
             font-weight: 600;
@@ -112,9 +110,7 @@
             text-overflow: ellipsis;
         }
 
-        .invitado.confirmado .nombre-texto {
-            color: #d46b08;
-        }
+        .invitado.confirmado .nombre-texto { color: #d46b08; }
 
         .estrella {
             font-size: 0.85rem;
@@ -124,7 +120,6 @@
 
         .invitado.confirmado .estrella { visibility: visible; }
 
-        /* Selector de Tipo de Icono */
         .select-tipo {
             font-size: 0.7rem;
             border: 1px solid #dcdfe6;
@@ -184,8 +179,8 @@
 
         .mesa-redonda-area {
             position: relative;
-            width: 340px;
-            height: 340px;
+            width: 350px;
+            height: 350px;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -223,13 +218,13 @@
         /* --- ASIENTOS EN MESA --- */
         .asiento {
             position: absolute;
-            width: 82px;
-            height: 40px;
-            margin-left: -41px;
-            margin-top: -20px;
+            width: 38px;
+            height: 38px;
+            margin-left: -19px;
+            margin-top: -19px;
             background-color: #f5f7fa;
             border: 1px dashed #dcdfe6;
-            border-radius: 8px;
+            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -237,14 +232,13 @@
             color: #909399;
             transition: all 0.2s;
             z-index: 2;
-            padding: 2px;
         }
 
         .asiento.ocupado {
             border-style: solid;
             background-color: #ffffff;
             border-color: #c2e7b0;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.08);
         }
 
         .asiento.ocupado .invitado {
@@ -255,22 +249,42 @@
             width: 100%;
             height: 100%;
             box-shadow: none;
-            justify-content: flex-start;
-            gap: 4px;
+            justify-content: center;
+            position: relative;
         }
 
-        /* Ajustes dentro de la silla */
+        /* Ocultar elementos dentro de la silla ocupada */
         .asiento .select-tipo { display: none; }
+        .asiento .estrella { display: none; }
 
         .asiento .avatar-box {
-            width: 20px;
-            height: 20px;
-            font-size: 0.65rem;
+            width: 100%;
+            height: 100%;
+            border: none;
+            background: transparent;
+            font-size: 1.1rem;
         }
 
+        /* Nombre posicionado fuera del recuadro/silla */
         .asiento .nombre-texto {
-            font-size: 0.68rem;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            white-space: nowrap;
+            font-size: 0.65rem;
+            font-weight: 700;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 1px 5px;
+            border-radius: 4px;
+            border: 1px solid #dcdfe6;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            pointer-events: none;
+            z-index: 5;
         }
+
+        /* Posición según mitad superior o inferior */
+        .asiento.pos-arriba .nombre-texto { bottom: 42px; }
+        .asiento.pos-abajo .nombre-texto { top: 42px; }
 
         /* --- BOTONES --- */
         .panel-botones {
@@ -394,7 +408,7 @@
                 const y = Math.round(radio * Math.sin(angulo));
 
                 const asiento = document.createElement('div');
-                asiento.className = 'asiento';
+                asiento.className = 'asiento ' + (y < 0 ? 'pos-arriba' : 'pos-abajo');
                 asiento.id = `m${numMesa}-asiento${j}`;
                 asiento.style.transform = `translate(${x}px, ${y}px)`;
                 asiento.ondragover = allowDrop;
@@ -454,12 +468,10 @@
                 guardarProgreso();
             };
 
-            // Avatar / Icono / Foto
             const avatarBox = document.createElement('div');
             avatarBox.className = 'avatar-box';
             actualizarVisualAvatar(avatarBox, tipoIcono, urlFoto);
 
-            // Texto Nombre Completo
             const spanNombre = document.createElement('span');
             spanNombre.className = 'nombre-texto';
             spanNombre.innerText = textoCompleto;
@@ -468,7 +480,6 @@
             spanEstrella.className = 'estrella';
             spanEstrella.innerText = '⭐';
 
-            // Selector de icono / foto personalizada
             const selectTipo = document.createElement('select');
             selectTipo.className = 'select-tipo';
             selectTipo.innerHTML = `
