@@ -382,12 +382,13 @@
         let invitadoSeleccionado = null;
 
         function detectarTipoPorDefecto(nombre) {
-            const min = nombre.toLowerCase();
-            if (min.includes('[bb]')) return 'bebe';
-            if (min.includes('[niño]')) return 'nino';
-            if (min.includes('niña')) return 'nina';
-            return 'hombre';
-        }
+                const min = nombre.toLowerCase();
+                if (min.includes('pase')) return 'pase';
+                if (min.includes('[bb]')) return 'bebe';
+                if (min.includes('[niño]')) return 'nino';
+                if (min.includes('niña')) return 'nina';
+                return 'hombre';
+            }
 
         function generarEstructuraMesas() {
             contenedorMesas.innerHTML = "";
@@ -515,6 +516,8 @@
             selectTipo.innerHTML = `
                 <option value="hombre" ${tipoIcono==='hombre'?'selected':''}>👨 Hombre</option>
                 <option value="mujer" ${tipoIcono==='mujer'?'selected':''}>👩 Mujer</option>
+                <option value="pase" ${tipoIcono==='pase'?'selected':''}>🎟️ Pase Extra</option>
+                <option value="neutro" ${tipoIcono==='neutro'?'selected':''}>👤 Sin definir</option>
                 <option value="nino" ${tipoIcono==='nino'?'selected':''}>👦 Niño</option>
                 <option value="nina" ${tipoIcono==='nina'?'selected':''}>👧 Niña</option>
                 <option value="bebe" ${tipoIcono==='bebe'?'selected':''}>👶 Bebé</option>
