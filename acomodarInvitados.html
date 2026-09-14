@@ -138,7 +138,6 @@
             cursor: pointer;
         }
 
-        /* Área circular perfectamente centrada */
         .mesa-redonda-area {
             position: relative;
             width: 310px;
@@ -149,7 +148,6 @@
             margin: 10px 0;
         }
 
-        /* Centro de la mesa completamente alineado */
         .centro-mesa {
             position: absolute;
             top: 50%;
@@ -170,7 +168,6 @@
             z-index: 1;
         }
 
-        /* Contenedor centralizado para los asientos */
         .asientos-circulares {
             position: absolute;
             top: 50%;
@@ -268,7 +265,7 @@
 
     <div id="panel-invitados">
         <h2>Por Acomodar (<span id="contador">0</span>)</h2>
-        <div class="subtitulo">💡 <b>Tip:</b> Pasa el cursor sobre las tarjetas para ver el nombre completo o haz doble clic para poner estrella ⭐.</div>
+        <div class="subtitulo">💡 <b>Tip:</b> Toca un invitado para ver su nombre completo. Doble clic/toque rápido para agregar ⭐.</div>
         
         <div class="lista-scroll" id="lista-origen" ondragover="allowDrop(event)" ondrop="dropBack(event)">
         </div>
@@ -336,7 +333,7 @@
 
         function renderizarAsientosMesa(numMesa, capacidad) {
             const contenedorAsientos = document.getElementById(`asientos-m${numMesa}`);
-            const radio = 125; // Radio ajustado para evitar encimados y centrar correctamente
+            const radio = 125;
             
             const estadoActual = {};
             contenedorAsientos.querySelectorAll('.asiento').forEach(asiento => {
@@ -404,13 +401,25 @@
             div.id = id;
             div.draggable = true;
             div.ondragstart = drag;
-            div.title = textoCompleto; // Al pasar el cursor o presionar muestra el nombre completo
+            div.title = textoCompleto;
             div.setAttribute('data-nombre-completo', textoCompleto);
             
-            div.ondblclick = function(e) {
+            // Toque/Clic simple para mostrar el nombre completo en móvil o desktop
+            let clickTimer = null;
+            div.onclick = function(e) {
                 e.stopPropagation();
-                this.classList.toggle('confirmado');
-                guardarProgreso();
+                if (clickTimer == null) {
+                    clickTimer = setTimeout(() => {
+                        clickTimer = null;
+                        const esConf = this.classList.contains('confirmado') ? ' ⭐ (Confirmado)' : '';
+                        alert(`👤 Invitado: ${textoCompleto}${esConf}`);
+                    }, 250);
+                } else {
+                    clearTimeout(clickTimer);
+                    clickTimer = null;
+                    this.classList.toggle('confirmado');
+                    guardarProgreso();
+                }
             };
 
             const spanTexto = document.createElement('span');
