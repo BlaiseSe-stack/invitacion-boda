@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Asignación de Mesas Multidispositivo con Confirmación</title>
+    <title>Asignación de Mesas Redondas con Confirmación</title>
     <style>
         * {
             box-sizing: border-box;
@@ -27,6 +27,7 @@
             display: flex;
             flex-direction: column;
             box-shadow: 2px 0 8px rgba(0,0,0,0.05);
+            z-index: 10;
         }
 
         #panel-invitados h2 {
@@ -79,9 +80,10 @@
         }
 
         .estrella {
-            font-size: 1rem;
+            font-size: 0.9rem;
             color: #ffc107;
             visibility: hidden;
+            margin-left: 4px;
         }
 
         .invitado.confirmado .estrella {
@@ -94,50 +96,93 @@
             padding: 25px;
             overflow-y: auto;
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 30px;
             background-color: #f4f6f9;
         }
 
-        /* --- DISEÑO DE MESA Y ASIENTOS --- */
-        .mesa-cuadrada {
+        /* --- DISEÑO DE MESA REDONDA Y ASIENTOS --- */
+        .mesa-contenedor {
             background-color: #ffffff;
             border: 1px solid #e4e7ed;
-            border-radius: 10px;
-            padding: 12px;
+            border-radius: 12px;
+            padding: 15px;
             box-shadow: 0 2px 12px 0 rgba(0,0,0,0.05);
             display: flex;
             flex-direction: column;
+            align-items: center;
+        }
+
+        .mesa-header {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            border-bottom: 2px solid #f2f6fc;
+            padding-bottom: 6px;
         }
 
         .mesa-titulo {
-            text-align: center;
             font-weight: bold;
-            font-size: 0.95rem;
-            margin-bottom: 10px;
+            font-size: 1rem;
             color: #303133;
-            padding-bottom: 6px;
-            border-bottom: 2px solid #f2f6fc;
         }
 
-        .asientos-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 6px;
-        }
-
-        .asiento {
-            background-color: #f5f7fa;
-            border: 1px dashed #dcdfe6;
-            height: 36px;
+        .selector-capacidad {
+            font-size: 0.75rem;
+            padding: 2px 6px;
             border-radius: 4px;
+            border: 1px solid #dcdfe6;
+            background: #fff;
+            color: #606266;
+            cursor: pointer;
+        }
+
+        .mesa-redonda-area {
+            position: relative;
+            width: 280px;
+            height: 280px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 10px 0;
+        }
+
+        .centro-mesa {
+            position: absolute;
+            width: 120px;
+            height: 120px;
+            background: #eef2f7;
+            border: 2px solid #dcdfe6;
+            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 0.75rem;
+            font-weight: bold;
+            color: #909399;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.05);
+            font-size: 0.9rem;
+            z-index: 1;
+        }
+
+        .asiento {
+            position: absolute;
+            width: 75px;
+            height: 38px;
+            background-color: #f5f7fa;
+            border: 1px dashed #dcdfe6;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.72rem;
             color: #909399;
             overflow: hidden;
             transition: all 0.2s;
+            z-index: 2;
+            padding: 2px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.03);
         }
 
         .asiento.ocupado {
@@ -147,14 +192,17 @@
             color: #67c23a;
         }
 
-        /* Ajustes para el invitado dentro de un asiento de mesa */
+        /* Ajustes para el invitado dentro de un asiento */
         .asiento.ocupado .invitado {
             background-color: transparent;
             border: none;
-            padding: 0 4px;
+            padding: 0 2px;
             margin: 0;
             width: 100%;
             height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .asiento.ocupado .invitado.confirmado {
@@ -165,8 +213,9 @@
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
-            flex-grow: 1;
             text-align: center;
+            width: 100%;
+            font-size: 0.72rem;
         }
 
         /* --- SECCIÓN DE BOTONES --- */
@@ -207,7 +256,7 @@
         <div class="subtitulo">💡 <b>Tip:</b> Da doble clic sobre un invitado para marcarlo/desmarcarlo con estrella ⭐.</div>
         
         <div class="lista-scroll" id="lista-origen" ondragover="allowDrop(event)" ondrop="dropBack(event)">
-            </div>
+        </div>
 
         <div class="panel-botones">
             <button class="btn btn-success" onclick="exportarDisposicion()">📤 Guardar / Exportar Archivo</button>
@@ -222,7 +271,7 @@
     </div>
 
     <div id="distribucion-mesas">
-        </div>
+    </div>
 
     <script>
         const listaInvitadosUnica = [
@@ -239,18 +288,87 @@
 
         const listaOrigen = document.getElementById('lista-origen');
         const contenedorMesas = document.getElementById('distribucion-mesas');
+        const TOTAL_MESAS = 16;
 
-        // Generar las 16 mesas
-        for (let i = 1; i <= 16; i++) {
-            let mesaHtml = `<div class="mesa-cuadrada"><div class="mesa-titulo">Mesa ${i}</div><div class="asientos-grid">`;
-            for (let j = 1; j <= 12; j++) {
-                mesaHtml += `<div class="asiento" id="m${i}-asiento${j}" ondragover="allowDrop(event)" ondrop="drop(event)">${j}</div>`;
+        function generarEstructuraMesas() {
+            contenedorMesas.innerHTML = "";
+            for (let i = 1; i <= TOTAL_MESAS; i++) {
+                let mesaHtml = `
+                <div class="mesa-contenedor" id="mesa-contenedor-${i}">
+                    <div class="mesa-header">
+                        <span class="mesa-titulo">Mesa ${i}</span>
+                        <select class="selector-capacidad" id="capacidad-m${i}" onchange="cambiarCapacidadMesa(${i}, this.value)">
+                            <option value="10">10 Asientos</option>
+                            <option value="11">11 Asientos</option>
+                            <option value="12" selected>12 Asientos</option>
+                        </select>
+                    </div>
+                    <div class="mesa-redonda-area">
+                        <div class="centro-mesa">Mesa ${i}</div>
+                        <div class="asientos-circulares" id="asientos-m${i}"></div>
+                    </div>
+                </div>`;
+                contenedorMesas.innerHTML += mesaHtml;
+                renderizarAsientosMesa(i, 12);
             }
-            mesaHtml += `</div></div>`;
-            contenedorMesas.innerHTML += mesaHtml;
+        }
+
+        function renderizarAsientosMesa(numMesa, capacidad) {
+            const contenedorAsientos = document.getElementById(`asientos-m${i = numMesa}`);
+            const radio = 105; // Distancia desde el centro
+            
+            // Guardar contenido de asientos existentes
+            const estadoActual = {};
+            contenedorAsientos.querySelectorAll('.asiento').forEach(asiento => {
+                const numAsiento = asiento.id.split('-asiento')[1];
+                if (asiento.classList.contains('ocupado')) {
+                    const inv = asiento.querySelector('.invitado');
+                    estadoActual[numAsiento] = inv;
+                }
+            });
+
+            contenedorAsientos.innerHTML = "";
+
+            for (let j = 1; j <= capacidad; j++) {
+                const angulo = ((j - 1) * (360 / capacidad) - 90) * (Math.PI / 180);
+                const x = Math.round(radio * Math.cos(angulo));
+                const y = Math.round(radio * Math.sin(angulo));
+
+                const asiento = document.createElement('div');
+                asiento.className = 'asiento';
+                asiento.id = `m${numMesa}-asiento${j}`;
+                asiento.style.transform = `translate(${x}px, ${y}px)`;
+                asiento.ondragover = allowDrop;
+                asiento.ondrop = drop;
+
+                // Si previamente estaba ocupado, reinsertar invitado
+                if (estadoActual[j]) {
+                    asiento.appendChild(estadoActual[j]);
+                    asiento.classList.add('ocupado');
+                } else {
+                    asiento.innerText = j;
+                }
+
+                contenedorAsientos.appendChild(asiento);
+            }
+
+            // Si se redujo la capacidad y había un invitado en un asiento eliminado, moverlo de vuelta a la lista
+            Object.keys(estadoActual).forEach(numAsiento => {
+                if (parseInt(numAsiento) > capacidad) {
+                    const inv = estadoActual[numAsiento];
+                    listaOrigen.appendChild(inv);
+                }
+            });
+            actualizarContador();
+        }
+
+        function cambiarCapacidadMesa(numMesa, nuevaCapacidad) {
+            renderizarAsientosMesa(numMesa, parseInt(nuevaCapacidad));
+            guardarProgreso();
         }
 
         function inicializar() {
+            generarEstructuraMesas();
             const mapaGuardado = localStorage.getItem('distribucionBodas');
             if (mapaGuardado) {
                 cargarProgreso(JSON.parse(mapaGuardado));
@@ -268,15 +386,14 @@
             div.id = id;
             div.draggable = true;
             div.ondragstart = drag;
+            div.title = texto; // Muestra el nombre completo en un tooltip al pasar el cursor
             
-            // Alternar estado con doble clic
             div.ondblclick = function(e) {
                 e.stopPropagation();
                 this.classList.toggle('confirmado');
                 guardarProgreso();
             };
 
-            // Contenedores internos para dar soporte visual a la estrella sin romper el drag text
             const spanTexto = document.createElement('span');
             spanTexto.className = 'nombre-texto';
             spanTexto.innerText = texto;
@@ -291,14 +408,22 @@
         }
 
         function obtenerEstadoActual() {
-            const estado = { listaIzquierda: [], asientos: {} };
+            const estado = { listaIzquierda: [], capacidades: {}, asientos: {} };
             
+            // Guardar capacidades de mesas
+            for (let i = 1; i <= TOTAL_MESAS; i++) {
+                const select = document.getElementById(`capacidad-m${i}`);
+                if (select) estado.capacidades[`m${i}`] = select.value;
+            }
+
+            // Guardar lista desocupada
             Array.from(listaOrigen.children).forEach(nodo => {
                 const texto = nodo.querySelector('.nombre-texto').innerText;
                 const conf = nodo.classList.contains('confirmado');
                 estado.listaIzquierda.push({ id: nodo.id, texto: texto, confirmado: conf });
             });
             
+            // Guardar asientos ocupados
             document.querySelectorAll('.asiento').forEach(asiento => {
                 if (asiento.classList.contains('ocupado')) {
                     const nodoInvitado = asiento.querySelector('.invitado');
@@ -316,6 +441,19 @@
         }
 
         function cargarProgreso(estado) {
+            // Cargar capacidades si existen
+            if (estado.capacidades) {
+                Object.keys(estado.capacidades).forEach(key => {
+                    const numMesa = key.replace('m', '');
+                    const cap = estado.capacidades[key];
+                    const select = document.getElementById(`capacidad-${key}`);
+                    if (select) {
+                        select.value = cap;
+                        renderizarAsientosMesa(numMesa, parseInt(cap));
+                    }
+                });
+            }
+
             listaOrigen.innerHTML = "";
             document.querySelectorAll('.asiento').forEach(asiento => {
                 asiento.classList.remove('ocupado');
@@ -343,7 +481,7 @@
             const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(estado));
             const downloadAnchor = document.createElement('a');
             downloadAnchor.setAttribute("href", dataStr);
-            downloadAnchor.setAttribute("download", "distribucion_mesas_boda.json");
+            downloadAnchor.setAttribute("download", "distribucion_mesas_redondas.json");
             document.body.appendChild(downloadAnchor);
             downloadAnchor.click();
             downloadAnchor.remove();
@@ -359,7 +497,7 @@
                     const estadoImportado = JSON.parse(e.target.result);
                     cargarProgreso(estadoImportado);
                     guardarProgreso();
-                    alert("¡Distribución y confirmaciones cargadas exitosamente!");
+                    alert("¡Distribución cargada exitosamente!");
                 } catch (error) {
                     alert("Error: El archivo seleccionado no es válido.");
                 }
@@ -375,7 +513,7 @@
             }
         }
 
-        // Lógica de Drag & Drop heredada
+        // Lógica Drag & Drop
         function allowDrop(ev) { ev.preventDefault(); }
         function drag(ev) { ev.dataTransfer.setData("text", ev.target.id); }
 
