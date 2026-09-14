@@ -390,6 +390,7 @@
                 return 'hombre';
             }
 
+        // Asegurar que al inicializar se lean los valores directamente del select
         function generarEstructuraMesas() {
             contenedorMesas.innerHTML = "";
             for (let i = 1; i <= TOTAL_MESAS; i++) {
@@ -409,7 +410,13 @@
                     </div>
                 </div>`;
                 contenedorMesas.innerHTML += mesaHtml;
-                renderizarAsientosMesa(i, 10); // Inicializa con 10 lugares
+            }
+            
+            // Renderizar los asientos inmediatamente después de insertar el HTML
+            for (let i = 1; i <= TOTAL_MESAS; i++) {
+                const selectCapacidad = document.getElementById(`capacidad-m${i}`);
+                const capacidadInicial = selectCapacidad ? parseInt(selectCapacidad.value) : 10;
+                renderizarAsientosMesa(i, capacidadInicial);
             }
         }
 
