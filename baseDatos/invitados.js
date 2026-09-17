@@ -70,7 +70,8 @@ const baseInvitadosEstricta = {
     "pozos avila": { integrantes: ["Rodrigo", "Brenda", "Aimy Danae [niño]"], confirmado: false },
     "reza garcia": { integrantes: ["Viridiana", "Rogelio", "Yusef R. [niño]", "Elizabeth"], confirmado: false },
     "casas garcia": { integrantes: ["María Guadalupe", "Oswaldo"], confirmado: false },
-    "salvador nicolas": { integrantes: ["Edgar", "Dulce", "Danae [niño]"], confirmado: false }
+    "salvador nicolas": { integrantes: ["Edgar", "Dulce", "Danae [niño]"], confirmado: false },
+    "navarro gonzalez": { integrantes: ["Luis Ángel", "+1 pase"], confirmado: false }
     // Inivitados novia FIN
 };
 
@@ -143,6 +144,6 @@ const nombresVisualesFamilias = {
     "pozos avila": "Pozos Avila",
     "reza garcia": "Reza García",
     "casas garcia": "Casas García",
-    "salvador nicolas": "Salvador Nicolás"
+    "navarro gonzalez": "Navarro González"
     // Inivitados novia FIN
 };
