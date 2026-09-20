@@ -46,7 +46,7 @@ const baseInvitadosEstricta = {
     "mendoza espinoza": { integrantes: ["Arelí", "Samantha", "Johan", "Andrik", "José Fabián Soto Amores"], confirmado: false },
     "jaramillo espinoza": { integrantes: ["Víctor", "Verónica", "Cristian", "Estefania", "Sebastián [niño]"], confirmado: false },
     "salvador beristain": { integrantes: ["Omar", "Alejandra", "Mariana", "Omar h."], confirmado: false },
-    "salvador gonzalez": { integrantes: ["Rubén", "Marcos"], confirmado: false },// FALTAN
+    "salvador gonzalez": { integrantes: ["Alejandro", "Perla", "Francisco", "+1 pase"], confirmado: false },
     "salvador eulogio": { integrantes: ["Jesús", "Carolina", "Jazmín", "Samuel", "Monserrat", "+1 pase"], confirmado: false },
     "corpus carrazco": { integrantes: ["César", "Luz"], confirmado: false },
     "guzman gaspar": { integrantes: ["Giovanni", "Nayeli"], confirmado: false },
@@ -70,8 +70,10 @@ const baseInvitadosEstricta = {
     "pozos avila": { integrantes: ["Rodrigo", "Brenda", "Aimy Danae [niño]"], confirmado: false },
     "reza garcia": { integrantes: ["Viridiana", "Rogelio", "Yusef R. [niño]", "Elizabeth"], confirmado: false },
     "casas garcia": { integrantes: ["María Guadalupe", "Oswaldo"], confirmado: false },
-    "salvador nicolas": { integrantes: ["Edgar", "Dulce", "Danae [niño]"], confirmado: false },
-    "navarro gonzalez": { integrantes: ["Luis Ángel", "+1 pase"], confirmado: false }
+    "salvador nicolas": { integrantes: ["Bertha", "Edgar", "Dulce", "Danae [niño]"], confirmado: false },
+    "navarro gonzalez": { integrantes: ["Luis Ángel", "+1 pase"], confirmado: false },
+    "contreras salvador": { integrantes: ["Anai", "Jose Antonio", "Alison", "Diego José [niño]"], confirmado: false },
+    "sanchez salvador": { integrantes: ["Karen", "Geovani", "Liliana Valeria [niño]"], confirmado: false }
     // Inivitados novia FIN
 };
 
@@ -144,6 +146,9 @@ const nombresVisualesFamilias = {
     "pozos avila": "Pozos Avila",
     "reza garcia": "Reza García",
     "casas garcia": "Casas García",
-    "navarro gonzalez": "Navarro González"
+    "salvador nicolas": "Salvador Nicolás",
+    "navarro gonzalez": "Navarro González",
+    "contreras salvador": "Contreras Salvador",
+    "sanchez salvador": "Sánchez Salvador"
     // Inivitados novia FIN
 };
