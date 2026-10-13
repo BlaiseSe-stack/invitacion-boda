@@ -19,7 +19,6 @@
             align-items: center;
             min-height: 100vh;
             box-sizing: border-box;
-            /* ✨ CAPA DE IMAGEN DE FONDO ELEGANTE */
             background-image: 
                 linear-gradient(rgba(251, 246, 245, 0.5), rgba(251, 246, 245, 0.5)), 
                 url('img/img4.png');
@@ -28,7 +27,6 @@
             background-attachment: fixed;
         }
 
-        /* Estilos complementarios para la tarjeta de asistencia */
         .tarjeta-confirmacion {
             background: rgba(255, 255, 255, 0.95);
             border-radius: 12px;
@@ -38,7 +36,6 @@
             text-align: center;
         }
 
-        /* Envoltorio elegante para la vista previa del pase digital */
         .contenedor-pase-imagen {
             margin: 20px 0;
             padding: 10px;
@@ -77,6 +74,12 @@
             background-color: #d4edda;
             color: #155724;
             border: 1px solid #c3e6cb;
+        }
+
+        .badge-error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
         }
 
         .btn-confirmar {
@@ -131,17 +134,15 @@
             <div class="subtitulo">Verificación de pase y confirmación de ingreso</div>
             
             <div class="tarjeta-confirmacion">
-                <div id="estado-badge" class="badge-asistencia badge-pendiente">Pendiente de Ingreso</div>
+                <div id="estado-badge" class="badge-asistencia badge-pendiente">Consultando Estado...</div>
                 
-                <!-- VISTA PREVIA DEL PASE DIGITAL -->
                 <div class="contenedor-pase-imagen">
                     <img id="imagen-qr-render" src="" alt="Cargando Pase Digital...">
                 </div>
                 
                 <p id="info-familia">Verifica la información del pase antes de confirmar el acceso.</p>
                 
-                <!-- Botón de Acción Principal -->
-                <button class="btn-confirmar" id="btn-confirmar-entrada">✅ CONFIRMAR ENTRADA</button>
+                <button class="btn-confirmar" id="btn-confirmar-entrada" disabled>✅ CONFIRMAR ENTRADA</button>
                 
                 <div id="hora-registro" class="hora-ingreso"></div>
             </div>
@@ -151,26 +152,26 @@
     </div>
 
     <script>
-        // Configuración de las rutas dinámicas de tu GitHub
         const CONFIG = {
             usuario: "blaisese-stack",
             repositorio: "invitacion-boda/makeInvitation",
-            carpetaPases: "pases_digitales"
+            carpetaPases: "pases_digitales",
+            urlWebhook: "https://script.google.com/macros/s/AKfycbyvDvN_A1_y50VryqmHPA8k9a-YE2TnTXORwltCjx4MuQMlBGO_CSywVR1gO9sKWpE_Gg/exec"
         };
 
         let familiaActualID = "";
         let apellidoActualTexto = "";
+        let temporizadorRespuesta = null;
 
         function normalizarParaNombreArchivo(texto) {
             return texto.toLowerCase()
                         .trim()
                         .normalize("NFD")
-                        .replace(/[\u0300-\u036f]/g, "") // Elimina acentos
-                        .replace(/ñ/g, "n")              // Cambia la ñ por n
-                        .replace(/\s+/g, '_');           // Cambia espacios por guiones bajos (_)
+                        .replace(/[\u0300-\u036f]/g, "")
+                        .replace(/ñ/g, "n")
+                        .replace(/\s+/g, '_');
         }
 
-        // Buscar familia en el sistema
         document.getElementById("btn-buscar").addEventListener("click", function() {
             const input = document.getElementById("apellidos-input");
             const errorDiv = document.getElementById("mensaje-error");
@@ -183,100 +184,132 @@
             }
 
             errorDiv.style.display = "none";
-            
-            // Convertir a ID de archivo (Ej: "sanchez_espinosa")
             familiaActualID = normalizarParaNombreArchivo(apellidoActualTexto);
             
-            // Construimos la URL para validar si la familia está registrada en la carpeta de pases
             const urlImagenPase = `https://${CONFIG.usuario}.github.io/${CONFIG.repositorio}/${CONFIG.carpetaPases}/pase_${familiaActualID}.png`;
-
             const imgElement = document.getElementById("imagen-qr-render");
             
-            // Validamos dinámicamente si la familia existe registrada en GitHub
             imgElement.onload = function() {
-                mostrarPanelConfirmacion();
+                document.getElementById("bloque-busqueda").style.display = "none";
+                document.getElementById("titulo-familia-resultado").innerText = "Familia " + apellidoActualTexto;
+                document.getElementById("resultado-pase").style.display = "block";
+                
+                consultarEstatusEnExcel();
             };
 
             imgElement.onerror = function() {
-                errorDiv.innerHTML = `No se encontró el pase para "<b>${apellidoActualTexto}</b>".<br><span style="font-size:0.85rem; color:#5c4d4d;">Verifica que esté escrito exactamente igual que en el registro.</span>`;
+                errorDiv.innerHTML = `No se encontró el pase para "<b>${apellidoActualTexto}</b>".<br><span style="font-size:0.85rem; color:#5c4d4d;">Verifica la escritura en el registro.</span>`;
                 errorDiv.style.display = "block";
             };
 
             imgElement.src = urlImagenPase;
         });
 
-        // Muestra los datos de la familia encontrada y evalúa si ya ingresó
-        function mostrarPanelConfirmacion() {
-            document.getElementById("bloque-busqueda").style.display = "none";
-            document.getElementById("titulo-familia-resultado").innerText = "Familia " + apellidoActualTexto;
-            
-            // Revisar en almacenamiento local si ya se registró la entrada
-            const registroEntrada = localStorage.getItem("asistencia_" + familiaActualID);
-            
-            const btnConfirmar = document.getElementById("btn-confirmar-entrada");
+        // CONSULTA DE ESTADO EN TIEMPO REAL DESDE GOOGLE SHEETS
+        function consultarEstatusEnExcel() {
             const badge = document.getElementById("estado-badge");
+            const btnConfirmar = document.getElementById("btn-confirmar-entrada");
+            
+            badge.className = "badge-asistencia badge-pendiente";
+            badge.innerText = "🔄 Consultando Excel...";
+            btnConfirmar.disabled = true;
+
+            const scriptAntiguo = document.getElementById("jsonp-check-script");
+            if (scriptAntiguo) scriptAntiguo.remove();
+
+            const src = `${CONFIG.urlWebhook}?familia=${encodeURIComponent(apellidoActualTexto)}&callback=procesarRespuestaExcel`;
+            const script = document.createElement("script");
+            script.id = "jsonp-check-script";
+            script.src = src;
+
+            temporizadorRespuesta = setTimeout(function() {
+                badge.className = "badge-asistencia badge-error";
+                badge.innerText = "⚠️ Conexión Lenta";
+                btnConfirmar.disabled = false;
+                btnConfirmar.innerText = "✅ FORZAR CONFIRMACIÓN";
+            }, 10000);
+
+            script.onerror = function() {
+                clearTimeout(temporizadorRespuesta);
+                badge.className = "badge-asistencia badge-error";
+                badge.innerText = "❌ Error de Red";
+                btnConfirmar.disabled = false;
+                btnConfirmar.innerText = "✅ CONFIRMAR ENTRADA (LOCAL)";
+            };
+
+            document.body.appendChild(script);
+        }
+
+        // RESPUESTA DE GOOGLE SHEETS
+        window.procesarRespuestaExcel = function(data) {
+            clearTimeout(temporizadorRespuesta);
+            const scriptAntiguo = document.getElementById("jsonp-check-script");
+            if (scriptAntiguo) scriptAntiguo.remove();
+
+            const badge = document.getElementById("estado-badge");
+            const btnConfirmar = document.getElementById("btn-confirmar-entrada");
             const horaDiv = document.getElementById("hora-registro");
 
-            if (registroEntrada) {
-                // Si ya fue registrada previamente
-                const datos = JSON.parse(registroEntrada);
+            if (data.acceso && data.acceso.includes("ENTRÓ")) {
                 badge.className = "badge-asistencia badge-confirmado";
-                badge.innerText = "ENTRADA REGISTRADA";
+                badge.innerText = "ENTRADA YA REGISTRADA";
                 btnConfirmar.disabled = true;
-                btnConfirmar.innerText = "✓ Asistencia Ya Confirmada";
-                horaDiv.innerText = "Ingresó a las: " + datos.hora;
+                btnConfirmar.innerText = "✓ Asistencia Registrada";
+                horaDiv.innerText = "Estatus en Excel: " + data.acceso;
             } else {
-                // Si aún no ingresa
                 badge.className = "badge-asistencia badge-pendiente";
                 badge.innerText = "Pendiente de Ingreso";
                 btnConfirmar.disabled = false;
                 btnConfirmar.innerText = "✅ CONFIRMAR ENTRADA";
                 horaDiv.innerText = "";
             }
+        };
 
-            document.getElementById("resultado-pase").style.display = "block";
-        }
+        // REGISTRAR ASISTENCIA EN EL EXCEL AL HACER CLIC
+        document.getElementById("btn-confirmar-entrada").addEventListener("click", function() {
+            const btnConfirmar = document.getElementById("btn-confirmar-entrada");
+            const badge = document.getElementById("estado-badge");
+            const horaDiv = document.getElementById("hora-registro");
 
-        // Registrar la entrada de la familia al presionar el botón
-        // Reemplaza tu evento click actual por este:
-document.getElementById("btn-confirmar-entrada").addEventListener("click", function() {
-    const btnConfirmar = document.getElementById("btn-confirmar-entrada");
-    btnConfirmar.disabled = true;
-    btnConfirmar.innerText = "⏳ Guardando...";
+            btnConfirmar.disabled = true;
+            btnConfirmar.innerText = "⏳ Guardando en Excel...";
 
-    const ahora = new Date();
-    const horaFormateada = ahora.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+            const ahora = new Date();
+            const horaFormateada = ahora.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
 
-    const datosRegistro = {
-        familia: apellidoActualTexto,
-        hora: horaFormateada,
-        fecha: ahora.toLocaleDateString()
-    };
+            const datosFormulario = new URLSearchParams();
+            datosFormulario.append("familia", apellidoActualTexto);
+            datosFormulario.append("tipo", "checkin");
+            datosFormulario.append("hora", horaFormateada);
 
-    // 1. Guardar copia local en el navegador
-    localStorage.setItem("asistencia_" + familiaActualID, JSON.stringify(datosRegistro));
+            fetch(CONFIG.urlWebhook, {
+                method: "POST",
+                mode: "no-cors",
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded"
+                },
+                body: datosFormulario.toString()
+            })
+            .then(() => {
+                badge.className = "badge-asistencia badge-confirmado";
+                badge.innerText = "ENTRADA REGISTRADA EN EXCEL";
+                btnConfirmar.innerText = "✓ Entrada Confirmada";
+                horaDiv.innerText = "Registrado a las: " + horaFormateada;
+                
+                localStorage.setItem("asistencia_" + familiaActualID, JSON.stringify({
+                    familia: apellidoActualTexto,
+                    hora: horaFormateada
+                }));
+            })
+            .catch(err => {
+                console.error("Error al registrar:", err);
+                alert("Error al conectar con la base de datos.");
+                btnConfirmar.disabled = false;
+                btnConfirmar.innerText = "✅ REINTENTAR CONFIRMACIÓN";
+            });
+        });
 
-    // 2. Coloca aquí la URL del Web App de tu Google Apps Script
-    const URL_WEBHOOK_EXCEL = "https://script.google.com/macros/s/AKfycbwL68GQBk7JiM3VGAQGKorOLvrlB31pSY504NvKe2ItTlPiyGYduLOZ8leQ2qXZqCr6PA/exec";
-
-    // 3. Enviar datos a Google Sheets
-    fetch(URL_WEBHOOK_EXCEL, {
-        method: "POST",
-        mode: "no-cors", // Para evitar bloqueos CORS con Google Apps Script
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-            familia: apellidoActualTexto,
-            hora: horaFormateada
-        })
-    }).then(() => {
-        mostrarPanelConfirmacion();
-    }).catch(err => {
-        console.error("Error al sincronizar con Excel:", err);
-        mostrarPanelConfirmacion();
-    });
-});
-
-        // Botón de nueva búsqueda
+        // REINICIAR BÚSQUEDA
         document.getElementById("btn-nueva-busqueda").addEventListener("click", function() {
             document.getElementById("resultado-pase").style.display = "none";
             document.getElementById("apellidos-input").value = "";
@@ -285,7 +318,6 @@ document.getElementById("btn-confirmar-entrada").addEventListener("click", funct
             document.getElementById("apellidos-input").focus();
         });
 
-        // Permitir buscar presionando "Enter"
         document.getElementById("apellidos-input").addEventListener("keypress", function(e) {
             if (e.key === 'Enter') {
                 document.getElementById("btn-buscar").click();
