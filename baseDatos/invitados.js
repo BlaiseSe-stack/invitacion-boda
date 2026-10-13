@@ -39,7 +39,7 @@ const baseInvitadosEstricta = {
     "cruz rodriguez": { integrantes: ["Marijose", "Yosafat", "Mya", "Marjorie [niño]", "Mailen [bb]"], confirmado: false },
     "arriaga sanchez": { integrantes: ["Karina", "Matias", "Sophy"], confirmado: false },
     // Invitados novia INICIO
-    "espinoza salvador": { integrantes: ["Edgardo", "Elvia", "Joan"], confirmado: false },
+    "espinoza salvador": { integrantes: ["Edgardo", "Elvia", ], confirmado: false },
     "meza salvador": { integrantes: ["Adelina", "Juan Carlos", "Ariana", "Ximena", "Isaac", "Emilio [bb]"], confirmado: false },
     "salvador remigio": { integrantes: ["Roberto", "Griselda", "Renata", "Isai", "Carla", "Adelina", "Roberto"], confirmado: false },
     "maldonado salvador": { integrantes: ["Rocio", "Angeles", "Rocio h.", "Norberto", "Josue", "Carlos"], confirmado: false },
@@ -74,7 +74,8 @@ const baseInvitadosEstricta = {
     "salvador nicolas": { integrantes: ["Bertha", "Edgar", "Dulce", "Danae [niño]"], confirmado: false },
     "navarro gonzalez": { integrantes: ["Luis Ángel", "+1 pase"], confirmado: false },
     "contreras salvador": { integrantes: ["Anai", "Jose Antonio", "Alison", "Diego José [niño]"], confirmado: false },
-    "sanchez salvador": { integrantes: ["Karen", "Geovani", "Liliana Valeria [niño]"], confirmado: false }
+    "sanchez salvador": { integrantes: ["Karen", "Geovani", "Liliana Valeria [niño]"], confirmado: false },
+    "espinoza martinez": { integrantes: ["Joan", "Candy", "Nicole [niño]", "Estefany [niño]"], confirmado: false }
     // Inivitados novia FIN
 };
 
@@ -116,6 +117,7 @@ const nombresVisualesFamilias = {
     "arriaga sanchez": "Arriaga Sánchez",
     // Invitados novia INICIO
     "espinoza salvador": "Espinoza Salvador",
+    "espinoza martinez": "Espinoza Martínez",
     "meza salvador": "Meza Salvador",
     "salvador remigio": "Salvador Remigio",
     "salvador lopez": "Salvador López",

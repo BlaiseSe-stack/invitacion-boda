@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Buscador de Pases - Control de Recepción</title>
+    <title>Confirmación de Entrada - Control de Recepción</title>
     <link rel="icon" href="img/bodaIcon.png">
     <link rel="apple-touch-icon" sizes="180x180" href="img/bodaIcon.png">
-    <link rel="stylesheet" type="text/css" href="css\styles.css">
+    <link rel="stylesheet" type="text/css" href="css/styles.css">
     <style>
         body {
             font-family: 'Times New Roman', Times, serif;
@@ -23,35 +23,106 @@
             background-image: 
                 linear-gradient(rgba(251, 246, 245, 0.5), rgba(251, 246, 245, 0.5)), 
                 url('img/img4.png');
-            background-size: cover;           /* Cubre toda la pantalla sin importar el monitor o tablet */
-            background-position: center;      /* Centra la imagen de fondo */
+            background-size: cover;
+            background-position: center;
             background-attachment: fixed;
+        }
+
+        /* Estilos complementarios para la tarjeta de asistencia */
+        .tarjeta-confirmacion {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 12px;
+            padding: 25px;
+            margin: 20px 0;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .badge-asistencia {
+            display: inline-block;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.95rem;
+            margin-bottom: 15px;
+        }
+
+        .badge-pendiente {
+            background-color: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeeba;
+        }
+
+        .badge-confirmado {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .btn-confirmar {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        .btn-confirmar:hover {
+            background-color: #218838;
+        }
+
+        .btn-confirmar:disabled {
+            background-color: #6c757d;
+            cursor: not-allowed;
+        }
+
+        .hora-ingreso {
+            font-size: 0.85rem;
+            color: #555;
+            margin-top: 10px;
         }
     </style>
 </head>
 <body>
 
     <div class="buscador-container">
+        <!-- BLOQUE DE BÚSQUEDA -->
         <div id="bloque-busqueda">
             <h1>CONTROL DE ACCESO</h1>
-            <div class="subtitulo">Buscador de pases digitales para recepción</div>
+            <div class="subtitulo">Registro manual de recepción de invitados</div>
             
             <div class="grupo-input">
                 <label for="apellidos-input">Apellidos de la Familia:</label>
                 <input type="text" id="apellidos-input" placeholder="Ej: Sánchez Espinosa" autocomplete="off">
             </div>
             
-            <button class="btn-principal" id="btn-buscar">BUSCAR PASE DIGITAL</button>
+            <button class="btn-principal" id="btn-buscar">BUSCAR INVITADO</button>
             <div id="mensaje-error"></div>
         </div>
 
-        <div id="resultado-pase">
+        <!-- RESULTADO Y CONFIRMACIÓN DE ENTRADA -->
+        <div id="resultado-pase" style="display: none;">
             <h1 id="titulo-familia-resultado"></h1>
-            <div class="subtitulo">Escanea el código QR en la entrada</div>
+            <div class="subtitulo">Verificación de pase y confirmación de ingreso</div>
             
-            <div class="contenedor-imagen">
-                <img id="imagen-qr-render" src="" alt="Cargando Pase...">
+            <div class="tarjeta-confirmacion">
+                <div id="estado-badge" class="badge-asistencia badge-pendiente">Pendiente de Ingreso</div>
+                
+                <p id="info-familia">Se validará el acceso para el grupo familiar indicado.</p>
+                
+                <!-- Botón de Acción Principal -->
+                <button class="btn-confirmar" id="btn-confirmar-entrada">✅ CONFIRMAR ENTRADA</button>
+                
+                <div id="hora-registro" class="hora-ingreso"></div>
             </div>
+
+            <!-- Pre-carga de validación del pase -->
+            <img id="imagen-qr-render" src="" alt="Validando..." style="display: none;">
             
             <button class="btn-principal btn-regresar" id="btn-nueva-busqueda">🔍 BUSCAR OTRA FAMILIA</button>
         </div>
@@ -65,6 +136,9 @@
             carpetaPases: "pases_digitales"
         };
 
+        let familiaActualID = "";
+        let apellidoActualTexto = "";
+
         function normalizarParaNombreArchivo(texto) {
             return texto.toLowerCase()
                         .trim()
@@ -74,12 +148,13 @@
                         .replace(/\s+/g, '_');           // Cambia espacios por guiones bajos (_)
         }
 
+        // Buscar familia en el sistema
         document.getElementById("btn-buscar").addEventListener("click", function() {
             const input = document.getElementById("apellidos-input");
             const errorDiv = document.getElementById("mensaje-error");
-            const apellidoTexto = input.value.trim();
+            apellidoActualTexto = input.value.trim();
 
-            if (apellidoTexto === "") {
+            if (apellidoActualTexto === "") {
                 errorDiv.innerText = "Por favor, escribe los apellidos de la familia.";
                 errorDiv.style.display = "block";
                 return;
@@ -87,33 +162,78 @@
 
             errorDiv.style.display = "none";
             
-            // Convertimos la entrada al formato exacto de tu script (Ej: "Sánchez Espinosa" -> "sanchez_espinosa")
-            const nombreArchivoFormateado = normalizarParaNombreArchivo(apellidoTexto);
+            // Convertir a ID de archivo (Ej: "sanchez_espinosa")
+            familiaActualID = normalizarParaNombreArchivo(apellidoActualTexto);
             
-            // Construimos la URL pública nativa del archivo guardado en tu GitHub Pages
-            const urlImagenPase = `https://${CONFIG.usuario}.github.io/${CONFIG.repositorio}/${CONFIG.carpetaPases}/pase_${nombreArchivoFormateado}.png`;
+            // Construimos la URL para validar si la familia está registrada en la carpeta de pases
+            const urlImagenPase = `https://${CONFIG.usuario}.github.io/${CONFIG.repositorio}/${CONFIG.carpetaPases}/pase_${familiaActualID}.png`;
 
             const imgElement = document.getElementById("imagen-qr-render");
             
-            // Validamos dinámicamente si el pase existe físicamente en el hosting de GitHub antes de cambiar la pantalla
+            // Validamos dinámicamente si la familia existe registrada en GitHub
             imgElement.onload = function() {
-                // Si la imagen carga con éxito, hacemos el intercambio visual de paneles
-                document.getElementById("bloque-busqueda").style.display = "none";
-                document.getElementById("titulo-familia-resultado").innerText = "Familia " + apellidoTexto;
-                document.getElementById("resultado-pase").style.display = "block";
+                mostrarPanelConfirmacion();
             };
 
             imgElement.onerror = function() {
-                // Si da error 404 (no existe), le avisamos amablemente al recepcionista
-                errorDiv.innerHTML = `No se encontró el pase para "<b>${apellidoTexto}</b>".<br><span style="font-size:0.85rem; color:#5c4d4d;">Verifica que esté escrito exactamente igual que en Excel o que el pase haya sido generado.</span>`;
+                errorDiv.innerHTML = `No se encontró el pase para "<b>${apellidoActualTexto}</b>".<br><span style="font-size:0.85rem; color:#5c4d4d;">Verifica que esté escrito exactamente igual que en el registro.</span>`;
                 errorDiv.style.display = "block";
             };
 
-            // Disparamos la petición asignando la URL al atributo src
             imgElement.src = urlImagenPase;
         });
 
-        // Evento del botón de reinicio para limpiar y regresar al formulario original
+        // Muestra los datos de la familia encontrada y evalúa si ya ingresó
+        function mostrarPanelConfirmacion() {
+            document.getElementById("bloque-busqueda").style.display = "none";
+            document.getElementById("titulo-familia-resultado").innerText = "Familia " + apellidoActualTexto;
+            
+            // Revisar en almacenamiento local si ya se registró la entrada
+            const registroEntrada = localStorage.getItem("asistencia_" + familiaActualID);
+            
+            const btnConfirmar = document.getElementById("btn-confirmar-entrada");
+            const badge = document.getElementById("estado-badge");
+            const horaDiv = document.getElementById("hora-registro");
+
+            if (registroEntrada) {
+                // Si ya fue registrada previamente
+                const datos = JSON.parse(registroEntrada);
+                badge.className = "badge-asistencia badge-confirmado";
+                badge.innerText = "ENTRADA REGISTRADA";
+                btnConfirmar.disabled = true;
+                btnConfirmar.innerText = "✓ Asistencia Ya Confirmada";
+                horaDiv.innerText = "Ingresó a las: " + datos.hora;
+            } else {
+                // Si aún no ingresa
+                badge.className = "badge-asistencia badge-pendiente";
+                badge.innerText = "Pendiente de Ingreso";
+                btnConfirmar.disabled = false;
+                btnConfirmar.innerText = "✅ CONFIRMAR ENTRADA";
+                horaDiv.innerText = "";
+            }
+
+            document.getElementById("resultado-pase").style.display = "block";
+        }
+
+        // Registrar la entrada de la familia al presionar el botón
+        document.getElementById("btn-confirmar-entrada").addEventListener("click", function() {
+            const ahora = new Date();
+            const horaFormateada = ahora.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+
+            const datosRegistro = {
+                familia: apellidoActualTexto,
+                hora: horaFormateada,
+                fecha: ahora.toLocaleDateString()
+            };
+
+            // Guarda la asistencia en el navegador del dispositivo de recepción
+            localStorage.setItem("asistencia_" + familiaActualID, JSON.stringify(datosRegistro));
+
+            // Actualiza la UI al estado confirmado
+            mostrarPanelConfirmacion();
+        });
+
+        // Botón de nueva búsqueda
         document.getElementById("btn-nueva-busqueda").addEventListener("click", function() {
             document.getElementById("resultado-pase").style.display = "none";
             document.getElementById("apellidos-input").value = "";
@@ -122,7 +242,7 @@
             document.getElementById("apellidos-input").focus();
         });
 
-        // Permitir buscar presionando "Enter" dentro del input de texto
+        // Permitir buscar presionando "Enter"
         document.getElementById("apellidos-input").addEventListener("keypress", function(e) {
             if (e.key === 'Enter') {
                 document.getElementById("btn-buscar").click();
