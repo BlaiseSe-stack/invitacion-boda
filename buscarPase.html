@@ -238,22 +238,43 @@
         }
 
         // Registrar la entrada de la familia al presionar el botón
-        document.getElementById("btn-confirmar-entrada").addEventListener("click", function() {
-            const ahora = new Date();
-            const horaFormateada = ahora.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+        // Reemplaza tu evento click actual por este:
+document.getElementById("btn-confirmar-entrada").addEventListener("click", function() {
+    const btnConfirmar = document.getElementById("btn-confirmar-entrada");
+    btnConfirmar.disabled = true;
+    btnConfirmar.innerText = "⏳ Guardando...";
 
-            const datosRegistro = {
-                familia: apellidoActualTexto,
-                hora: horaFormateada,
-                fecha: ahora.toLocaleDateString()
-            };
+    const ahora = new Date();
+    const horaFormateada = ahora.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
 
-            // Guarda la asistencia en el navegador del dispositivo de recepción
-            localStorage.setItem("asistencia_" + familiaActualID, JSON.stringify(datosRegistro));
+    const datosRegistro = {
+        familia: apellidoActualTexto,
+        hora: horaFormateada,
+        fecha: ahora.toLocaleDateString()
+    };
 
-            // Actualiza la UI al estado confirmado
-            mostrarPanelConfirmacion();
-        });
+    // 1. Guardar copia local en el navegador
+    localStorage.setItem("asistencia_" + familiaActualID, JSON.stringify(datosRegistro));
+
+    // 2. Coloca aquí la URL del Web App de tu Google Apps Script
+    const URL_WEBHOOK_EXCEL = "https://script.google.com/macros/s/AKfycbwL68GQBk7JiM3VGAQGKorOLvrlB31pSY504NvKe2ItTlPiyGYduLOZ8leQ2qXZqCr6PA/exec";
+
+    // 3. Enviar datos a Google Sheets
+    fetch(URL_WEBHOOK_EXCEL, {
+        method: "POST",
+        mode: "no-cors", // Para evitar bloqueos CORS con Google Apps Script
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+            familia: apellidoActualTexto,
+            hora: horaFormateada
+        })
+    }).then(() => {
+        mostrarPanelConfirmacion();
+    }).catch(err => {
+        console.error("Error al sincronizar con Excel:", err);
+        mostrarPanelConfirmacion();
+    });
+});
 
         // Botón de nueva búsqueda
         document.getElementById("btn-nueva-busqueda").addEventListener("click", function() {
