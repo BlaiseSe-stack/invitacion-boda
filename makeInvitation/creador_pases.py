@@ -116,7 +116,7 @@ def generar_imagen_pase(apellido_familia, texto_invitados, numero_pases, mesa_fa
                 
                 # Si el invitado tiene asignada una mesa distinta en corchetes [N]
                 if num_mesa_individual:
-                    texto_etiqueta_mesa = f"🪑 M_{num_mesa_individual}"
+                    texto_etiqueta_mesa = f"Mesa_{num_mesa_individual}"
                     
                     # Dibujar badge / recuadro de aviso resaltado
                     canvas.text((pos_x_base - 35, y_pauta), texto_a_dibujar, fill=COLOR_TEXTO, font=fuente_texto, anchor="rm")
