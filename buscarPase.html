@@ -30,12 +30,32 @@
 
         /* Estilos complementarios para la tarjeta de asistencia */
         .tarjeta-confirmacion {
-            background: rgba(255, 255, 255, 0.9);
+            background: rgba(255, 255, 255, 0.95);
             border-radius: 12px;
             padding: 25px;
             margin: 20px 0;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
             text-align: center;
+        }
+
+        /* Envoltorio elegante para la vista previa del pase digital */
+        .contenedor-pase-imagen {
+            margin: 20px 0;
+            padding: 10px;
+            background: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .contenedor-pase-imagen img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            display: block;
+            border: 1px solid #e0e0e0;
         }
 
         .badge-asistencia {
@@ -113,16 +133,18 @@
             <div class="tarjeta-confirmacion">
                 <div id="estado-badge" class="badge-asistencia badge-pendiente">Pendiente de Ingreso</div>
                 
-                <p id="info-familia">Se validará el acceso para el grupo familiar indicado.</p>
+                <!-- VISTA PREVIA DEL PASE DIGITAL -->
+                <div class="contenedor-pase-imagen">
+                    <img id="imagen-qr-render" src="" alt="Cargando Pase Digital...">
+                </div>
+                
+                <p id="info-familia">Verifica la información del pase antes de confirmar el acceso.</p>
                 
                 <!-- Botón de Acción Principal -->
                 <button class="btn-confirmar" id="btn-confirmar-entrada">✅ CONFIRMAR ENTRADA</button>
                 
                 <div id="hora-registro" class="hora-ingreso"></div>
             </div>
-
-            <!-- Pre-carga de validación del pase -->
-            <img id="imagen-qr-render" src="" alt="Validando..." style="display: none;">
             
             <button class="btn-principal btn-regresar" id="btn-nueva-busqueda">🔍 BUSCAR OTRA FAMILIA</button>
         </div>
