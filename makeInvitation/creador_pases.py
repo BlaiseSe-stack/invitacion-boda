@@ -151,7 +151,7 @@ def generar_imagen_pase(apellido_familia, texto_invitados, numero_pases, mesa_fa
     canvas.text((ancho/2, box_top_y + 110), texto_mesa_display, fill=COLOR_TEXTO, font=fuente_mesa_num, anchor="mm")
 
     # --- PIE DE PÁGINA ---
-    canvas.text((ancho/2, 940), "Presenta este pase en la recepción al ingresar.", fill=COLOR_DETALLES, font=fuente_subtitulo, anchor="mm")
+    canvas.text((ancho/2, 940), "Agradecemos de corazón tu asistencia.", fill=COLOR_DETALLES, font=fuente_subtitulo, anchor="mm")
 
     # --- GUARDAR ARCHIVO ---
     carpeta_salida = "pases_digitales"
