@@ -25,17 +25,16 @@ def generar_imagen_pase(apellido_familia, texto_invitados, numero_pases, mesa_fa
         fuente_titulo = ImageFont.truetype("georgia.ttf", 55)
         fuente_familia = ImageFont.truetype("times.ttf", 50)
         fuente_subtitulo = ImageFont.truetype("times.ttf", 34)
-        fuente_texto = ImageFont.truetype("times.ttf", 30)
-        fuente_badge = ImageFont.truetype("timesbd.ttf", 24)
+        fuente_badge = ImageFont.truetype("timesbd.ttf", 22)
         fuente_mesa_num = ImageFont.truetype("georgia.ttf", 75)
         
         try:
-            fuente_emoji = ImageFont.truetype("seguiemj.ttf", 26)
+            fuente_emoji = ImageFont.truetype("seguiemj.ttf", 24)
         except IOError:
-            fuente_emoji = ImageFont.truetype("arial.ttf", 26)
+            fuente_emoji = ImageFont.truetype("arial.ttf", 24)
             
     except IOError:
-        fuente_titulo = fuente_familia = fuente_subtitulo = fuente_texto = fuente_badge = fuente_mesa_num = fuente_emoji = ImageFont.load_default()
+        fuente_titulo = fuente_familia = fuente_subtitulo = fuente_badge = fuente_mesa_num = fuente_emoji = ImageFont.load_default()
 
     # Lógica de conversión numérica
     try:
@@ -74,31 +73,45 @@ def generar_imagen_pase(apellido_familia, texto_invitados, numero_pases, mesa_fa
         canvas.text((ancho/2, y_familia), linea, fill=COLOR_TEXTO, font=fuente_familia, anchor="mm")
         y_familia += interlineado
 
-    # --- SECCIÓN: LISTA DE INTEGRANTES CON DETECCIÓN DE MESA APARTE [N] ---
+    # --- SECCIÓN: LISTA DE INTEGRANTES ADAPTATIVA ---
     if cantidad > 1:
-        canvas.text((ancho/2, 490), f"{texto_invitados_incluidos}", fill=COLOR_DETALLES, font=fuente_subtitulo, anchor="mm")
+        canvas.text((ancho/2, 485), f"{texto_invitados_incluidos}", fill=COLOR_DETALLES, font=fuente_subtitulo, anchor="mm")
         
-        y_pauta_inicial = 535
         lista_nombres = [n.strip() for n in texto_invitados.split(',') if n.strip()]
         total_integrantes = len(lista_nombres)
         
-        for idx, linea in enumerate(lista_nombres[:6]): # Máximo 6 integrantes
-            
-            # Configuración de columnas según cantidad de integrantes
-            if total_integrantes <= 3:
+        # Ajuste dinámico de tipografía según la cantidad total para evitar desbordes
+        tam_fuente_integrante = 26 if total_integrantes > 6 else 28
+        try:
+            fuente_texto = ImageFont.truetype("times.ttf", tam_fuente_integrante)
+        except IOError:
+            fuente_texto = ImageFont.load_default()
+
+        # Configuración de distribución en columnas y espacios
+        if total_integrantes <= 4:
+            filas_por_columna = total_integrantes
+            paso_y = 42
+        else:
+            filas_por_columna = (total_integrantes + 1) // 2  # Divide equitativamente entre 2 columnas
+            paso_y = 36 if total_integrantes > 6 else 40
+
+        y_pauta_inicial = 525
+
+        for idx, linea in enumerate(lista_nombres):
+            if total_integrantes <= 4:
                 pos_x_base = ancho / 2
                 fila_actual = idx
                 max_caracteres = 38
             else:
-                max_caracteres = 20
-                if idx < 3:
+                max_caracteres = 18 if total_integrantes > 6 else 20
+                if idx < filas_por_columna:
                     pos_x_base = 230  # Columna izquierda
                     fila_actual = idx
                 else:
                     pos_x_base = 570  # Columna derecha
-                    fila_actual = idx - 3
+                    fila_actual = idx - filas_por_columna
             
-            y_pauta = y_pauta_inicial + (fila_actual * 48)
+            y_pauta = y_pauta_inicial + (fila_actual * paso_y)
             
             # Identificación de etiqueta [niño] y mesa individual [N]
             es_nino = "[niño]" in linea
@@ -118,20 +131,18 @@ def generar_imagen_pase(apellido_familia, texto_invitados, numero_pases, mesa_fa
                 if num_mesa_individual:
                     texto_etiqueta_mesa = f"Mesa_{num_mesa_individual}"
                     
-                    # Dibujar badge / recuadro de aviso resaltado
-                    canvas.text((pos_x_base - 35, y_pauta), texto_a_dibujar, fill=COLOR_TEXTO, font=fuente_texto, anchor="rm")
+                    canvas.text((pos_x_base - 30, y_pauta), texto_a_dibujar, fill=COLOR_TEXTO, font=fuente_texto, anchor="rm")
                     
-                    # Medimos la etiqueta para el recuadro
-                    bbox = canvas.textbbox((pos_x_base + 10, y_pauta), texto_etiqueta_mesa, font=fuente_badge, anchor="lm")
-                    padding = 4
+                    bbox = canvas.textbbox((pos_x_base + 5, y_pauta), texto_etiqueta_mesa, font=fuente_badge, anchor="lm")
+                    padding = 3
                     rect = [bbox[0]-padding, bbox[1]-padding, bbox[2]+padding, bbox[3]+padding]
                     
                     canvas.rectangle(rect, fill=COLOR_BG_BADGE, outline=COLOR_RESALTADO, width=1)
-                    canvas.text((pos_x_base + 10, y_pauta), texto_etiqueta_mesa, fill=COLOR_RESALTADO, font=fuente_badge, anchor="lm")
+                    canvas.text((pos_x_base + 5, y_pauta), texto_etiqueta_mesa, fill=COLOR_RESALTADO, font=fuente_badge, anchor="lm")
                 
                 elif es_nino:
                     ancho_texto = canvas.textlength(texto_a_dibujar, font=fuente_texto)
-                    pos_x_emoji = pos_x_base - (ancho_texto / 2) - 25
+                    pos_x_emoji = pos_x_base - (ancho_texto / 2) - 22
                     
                     canvas.text((pos_x_emoji, y_pauta), "👶", fill=COLOR_TEXTO, font=fuente_emoji, anchor="mm")
                     canvas.text((pos_x_base, y_pauta), texto_a_dibujar, fill=COLOR_TEXTO, font=fuente_texto, anchor="mm")
@@ -139,14 +150,12 @@ def generar_imagen_pase(apellido_familia, texto_invitados, numero_pases, mesa_fa
                     canvas.text((pos_x_base, y_pauta), texto_a_dibujar, fill=COLOR_TEXTO, font=fuente_texto, anchor="mm")
 
     # --- SECCIÓN: NÚMERO DE MESA PRINCIPAL ---
-    # Dibujar recuadro de la mesa
     box_top_y = 700
     box_bottom_y = 880
     canvas.rectangle([(150, box_top_y), (ancho-150, box_bottom_y)], fill="#f3ebe8", outline=COLOR_DETALLES, width=2)
     
     canvas.text((ancho/2, box_top_y + 35), "UBICACIÓN ASIGNADA", fill=COLOR_DETALLES, font=fuente_subtitulo, anchor="mm")
     
-    # Formateo del número de mesa (Ejemplo: "Mesa 5" o solo el valor si ya trae la palabra)
     texto_mesa_display = f"MESA {mesa_familia}".upper() if str(mesa_familia).isdigit() else f"{mesa_familia}".upper()
     canvas.text((ancho/2, box_top_y + 110), texto_mesa_display, fill=COLOR_TEXTO, font=fuente_mesa_num, anchor="mm")
 
@@ -176,9 +185,7 @@ else:
             familia = fila['Familia']
             texto_invitados = fila['InvitadosConfirmados']
             numero_pases = fila.get('TotalAsistentes', 1) 
-            # Leemos la columna 'Mesa' del CSV
             mesa = fila.get('Mesa', 'S/N')
             
             generar_imagen_pase(familia, texto_invitados, numero_pases, mesa)
     print("\n🎉 ¡Proceso terminado! Busca tus pases en la carpeta 'pases_digitales'.")
-    
